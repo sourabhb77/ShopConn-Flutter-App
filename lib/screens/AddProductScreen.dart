@@ -1,89 +1,232 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:shopconn/screens/SavedProductScreen.dart';
-import 'package:shopconn/widgets/CategorySelector.dart';
+import 'package:shopconn/screens/AddProductScreen_Book.dart';
+import 'package:shopconn/screens/AddProductScreen_Cloth.dart';
+import 'package:shopconn/screens/AddProductScreen_Note.dart';
+import 'package:shopconn/screens/AddProductScreen_Other.dart';
+import '../const/Theme.dart';
 
-
-class AddProductScreen extends StatelessWidget {
-  const AddProductScreen({Key key}) : super(key: key);
+class AddProuctScreen extends StatefulWidget {
+  AddProuctScreen({Key key}) : super(key: key);
 
   @override
+  _AddProuctScreenState createState() => _AddProuctScreenState();
+}
+
+class _AddProuctScreenState extends State<AddProuctScreen> {
+  int _value=0;
+  @override
   Widget build(BuildContext context) {
+    // print(_value);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Add Product"),
-        backgroundColor: Colors.red,
+        title: Text(
+          "Add Product",
+          style: TextStyle(
+            color: sc_AppBarTextColor,
+          ),
+        ),
+        backgroundColor: sc_AppBarBackgroundColor,
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
-          onPressed: () {},
+          onPressed: () {Navigator.pop(context);},
         ),
       ),
       body: SingleChildScrollView(
-              child: Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Column(
-            children: <Widget>[
-              // Text("sdkjvlkj"),
-              CategorySelector(),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 15.0,top: 15.0),
-                child: TextField(
-                  // obscureText: true,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Book Name',
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+              child: Text(
+                "Whats Your Product Details ?\nfill here",
+                style: TextStyle(
+                  color: sc_ItemInfoColor,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+            // SizedBox(
+            //   height: 10.0,
+            // ),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+              color: sc_InputBackgroundColor,
+              child: TextField(
+                decoration: InputDecoration(
+                  prefixIcon: Icon(
+                    Icons.print,
+                    color: sc_ItemTitleColor,
+                  ),
+                  hintText: "Product Name",
+                  hintStyle: TextStyle(
+                    color: sc_InputHintTextColor,
+                    fontSize: 16.0,
+                  ),
+                  enabledBorder: UnderlineInputBorder(      
+                    borderSide: BorderSide(color: sc_InputHintTextColor, width: 3.0),   
+                  ),  
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
+                  ),
+                  border: UnderlineInputBorder(
+                    borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 15.0),
-                child: TextField(
-                  // obscureText: true,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Author Name',
+            ),
+            SizedBox(
+              height: 30.0,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Text(
+                "Choose Category",
+                style: TextStyle(
+                  color: sc_ItemInfoColor,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 20.0,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                GestureDetector(
+                  onTap: () => setState(() => _value = 0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: _value == 0 ? Border.all(color: sc_PrimaryColor ,width: 5.0,) : null,
+                      borderRadius: BorderRadius.all(
+                          Radius.circular(13.0) 
+                      ),
+                    ),
+                    child: Image.asset('assets/images/CatBooks.png',),
                   ),
                 ),
-              ),
-              TextField(
-                // obscureText: true,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Edition',
+                GestureDetector(
+                  onTap: () => setState(() => _value = 1),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: _value == 1 ? Border.all(color: sc_PrimaryColor ,width: 5.0,) : null,
+                      borderRadius: BorderRadius.all(
+                          Radius.circular(13.0) 
+                      ),
+                    ),
+                    child: Image.asset('assets/images/CatClothes.png'),
+                  ),
                 ),
-              ),
-              TextField(
-                // obscureText: true,
-                maxLines: 5,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Description',
+              ],
+            ),
+            SizedBox(
+              height: 20.0,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                GestureDetector(
+                  onTap: () => setState(() => _value = 2),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: _value == 2 ? Border.all(color: sc_PrimaryColor ,width: 5.0,) : null,
+                      borderRadius: BorderRadius.all(
+                          Radius.circular(13.0) 
+                      ),
+                    ),
+                    child: Image.asset('assets/images/CatNotes.png'),
+                  ),
                 ),
-              ),
-              TextField(
-                // obscureText: true,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Price',
+                GestureDetector(
+                  onTap: () => setState(() => _value = 3),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: _value == 3 ? Border.all(color: sc_PrimaryColor ,width: 5.0,) : null,
+                      borderRadius: BorderRadius.all(
+                          Radius.circular(13.0) 
+                      ),
+                    ),
+                    child: Image.asset('assets/images/CatOther.png'),
+                  ),
+                ),
+              ],
+            ),
 
-                ),
+            SizedBox(
+              height: 20.0,
+            ),
+            
+// TODO: FOLLOWING ACTIONS SHOULD STICK TO BOTTOM
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  RaisedButton(
+                    color: sc_InputBackgroundColor,
+                    child: Text(
+                      'Cancel',
+                      style: TextStyle(
+                        fontSize: 18.0,
+                      ),
+                    ),
+                    onPressed: () {
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(builder: (context) =>AddProuctScreen_Book()),
+                      // );
+                    },
+                  ),
+                  RaisedButton(
+                    color: sc_PrimaryColor,
+                    child: Text(
+                      'Next',
+                      style: TextStyle(
+                        color: sc_AppBarTextColor,
+                        fontSize: 18.0,
+                      ),                      
+                    ),
+                    onPressed: () {
+                      if (_value== 0) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => AddProuctScreen_Book()),
+                        );
+                      }
+                      else if (_value == 1){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => AddProuctScreen_Cloth()),
+                        );
+                      }
+                      else if (_value == 2){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => AddProuctScreen_Note()),
+                        );
+                      }else if (_value == 3){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => AddProuctScreen_Other()),
+                        );
+                      }
+                      
+                    },
+                  ),
+                  
+                ],
               ),
-              RaisedButton(
-                child: Text('Open route'),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SavedProductScreen()),
-                  );
-                },
-              ),
-            ]
-            // children: 
-          ),
+            ),
+
+
+
+
+
+          ],
         ),
-      )
+      ),
     );
   }
 }

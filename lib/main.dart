@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
             bodyText2: TextStyle(color: sc_BodyTextColor),
           )
       ),
-      home: AddProductScreen(),
+      home: AddProuctScreen(),
     );
   }
 }
