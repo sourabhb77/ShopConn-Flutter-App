@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 
-void main()=>runApp(MaterialApp(
-  home: Scaffold(
+class SignUp extends StatefulWidget {
+  @override
+  _SignUpState createState() => _SignUpState();
+}
+
+class _SignUpState extends State<SignUp> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
     appBar: AppBar(
     backgroundColor: Colors.white, 
     title:Text("SignUp",style:TextStyle(color:Colors.black)),
@@ -139,7 +146,7 @@ void main()=>runApp(MaterialApp(
       color: Colors.blue[300],
       // decoration: BoxDecoration(borderRadius:BorderRadius.circular(10)),
       child: new RaisedButton(
-        child: new Text('SignUp',style: TextStyle(fontSize:20.0,fontWeight:FontWeight.bold,color:Colors.white),),splashColor: Colors.blueAccent,),
+        child: new Text('SignUp',style: TextStyle(fontSize:20.0,fontWeight:FontWeight.bold,color:Colors.white),),splashColor: Colors.blueAccent,onPressed: (){},),
       ),
     ),
   ),
@@ -157,7 +164,7 @@ SizedBox(height:10.0),
       color: Colors.white,
       // decoration: BoxDecoration(borderRadius:BorderRadius.circular(10)),
       child: new RaisedButton(
-        child: new Text('SignUp with Google',style: TextStyle(fontSize:20.0,color:Colors.black),),splashColor: Colors.blueAccent, 
+        child: new Text('SignUp with Google',style: TextStyle(fontSize:20.0,color:Colors.black),),splashColor: Colors.blueAccent,onPressed: (){},
       ),
     ),
   ),
@@ -171,5 +178,6 @@ Row(
         ),
       ),
   )
-  )
-));
+  );
+  }
+}

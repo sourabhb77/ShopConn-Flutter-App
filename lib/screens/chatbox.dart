@@ -1,20 +1,27 @@
 import 'package:flutter/material.dart';
 
-void main()=>runApp(MaterialApp(
-  home: Scaffold(
+class ChatPage extends StatefulWidget {
+  @override
+  _ChatPageState createState() => _ChatPageState();
+}
+
+class _ChatPageState extends State<ChatPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
     appBar:AppBar(
       leading:Row(children:<Widget>[
-      Expanded(child:Icon(IconData(58135, fontFamily: 'MaterialIcons', matchTextDirection: true),color:Colors.black,size:50.0,),),
+      Expanded(child:IconButton(icon:new Icon(IconData(58135, fontFamily: 'MaterialIcons', matchTextDirection: true),color:Colors.black,size:50.0,), onPressed:(){Navigator.pop(context);},)),
       Expanded(child:CircleAvatar(radius:30.0,backgroundColor:Colors.grey[400],child:Image(image:AssetImage('assets/Symbols.png'),),),),]),
       title: Text('Doctor Daddy'),
-      backgroundColor: Colors.pink[200],
+      backgroundColor: Colors.blue[300],
       ),
       body: (
         Column(
            mainAxisAlignment: MainAxisAlignment.end,
            children: <Widget>[
             Container( 
-                color:Colors.pink[200],
+                color:Colors.blue[300],
                 padding:EdgeInsets.all(10),
                 child:Row(
                children: <Widget>[
@@ -25,4 +32,8 @@ void main()=>runApp(MaterialApp(
            ],
         )
     ),
-)));
+);
+  }
+}
+// void main()=>runApp(MaterialApp(
+//   home: ));

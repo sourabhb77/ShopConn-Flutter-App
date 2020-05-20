@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:book/chatbox.dart';
 
-void main()=>runApp(ChatBox());
+class ChatBox extends StatefulWidget {
+  @override
+  _ChatBoxState createState() => _ChatBoxState();
+}
 
-class ChatBox extends StatelessWidget {
+class _ChatBoxState extends State<ChatBox> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -20,7 +24,7 @@ class ChatBox extends StatelessWidget {
       title: Text('Chat box',style:TextStyle(color:Colors.black),),
       actions:<Widget>[Icon(IconData(59576, fontFamily: 'MaterialIcons'),color: Colors.black,size: 30.0,) ,
       ],
-      backgroundColor: Colors.pink[200],
+      backgroundColor: Colors.blue[300],
       elevation: 1.0,
           ),
           body: TabBarView(
@@ -41,115 +45,36 @@ class ChatBox extends StatelessWidget {
               Text('New Requests',textAlign:TextAlign.center,style:new TextStyle(fontSize:14.0,color:Colors.grey[400])),],
             ),
             SizedBox(height:20.0),
-            Row(
-              children: <Widget>[
-                Expanded(child:CircleAvatar(radius:30.0,backgroundColor:Colors.grey[400],child:Image(image:AssetImage('assets/Symbols.png'),),),),
+            Card(child:InkWell(
+              splashColor:Colors.blue.withAlpha(30),
+              onTap:(){
+                Navigator.push(context,MaterialPageRoute(builder:(context)=>ChatPage()),);
+              } ,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(0.0,8.0,0.0,8.0),
+                child: Row(
+                children: <Widget>[
+                  Expanded(child:CircleAvatar(radius:30.0,backgroundColor:Colors.grey[400],child:Image(image:AssetImage('assets/Symbols.png'),),),),
+                  Expanded(child:Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                        Text('Doctor daddy',textAlign:TextAlign.center,style:new TextStyle(fontSize:14.0,color:Colors.black)),
+                                        Text('I love flutter',textAlign:TextAlign.center,style:new TextStyle(fontSize:14.0,color:Colors.grey[400])),
+                                        ],),),
+                SizedBox(width:100.0), 
                 Expanded(child:Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: <Widget>[
-                                      Text('Doctor daddy',textAlign:TextAlign.center,style:new TextStyle(fontSize:14.0,color:Colors.black)),
-                                      Text('I love flutter',textAlign:TextAlign.center,style:new TextStyle(fontSize:14.0,color:Colors.grey[400])),
-                                      ],),),
-              SizedBox(width:100.0), 
-              Expanded(child:Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: <Widget>[
-                                      Text('yesterday',textAlign:TextAlign.center,style:new TextStyle(fontSize:14.0,color:Colors.black)),
-                                      Text('12.00pm',textAlign:TextAlign.center,style:new TextStyle(fontSize:14.0,color:Colors.grey[400])),
-                                      ],),),
-              ],
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                        Text('yesterday',textAlign:TextAlign.center,style:new TextStyle(fontSize:14.0,color:Colors.black)),
+                                        Text('12.00pm',textAlign:TextAlign.center,style:new TextStyle(fontSize:14.0,color:Colors.grey[400])),
+                                        ],),),
+                ],
             ),
-            Divider(color: Colors.grey[400],),
-            SizedBox(height:20.0),
-            Row(
-              children: <Widget>[
-                Expanded(child:CircleAvatar(radius:30.0,backgroundColor:Colors.grey[400],child:Image(image:AssetImage('assets/Symbols.png'),),),),
-                Expanded(child:Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: <Widget>[
-                                      Text('Doctor daddy',textAlign:TextAlign.center,style:new TextStyle(fontSize:14.0,color:Colors.black)),
-                                      Text('I love flutter',textAlign:TextAlign.center,style:new TextStyle(fontSize:14.0,color:Colors.grey[400])),
-                                      ],),),
-              SizedBox(width:100.0), 
-              Expanded(child:Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: <Widget>[
-                                      Text('yesterday',textAlign:TextAlign.center,style:new TextStyle(fontSize:14.0,color:Colors.black)),
-                                      Text('12.00pm',textAlign:TextAlign.center,style:new TextStyle(fontSize:14.0,color:Colors.grey[400])),
-                                      ],),),
-              ],
+              ),
             ),
-            Divider(color: Colors.grey[400],),
-            SizedBox(height:20.0),
-            Row(
-              children: <Widget>[
-                Expanded(child:CircleAvatar(radius:30.0,backgroundColor:Colors.grey[400],child:Image(image:AssetImage('assets/Symbols.png'),),),),
-                Expanded(child:Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: <Widget>[
-                                      Text('Doctor daddy',textAlign:TextAlign.center,style:new TextStyle(fontSize:14.0,color:Colors.black)),
-                                      Text('I love flutter',textAlign:TextAlign.center,style:new TextStyle(fontSize:14.0,color:Colors.grey[400])),
-                                      ],),),
-              SizedBox(width:100.0), 
-              Expanded(child:Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: <Widget>[
-                                      Text('yesterday',textAlign:TextAlign.center,style:new TextStyle(fontSize:14.0,color:Colors.black)),
-                                      Text('12.00pm',textAlign:TextAlign.center,style:new TextStyle(fontSize:14.0,color:Colors.grey[400])),
-                                      ],),),
-              ],
             ),
-            Divider(color: Colors.grey[400],),
-            SizedBox(height:20.0),
-            Row(
-              children: <Widget>[
-                Expanded(child:CircleAvatar(radius:30.0,backgroundColor:Colors.grey[400],child:Image(image:AssetImage('assets/Symbols.png'),),),),
-                Expanded(child:Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: <Widget>[
-                                      Text('Doctor daddy',textAlign:TextAlign.center,style:new TextStyle(fontSize:14.0,color:Colors.black)),
-                                      Text('I love flutter',textAlign:TextAlign.center,style:new TextStyle(fontSize:14.0,color:Colors.grey[400])),
-                                      ],),),
-              SizedBox(width:100.0), 
-              Expanded(child:Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: <Widget>[
-                                      Text('yesterday',textAlign:TextAlign.center,style:new TextStyle(fontSize:14.0,color:Colors.black)),
-                                      Text('12.00pm',textAlign:TextAlign.center,style:new TextStyle(fontSize:14.0,color:Colors.grey[400])),
-                                      ],),),
-              ],
-            ),
-            Divider(color: Colors.grey[400],),
-            SizedBox(height:20.0),
-            Row(
-              children: <Widget>[
-                Expanded(child:CircleAvatar(radius:30.0,backgroundColor:Colors.grey[400],child:Image(image:AssetImage('assets/Symbols.png'),),),),
-                Expanded(child:Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: <Widget>[
-                                      Text('Doctor daddy',textAlign:TextAlign.center,style:new TextStyle(fontSize:14.0,color:Colors.black)),
-                                      Text('I love flutter',textAlign:TextAlign.center,style:new TextStyle(fontSize:14.0,color:Colors.grey[400])),
-                                      ],),),
-              SizedBox(width:100.0), 
-              Expanded(child:Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: <Widget>[
-                                      Text('yesterday',textAlign:TextAlign.center,style:new TextStyle(fontSize:14.0,color:Colors.black)),
-                                      Text('12.00pm',textAlign:TextAlign.center,style:new TextStyle(fontSize:14.0,color:Colors.grey[400])),
-                                      ],),),
-              ],
-            ),
-            Divider(color: Colors.grey[400],),
             SizedBox(height:20.0),
           ],
         ),
@@ -169,53 +94,21 @@ class ChatBox extends StatelessWidget {
               Text('New Requests',textAlign:TextAlign.center,style:new TextStyle(fontSize:14.0,color:Colors.black)),],
             ),
             SizedBox(height:10.0),
-            Row(
-              children: <Widget>[
-                SizedBox(width: 5,),
-                Expanded(child:CircleAvatar(radius:30.0,backgroundColor:Colors.grey[400],child:Image(image:AssetImage('assets/Symbols.png'),),),),
-                SizedBox(width: 5,),
-                Expanded(flex:5,child:Text('Doctor daddy',textAlign:TextAlign.start,style:new TextStyle(fontSize:15.0,color:Colors.black))),
-                Expanded(child:Icon(IconData(59510, fontFamily: 'MaterialIcons'),color: Colors.green,size: 30.0,) ),
-                Expanded(child:Icon(IconData(57676, fontFamily: 'MaterialIcons'),color:Colors.red,size: 30.0,)),
-              ],
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(0.0,8.0,0.0,8.0),
+                child: Row(
+                children: <Widget>[
+                  SizedBox(width: 5,),
+                  Expanded(child:CircleAvatar(radius:30.0,backgroundColor:Colors.grey[400],child:Image(image:AssetImage('assets/Symbols.png'),),),),
+                  SizedBox(width: 5,),
+                  Expanded(flex:5,child:Text('Doctor daddy',textAlign:TextAlign.start,style:new TextStyle(fontSize:15.0,color:Colors.black))),
+                  Expanded(child:IconButton(icon:new Icon(IconData(59510, fontFamily: 'MaterialIcons'),color: Colors.green,size: 30.0,),onPressed:(){},)),
+                  Expanded(child:IconButton(icon:new Icon(IconData(57676, fontFamily: 'MaterialIcons'),color:Colors.red,size: 30.0,),onPressed:(){})),
+                ],
             ),
-            Divider(color: Colors.grey[400],),
-            SizedBox(height:10.0),
-            Row(
-              children: <Widget>[
-                SizedBox(width: 5,),
-                Expanded(child:CircleAvatar(radius:30.0,backgroundColor:Colors.grey[400],child:Image(image:AssetImage('assets/Symbols.png'),),),),
-                SizedBox(width: 5,),
-                Expanded(flex:5,child:Text('Doctor daddy',textAlign:TextAlign.start,style:new TextStyle(fontSize:15.0,color:Colors.black))),
-                Expanded(child:Icon(IconData(59510, fontFamily: 'MaterialIcons'),color: Colors.green,size: 30.0,) ),
-                Expanded(child:Icon(IconData(57676, fontFamily: 'MaterialIcons'),color:Colors.red,size: 30.0,)),
-              ],
+              ),
             ),
-            Divider(color: Colors.grey[400],),
-            SizedBox(height:10.0),
-             Row(
-              children: <Widget>[
-                SizedBox(width: 5,),
-                Expanded(child:CircleAvatar(radius:30.0,backgroundColor:Colors.grey[400],child:Image(image:AssetImage('assets/Symbols.png'),),),),
-                SizedBox(width: 5,),
-                Expanded(flex:5,child:Text('Doctor daddy',textAlign:TextAlign.start,style:new TextStyle(fontSize:15.0,color:Colors.black))),
-                Expanded(child:Icon(IconData(59510, fontFamily: 'MaterialIcons'),color: Colors.green,size: 30.0,) ),
-                Expanded(child:Icon(IconData(57676, fontFamily: 'MaterialIcons'),color:Colors.red,size: 30.0,)),
-              ],
-            ),
-            Divider(color: Colors.grey[400],),
-            SizedBox(height:10.0),
-             Row(
-              children: <Widget>[
-                SizedBox(width: 5,),
-                Expanded(child:CircleAvatar(radius:30.0,backgroundColor:Colors.grey[400],child:Image(image:AssetImage('assets/Symbols.png'),),),),
-                SizedBox(width: 5,),
-                Expanded(flex:5,child:Text('Doctor daddy',textAlign:TextAlign.start,style:new TextStyle(fontSize:15.0,color:Colors.black))),
-                Expanded(child:Icon(IconData(59510, fontFamily: 'MaterialIcons'),color: Colors.green,size: 30.0,) ),
-                Expanded(child:Icon(IconData(57676, fontFamily: 'MaterialIcons'),color:Colors.red,size: 30.0,)),
-              ],
-            ),
-            Divider(color: Colors.grey[400],),
             SizedBox(height:10.0),
 
           ],

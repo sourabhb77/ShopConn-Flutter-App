@@ -1,7 +1,17 @@
 import 'package:flutter/material.dart';
 
-void main()=>runApp(MaterialApp(
-  home: Scaffold(
+
+
+class Login extends StatefulWidget {
+  @override
+  _LoginState createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child:Scaffold(
     appBar: AppBar(
     backgroundColor: Colors.white, 
     title:Text("Login",style:TextStyle(color:Colors.black)),
@@ -88,7 +98,7 @@ void main()=>runApp(MaterialApp(
       color: Colors.blue[300],
       // decoration: BoxDecoration(borderRadius:BorderRadius.circular(10)),
       child: new RaisedButton(
-        child: new Text('Login',style: TextStyle(fontSize:20.0,fontWeight:FontWeight.bold,color:Colors.white),),splashColor: Colors.blueAccent,),
+        child: new Text('Login',style: TextStyle(fontSize:20.0,fontWeight:FontWeight.bold,color:Colors.white),),splashColor: Colors.blueAccent,onPressed: (){},),
       ),
     ),
   ),
@@ -106,7 +116,7 @@ SizedBox(height:10.0),
       color: Colors.white,
       // decoration: BoxDecoration(borderRadius:BorderRadius.circular(10)),
       child: new RaisedButton(
-        child: new Text('Log In with Google',style: TextStyle(fontSize:20.0,fontWeight:FontWeight.bold,color:Colors.black),),splashColor: Colors.blueAccent, 
+        child: new Text('Log In with Google',style: TextStyle(fontSize:20.0,fontWeight:FontWeight.bold,color:Colors.black),),splashColor: Colors.blueAccent,onPressed: (){}, 
       ),
     ),
   ),
@@ -121,4 +131,6 @@ Row(
       ),
   )
   )
-));
+    );
+  }
+}
