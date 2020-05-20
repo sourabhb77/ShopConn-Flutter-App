@@ -9,8 +9,10 @@ final sc_ItemInfoColor = Color(0xFF000000);
 const sc_TitleTextColor = Color(0xFF303030);
 const sc_BodyTextColor = Color(0xFF4B4B4B);
 const sc_PrimaryColor = Color(0xff35C5CF);
-final sc_ShadowColor = Color(0xFFB7B7B7).withOpacity(.16);
-final sc_ActiveShadowColor = Color(0xFF4056C6).withOpacity(.15);
+// final sc_ShadowColor = Color(0xFFB7B7B7).withOpacity(.16);
+// final sc_ActiveShadowColor = Color(0xFF4056C6).withOpacity(.15);
+final sc_InputHintTextColor = Color(0xFF7D989E);
+final sc_InputBackgroundColor = Color(0xFFEBF7FA);
 // Text Style
 // const kHeadingTextStyle = TextStyle(
 //   fontSize: 22,
