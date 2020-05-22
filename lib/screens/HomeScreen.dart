@@ -16,18 +16,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
 
-        // appBar: AppBar(
-        //   elevation: 0,
-        //   title: Text("Home"),
-        //   centerTitle: true,
-
-        //   flexibleSpace: FlexibleSpaceBar(
-        //     title:Text("YOLO"),
-        //     centerTitle: true,
-
-        //   ),
-
-        // ),
+      
         drawer: NavDrawer(),
         body: CustomScrollView(
           slivers: <Widget>[
@@ -75,6 +64,7 @@ class _HomePageState extends State<HomePage> {
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context,int index){
                   return Padding(
+
                     padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                     child: ProductDisplay(),
                   );

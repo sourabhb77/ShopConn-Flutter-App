@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:shopconn/const/Theme.dart';
+import 'package:shopconn/screens/Profile.dart';
 
 class HomeSliver extends StatefulWidget {
   @override
@@ -75,7 +76,12 @@ class _HomeSliver extends State<HomeSliver> {
         IconButton(
           icon: const Icon(Icons.add_circle),
           tooltip: 'Add new entry',
-          onPressed: () {/* ... */},
+          onPressed: () {/* ... */
+               Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) =>Profile()),
+                      );
+          },
         ),
         IconButton(
           icon: Icon(Icons.bookmark),
