@@ -88,7 +88,7 @@ class _BoardingScreenState extends State<BoardingScreen> {
                         currIndex++;
                       })
                     },
-                    child: Text("SinUP"),
+                    child: Text("SignUP"),
                   ),
                   Row(
                     children: <Widget>[

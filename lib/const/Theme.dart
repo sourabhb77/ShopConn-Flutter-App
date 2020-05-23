@@ -13,6 +13,10 @@ const sc_PrimaryColor = Color(0xff35C5CF);
 // final sc_ActiveShadowColor = Color(0xFF4056C6).withOpacity(.15);
 final sc_InputHintTextColor = Color(0xFF7D989E);
 final sc_InputBackgroundColor = Color(0xFFEBF7FA);
+final sc_grey = Color(0xFFEDEDF1);
+final sc_skyblue = Color(0xFF81C9F3);
+
+
 // Text Style
 // const kHeadingTextStyle = TextStyle(
 //   fontSize: 22,
