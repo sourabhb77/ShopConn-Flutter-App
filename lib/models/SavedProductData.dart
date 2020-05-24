@@ -29,7 +29,9 @@ class Clothes extends Product{
 }
 
 class Books extends Product{
-  Books(String pId, String name,int price, List<String> imgList, String description): super(pId, name, price, description, imgList);
+  String  author,publication;
+  int edition;
+  Books(String pId, String name,int price, List<String> imgList, String description,String author,String publication,int edition): super(pId, name, price, description, imgList);
 
 }
 
