@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:book/chatbox.dart';
-import 'package:book/services/auth.dart';
 
 class ChatBox extends StatefulWidget {
   @override
@@ -8,7 +7,6 @@ class ChatBox extends StatefulWidget {
 }
 
 class _ChatBoxState extends State<ChatBox> {
-  final AuthService _auth=AuthService();
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -24,7 +22,7 @@ class _ChatBoxState extends State<ChatBox> {
             ),
            leading: Icon(IconData(58135, fontFamily: 'MaterialIcons', matchTextDirection: true),color:Colors.black,size:30.0,),
       title: Text('Chat box',style:TextStyle(color:Colors.black),),
-      actions:<Widget>[IconButton(icon:Icon(IconData(59576, fontFamily: 'MaterialIcons'),color: Colors.black,size: 30.0,), onPressed:()async{await _auth.signOut();},) ,
+      actions:<Widget>[Icon(IconData(59576, fontFamily: 'MaterialIcons'),color: Colors.black,size: 30.0,) ,
       ],
       backgroundColor: Colors.blue[300],
       elevation: 1.0,
