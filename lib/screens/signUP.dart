@@ -1,11 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:book/services/auth.dart';
 
 class SignUp extends StatefulWidget {
+  final Function toggleView;
+ SignUp({this.toggleView});
   @override
   _SignUpState createState() => _SignUpState();
 }
 
 class _SignUpState extends State<SignUp> {
+  final AuthService _auth=AuthService();
+  final _formkey = GlobalKey<FormState>();
+  String firstname='';
+  String lastname='';
+  String email='';
+  String password='';
+  String error='';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,7 +25,11 @@ class _SignUpState extends State<SignUp> {
     leading: Icon(IconData(58135, fontFamily: 'MaterialIcons', matchTextDirection: true),color:Colors.black,size:30.0,),
     elevation: 0.5,
     ),
-    body:
+    body:SingleChildScrollView(
+      child:
+      Form(
+        key:_formkey,
+        child:
     Container(
       decoration: BoxDecoration(
         gradient:LinearGradient(begin:Alignment.topCenter,
@@ -36,7 +50,7 @@ class _SignUpState extends State<SignUp> {
          Container(
               margin: EdgeInsets.symmetric(horizontal: 18.0),
               color:Colors.blue[100],
-               child:TextField(
+               child:TextFormField(
                 decoration: InputDecoration(
                   hintText: "",
                   hintStyle: TextStyle(
@@ -53,6 +67,10 @@ class _SignUpState extends State<SignUp> {
                     borderSide: BorderSide(color:  Colors.blue[300], width: 3.0),
                   ),
                 ),
+                validator:(val)=> val.isEmpty?"Enter an first name":null,
+                onChanged: (val){
+                  setState(()=>firstname=val);
+                },
               ),
             ),
           SizedBox(height:10.0),
@@ -63,7 +81,7 @@ class _SignUpState extends State<SignUp> {
           Container(
               margin: EdgeInsets.symmetric(horizontal: 18.0),
               color:Colors.blue[100],
-              child: TextField(
+              child: TextFormField(
                 decoration: InputDecoration(
                   hintText: "",
                   hintStyle: TextStyle(
@@ -80,6 +98,10 @@ class _SignUpState extends State<SignUp> {
                     borderSide: BorderSide(color:  Colors.blue[300], width: 3.0),
                   ),
                 ),
+                validator:(val)=> val.isEmpty?"Enter an last name":null,
+                 onChanged: (val){
+                  setState(()=>lastname=val);
+                },
               ),
             ),
             SizedBox(height:10.0),
@@ -90,7 +112,7 @@ class _SignUpState extends State<SignUp> {
           Container(
               margin: EdgeInsets.symmetric(horizontal: 18.0),
               color:Colors.blue[100],
-              child: TextField(
+              child: TextFormField(
                 decoration: InputDecoration(
                   hintText: "",
                   hintStyle: TextStyle(
@@ -107,6 +129,10 @@ class _SignUpState extends State<SignUp> {
                     borderSide: BorderSide(color:  Colors.blue[300], width: 3.0),
                   ),
                 ),
+                validator:(val)=> val.isEmpty?"Enter an email":null,
+                 onChanged: (val){
+                  setState(()=>email=val);
+                },
               ),
             ),
             SizedBox(height:10.0),
@@ -117,7 +143,7 @@ class _SignUpState extends State<SignUp> {
             Container(
               margin: EdgeInsets.symmetric(horizontal: 18.0),
               color:Colors.blue[100],
-              child: TextField(
+              child: TextFormField(
                 decoration: InputDecoration(
                   hintText: "",
                   hintStyle: TextStyle(
@@ -134,7 +160,17 @@ class _SignUpState extends State<SignUp> {
                     borderSide: BorderSide(color:  Colors.blue[300], width: 3.0),
                   ),
                 ),
+                obscureText: true,
+                validator:(val)=> val.length<8?"Enter an password 8 character long":null,
+                 onChanged: (val){
+                  setState(()=>password=val);
+                },
               ),
+            ),
+            SizedBox(height:12.0),
+            Text(
+              error,
+              style:TextStyle(color: Colors.red,fontSize: 14.0),
             ),
             SizedBox(height:30.0),
           new SizedBox(
@@ -146,7 +182,17 @@ class _SignUpState extends State<SignUp> {
       color: Colors.blue[300],
       // decoration: BoxDecoration(borderRadius:BorderRadius.circular(10)),
       child: new RaisedButton(
-        child: new Text('SignUp',style: TextStyle(fontSize:20.0,fontWeight:FontWeight.bold,color:Colors.white),),splashColor: Colors.blueAccent,onPressed: (){},),
+        child: new Text('SignUp',style: TextStyle(fontSize:20.0,fontWeight:FontWeight.bold,color:Colors.white),),splashColor: Colors.blueAccent,onPressed: ()async{
+         if(_formkey.currentState.validate()){
+           dynamic  result= await _auth.registerwithEmailAndPassword(email, password);
+           if(result==null)
+           {
+             setState(() {
+               error ='Please enter valid details.';
+             });
+           }
+         }
+        },),
       ),
     ),
   ),
@@ -173,11 +219,14 @@ SizedBox(height:20.0),
 Row(
   mainAxisAlignment: MainAxisAlignment.center,
   children:<Widget>[Text("Already Have Account?",style: TextStyle(fontSize:15.0),),
-  Text("SignIn here",style: TextStyle(fontWeight:FontWeight.bold,fontSize:15.0,color: Colors.blue[300]),),]),
+    FlatButton(onPressed: (){
+      widget.toggleView();
+    },padding:EdgeInsets.all(0.0), child:Text("SignIn here",style: TextStyle(fontWeight:FontWeight.bold,fontSize:15.0,color: Colors.blue[300]),))
+  ]),
           ],
         ),
       ),
   )
-  );
+  )));
   }
 }
