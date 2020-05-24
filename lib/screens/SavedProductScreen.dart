@@ -77,7 +77,7 @@ class _SavedProductScreenState extends State<SavedProductScreen> {
           children: clothesData.clotheItem.map((cloth){
             return Item();
           }).toList(),
-        )
+        ),
       ),
     );
   }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shopconn/const/Theme.dart';
-import 'package:shopconn/screens/AddProductScreen.dart';
-
+import 'package:shopconn/screens/ProductDetailScreen_Book.dart';
 import 'package:shopconn/screens/boarding/boarding.dart';
 
 
@@ -25,7 +24,7 @@ class MyApp extends StatelessWidget {
       ),
 
       // home: AddProuctScreen(),
-      home:BoardingScreen(),
+      home: ProductDetailScreen_Book(),
     );
   }
 }
