@@ -1,3 +1,5 @@
+import 'package:shopconn/screens/HomeScreen.dart';
+
 import '../services/auth.dart';
 import 'package:flutter/material.dart';
 
@@ -138,6 +140,12 @@ String error='';
                setState(() {
                  error ='Enter valid credentials';
                });
+             }
+             else{
+                Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) =>HomePage()),
+                      );
              }
               }
           },),

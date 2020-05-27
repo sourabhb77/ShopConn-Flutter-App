@@ -1,6 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shopconn/const/Theme.dart';
+import 'package:shopconn/screens/HomeScreen.dart';
 import 'package:shopconn/screens/ProductDetailScreen_Book.dart';
+import 'package:shopconn/screens/Profile.dart';
 import 'package:shopconn/screens/Wrapper.dart';
 import 'package:shopconn/screens/boarding/boarding.dart';
 import 'package:shopconn/screens/signUP.dart';
@@ -14,6 +17,7 @@ void main() {
 
 
 class MyApp extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -28,7 +32,7 @@ class MyApp extends StatelessWidget {
       ),
 
       // home: AddProuctScreen(),
-      home: Login(),
+      home:HomePage(),
     );
   }
 }
