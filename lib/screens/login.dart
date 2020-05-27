@@ -1,182 +1,327 @@
-import '../services/auth.dart';
+import 'package:shopconn/api/shopconnApi.dart';
+import 'package:shopconn/const/Theme.dart';
+import 'package:shopconn/models/user.dart';
+import 'package:shopconn/notifier/authNotifier.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-
+enum AuthMode { Signup, Login }
 
 class Login extends StatefulWidget {
- 
- final Function toggleView;
- Login({this.toggleView});
-
   @override
-  _LoginState createState() => _LoginState();
+  State<StatefulWidget> createState() {
+    return _LoginState();
+  }
 }
 
 class _LoginState extends State<Login> {
-final AuthService _auth=AuthService();
-final _formkey = GlobalKey<FormState>();
-String email='';
-String password='';
-String error='';
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _passwordController = new TextEditingController();
+  AuthMode _authMode = AuthMode.Login;
+
+  User _user = User();
+
+  @override
+  void initState() {
+    AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
+    initializeCurrentUser(authNotifier);
+    super.initState();
+  }
+
+  void _submitForm() {
+    if (!_formKey.currentState.validate()) {
+      return;
+    }
+
+    _formKey.currentState.save();
+
+    AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
+
+    if (_authMode == AuthMode.Login) {
+      login(_user, authNotifier);
+    } else {
+      signup(_user, authNotifier);
+    }
+  }
+
+  Widget _buildDisplayNameField() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+      child: TextFormField(
+        decoration: InputDecoration(
+          fillColor: sc_InputBackgroundColor,
+          filled: true,
+          prefixIcon: Icon(
+            Icons.print,
+            color: sc_ItemTitleColor,
+          ),
+          hintText: "Display Name",
+          hintStyle: TextStyle(
+            color: sc_InputHintTextColor,
+            fontSize: 16.0,
+          ),
+          enabledBorder: UnderlineInputBorder(      
+            borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),   
+          ),  
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
+          ),
+          border: UnderlineInputBorder(
+            borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
+          ),
+        ),
+        keyboardType: TextInputType.text,
+        validator: (String value) {
+          if (value.isEmpty) {
+            return 'Display Name is required';
+          }
+
+          if (value.length < 5 || value.length > 12) {
+            return 'Display Name must be betweem 5 and 12 characters';
+          }
+
+          return null;
+        },
+        onSaved: (String value) {
+          _user.displayName = value;
+          print(value);
+        },
+
+      ),
+    );
+  }
+
+  Widget _buildEmailField() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+      child: TextFormField(
+        decoration: InputDecoration(
+          fillColor: sc_InputBackgroundColor,
+          filled: true,
+          prefixIcon: Icon(
+            Icons.print,
+            color: sc_ItemTitleColor,
+          ),
+          hintText: "Email",
+          hintStyle: TextStyle(
+            color: sc_InputHintTextColor,
+            fontSize: 16.0,
+          ),
+          enabledBorder: UnderlineInputBorder(      
+            borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),   
+          ),  
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
+          ),
+          border: UnderlineInputBorder(
+            borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
+          ),
+        ),
+        keyboardType: TextInputType.emailAddress,
+        validator: (String value) {
+          if (value.isEmpty) {
+            return 'Email is required';
+          }
+
+          if (!RegExp(
+                  r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
+              .hasMatch(value)) {
+            return 'Please enter a valid email address';
+          }
+
+          return null;
+        },
+        onSaved: (String value) {
+          _user.email = value;
+        },
+
+      ),
+    );
+  }
+
+  Widget _buildPasswordField() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+      child: TextFormField(
+        decoration: InputDecoration(
+          fillColor: sc_InputBackgroundColor,
+          filled: true,
+          prefixIcon: Icon(
+            Icons.print,
+            color: sc_ItemTitleColor,
+          ),
+          hintText: "Password",
+          hintStyle: TextStyle(
+            color: sc_InputHintTextColor,
+            fontSize: 16.0,
+          ),
+          enabledBorder: UnderlineInputBorder(      
+            borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),   
+          ),  
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
+          ),
+          border: UnderlineInputBorder(
+            borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
+          ),
+        ),
+        obscureText: true,
+        controller: _passwordController,
+        validator: (String value) {
+          if (value.isEmpty) {
+            return 'Password is required';
+          }
+
+          if (value.length < 5 || value.length > 20) {
+            return 'Password must be betweem 5 and 20 characters';
+          }
+
+          return null;
+        },
+        onSaved: (String value) {
+          _user.password = value;
+        },
+      ),
+    );
+  }
+
+  Widget _buildConfirmPasswordField() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+      child: TextFormField(
+        decoration: InputDecoration(
+          fillColor: sc_InputBackgroundColor,
+          filled: true,
+          prefixIcon: Icon(
+            Icons.print,
+            color: sc_ItemTitleColor,
+          ),
+          hintText: "Confirm Password",
+          hintStyle: TextStyle(
+            color: sc_InputHintTextColor,
+            fontSize: 16.0,
+          ),
+          enabledBorder: UnderlineInputBorder(      
+            borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),   
+          ),  
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
+          ),
+          border: UnderlineInputBorder(
+            borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
+          ),
+        ),
+        obscureText: true,
+        validator: (String value) {
+          if (_passwordController.text != value) {
+            return 'Passwords do not match';
+          }
+
+          return null;
+        },
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return 
-    Form(
-      key:_formkey,
-      child:
-    Container(
-      child:Scaffold(
-    appBar: AppBar(
-    backgroundColor: Colors.white, 
-    title:Text("Login",style:TextStyle(color:Colors.black)),
-    leading: Icon(IconData(58135, fontFamily: 'MaterialIcons', matchTextDirection: true),color:Colors.black,size:30.0,),
-    elevation: 0.5,
-    ),
-    body: 
-    SingleChildScrollView(
-          child: Container(
-        decoration: BoxDecoration(
-          gradient:LinearGradient(begin:Alignment.topCenter,
-          end:Alignment.bottomCenter,
-          colors:[Colors.white,Colors.white],)
+    print("Building login screen");
+
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white, 
+        title: Text(
+          _authMode == AuthMode.Login ? 'Login' : 'Register',
+          style: TextStyle(
+            color:Colors.black
+          )
         ),
-        child:Padding(
-          padding: const EdgeInsets.fromLTRB(10.0,0.0, 20.0,5.0),
-          child: Column(
-            mainAxisAlignment:MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children:<Widget>[
-            Container(
-                margin: EdgeInsets.symmetric(horizontal: 20.0),
-                color:Colors.blue[100],
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(
-                      Icons.email,
-                      color:Colors.black,
-                    ),
-                    hintText: "Email Id",
-                    hintStyle: TextStyle(
-                      color: Colors.grey[700],
-                      fontSize: 16.0,
-                    ),
-                    enabledBorder: UnderlineInputBorder(      
-                      borderSide: BorderSide(color: Colors.blue[300], width: 3.0),   
-                    ),  
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color:  Colors.blue[300], width: 3.0),
-                    ),
-                    border: UnderlineInputBorder(
-                      borderSide: BorderSide(color:  Colors.blue[300], width: 3.0),
+        leading: Icon(IconData(58135, fontFamily: 'MaterialIcons', matchTextDirection: true),color:Colors.black,size:30.0,),
+        elevation: 0.5,
+      ),
+      body: Container(
+        // constraints: BoxConstraints.expand(
+        //   height: MediaQuery.of(context).size.height,
+        // ),
+        padding: EdgeInsets.symmetric(horizontal: 20.0),
+        decoration: BoxDecoration(color: sc_AppBarTextColor ),
+        child: Form(
+          autovalidate: true,
+          key: _formKey,
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                SizedBox(height: 30),
+                _authMode == AuthMode.Signup ? _buildDisplayNameField() : Container(),
+                _buildEmailField(),
+                _buildPasswordField(),
+                _authMode == AuthMode.Signup ? _buildConfirmPasswordField() : Container(),
+                SizedBox(height: 20),
+                ButtonTheme(
+                  minWidth: 260,
+                
+                  child: RaisedButton(
+                    color: sc_PrimaryColor,
+                    padding: EdgeInsets.all(10.0),
+                    onPressed: () => _submitForm(),
+                    child: Text(
+                      _authMode == AuthMode.Login ? 'Login' : 'Signup',
+                      style: TextStyle(fontSize: 20, color: sc_AppBarTextColor),
                     ),
                   ),
-                  validator:(val)=> val.isEmpty?"Enter an email":null,
-                  onChanged: (val){
-                    setState(()=>email=val);
-                  },
-                  
                 ),
-              ),
-            SizedBox(height:30.0),
-            Container(
-                margin: EdgeInsets.symmetric(horizontal: 20.0),
-                color:Colors.blue[100],
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(
-                      Icons.lock,
-                      color:Colors.black,
-                    ),
-                    hintText: "Password",
-                    hintStyle: TextStyle(
-                      color: Colors.grey[700],
-                      fontSize: 16.0,
-                    ),
-                    enabledBorder: UnderlineInputBorder(      
-                      borderSide: BorderSide(color: Colors.blue[300], width: 3.0),   
-                    ),  
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color:  Colors.blue[300], width: 3.0),
-                    ),
-                    border: UnderlineInputBorder(
-                      borderSide: BorderSide(color:  Colors.blue[300], width: 3.0),
+                SizedBox(height: 15.0,),
+                Text(
+                  'or',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 18.0,
+                  ),
+                ),
+                SizedBox(height: 15.0,),
+                ButtonTheme(
+                  minWidth: 260,
+                  child: RaisedButton(
+                    color: sc_AppBarTextColor,
+                    padding: EdgeInsets.all(10.0),
+                    onPressed: () {},
+                    child: Text(
+                      _authMode == AuthMode.Login ? 'Login with Google' : 'Signup with Google',
+                      style: TextStyle(fontSize: 18, color: sc_ItemTitleColor),
                     ),
                   ),
-                  obscureText: true,
-                  validator:(val)=> val.length<8?"Enter an password 8 character long":null,
-                   onChanged: (val){
-                    setState(()=>password=val);
-                  },
                 ),
-              ),
-               SizedBox(height:12.0),
-              Text(
-                error,
-                style:TextStyle(color: Colors.red,fontSize: 14.0),
-              ),
-              SizedBox(height:10.0),
-              Row(
-  mainAxisAlignment: MainAxisAlignment.center,
-  children:<Widget>[Text('Forgot Password?',style: TextStyle(color:Colors.blue[300],fontWeight:FontWeight.bold,fontSize:15.0,),),]),
-              SizedBox(height:20.0),
-            new SizedBox(
-  width: 100.0,
-  height: 50.0,
-  child: Padding(
-      padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-      child: Container(
-        color: Colors.blue[300],
-        // decoration: BoxDecoration(borderRadius:BorderRadius.circular(10)),
-        child: new RaisedButton(
-          child: new Text('Login',style: TextStyle(fontSize:20.0,fontWeight:FontWeight.bold,color:Colors.white),),splashColor: Colors.blueAccent,
-          onPressed: () async{
-              if(_formkey.currentState.validate()){
-                 dynamic  result= await _auth.signInwithEmailAndPassword(email, password);
-             if(result==null)
-             {
-               setState(() {
-                 error ='Enter valid credentials';
-               });
-             }
-              }
-          },),
-        ),
-      ),
-  ),
-SizedBox(height:10.0),
-Row(
-  mainAxisAlignment: MainAxisAlignment.center,
-  children:<Widget>[Text('or',style: TextStyle(fontWeight:FontWeight.bold,fontSize:15.0),),]),
-SizedBox(height:10.0),
-   new SizedBox(
-  width: 100.0,
-  height: 50.0,
-  child: Padding(
-      padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-      child: Container(
-        color: Colors.white,
-        // decoration: BoxDecoration(borderRadius:BorderRadius.circular(10)),
-        child: new RaisedButton(
-          child: new Text('Log In with Google',style: TextStyle(fontSize:20.0,fontWeight:FontWeight.bold,color:Colors.black),),splashColor: Colors.blueAccent,onPressed: (){}, 
-        ),
-      ),
-  ),
-),
-SizedBox(height:20.0),
-Row(
-  mainAxisAlignment: MainAxisAlignment.center,
-  children:<Widget>[Text("Don't Have Account?",style: TextStyle(fontWeight:FontWeight.bold,fontSize:15.0),),
-  FlatButton(onPressed: (){
-      widget.toggleView();
-  },padding:EdgeInsets.all(0.0), child:Text("Register here",style: TextStyle(fontWeight:FontWeight.bold,fontSize:15.0,color: Colors.blue[300]),))
- ]),
-            ],
+                
+                SizedBox(height: 40.0,),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 0, 10, 15),
+                  child: Row(
+                    children: <Widget>[
+                      Text(
+                        '${_authMode == AuthMode.Login ? 'Don\'t Have Account? ' : 'Have Account? '}',
+                        style: TextStyle(fontSize: 16.0, color: sc_ItemTitleColor ),
+                      ),
+                      GestureDetector(
+                        child: Text(
+                          '${_authMode == AuthMode.Login ? 'Register' : 'Login'} with Google',
+                          style: TextStyle(fontSize: 16.0, color: sc_PrimaryColor ),
+                        ),
+                        onTap: () {
+                        setState(() {
+                          _authMode =
+                              _authMode == AuthMode.Login ? AuthMode.Signup : AuthMode.Login;
+                        });
+                      },
+                      )
+                      
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ),
-  ),
-    )
-  )
-    ));
+      ),
+    );
   }
 }
