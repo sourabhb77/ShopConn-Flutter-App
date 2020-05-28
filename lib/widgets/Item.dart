@@ -76,13 +76,7 @@ class _ItemState extends State<Item> {
               ),
             ),
           ),
-          const Divider(
-            color: Colors.grey,
-            height: 5,
-            thickness: 1,
-            indent: 115,
-            endIndent: 0,
-          ),
+          
         ],
       ),
     );

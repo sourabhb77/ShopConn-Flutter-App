@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:shopconn/api/shopconnApi.dart';
 import 'package:shopconn/const/Theme.dart';
 import 'package:shopconn/notifier/authNotifier.dart';
+import 'package:shopconn/screens/AddProductScreen.dart';
 // import 'package:shopconn/widgets/CategorySelector.dart';
 // import 'package:shopconn/widgets/HomeSliver.dart';
 import 'package:shopconn/widgets/Item.dart';
@@ -189,6 +190,10 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddProuctScreen()),
+          );
           print("go to add product screen");
         },
         child: Icon(Icons.add),

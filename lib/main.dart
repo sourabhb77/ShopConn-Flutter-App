@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopconn/const/Theme.dart';
 import 'package:shopconn/notifier/authNotifier.dart';
+import 'package:shopconn/notifier/bookNotifier.dart';
 import 'package:shopconn/screens/HomeScreen.dart';
 import 'package:shopconn/screens/ProductDetailScreen_Book.dart';
 import 'package:shopconn/screens/SavedProductScreen.dart';
@@ -19,9 +20,9 @@ void main() {
         ChangeNotifierProvider(
           create: (context) => AuthNotifier(),
         ),
-        // ChangeNotifierProvider(
-        //   create: (context) => FoodNotifier(),
-        // ),
+        ChangeNotifierProvider(
+          create: (context) => BookNotifier(),
+        ),
       ],
       child: MyApp(),
     )

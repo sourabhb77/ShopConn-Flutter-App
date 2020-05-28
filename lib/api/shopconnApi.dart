@@ -1,13 +1,15 @@
 import 'dart:io';
 
-// import 'package:shopconn/model/food.dart';
+// import 'package:shopconn/model/book.dart';
+import 'package:shopconn/models/SavedProductData.dart';
 import 'package:shopconn/models/user.dart';
 import 'package:shopconn/notifier/authNotifier.dart';
-// import 'package:shopconn/notifier/food_notifier.dart';
+// import 'package:shopconn/notifier/book_notifier.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart' as path;
+import 'package:shopconn/notifier/bookNotifier.dart';
 // import 'package:uuid/uuid.dart';
 
 login(User user, AuthNotifier authNotifier) async {
@@ -49,6 +51,14 @@ signup(User user, AuthNotifier authNotifier) async {
   }
 }
 
+
+getCurrentUser(AuthNotifier authNotifier) async {
+    final FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    final uid = user.uid;
+    return uid;
+}
+
+
 signout(AuthNotifier authNotifier) async {
   await FirebaseAuth.instance.signOut().catchError((error) => print(error.code));
 
@@ -64,23 +74,30 @@ initializeCurrentUser(AuthNotifier authNotifier) async {
   }
 }
 
-// getFoods(FoodNotifier foodNotifier) async {
-//   QuerySnapshot snapshot = await Firestore.instance
-//       .collection('Foods')
-//       .orderBy("createdAt", descending: true)
-//       .getDocuments();
 
-//   List<Food> _foodList = [];
 
-//   snapshot.documents.forEach((document) {
-//     Food food = Food.fromMap(document.data);
-//     _foodList.add(food);
-//   });
 
-//   foodNotifier.foodList = _foodList;
-// }
 
-// uploadFoodAndImage(Food food, bool isUpdating, File localFile, Function foodUploaded) async {
+
+
+
+getBooks(BookNotifier bookNotifier) async {
+  QuerySnapshot snapshot = await Firestore.instance
+      .collection('Books')
+      .orderBy("createdAt", descending: true)
+      .getDocuments();
+
+  List<Book> _bookList = [];
+
+  snapshot.documents.forEach((document) {
+    Book book = Book.fromMap(document.data);
+    _bookList.add(book);
+  });
+
+  bookNotifier.bookList = _bookList;
+}
+
+// uploadBookAndImage(Book book, bool isUpdating, File localFile, Function bookUploaded) async {
 //   if (localFile != null) {
 //     print("uploading image");
 
@@ -90,7 +107,7 @@ initializeCurrentUser(AuthNotifier authNotifier) async {
 //     var uuid = Uuid().v4();
 
 //     final StorageReference firebaseStorageRef =
-//         FirebaseStorage.instance.ref().child('foods/images/$uuid$fileExtension');
+//         FirebaseStorage.instance.ref().child('books/images/$uuid$fileExtension');
 
 //     await firebaseStorageRef.putFile(localFile).onComplete.catchError((onError) {
 //       print(onError);
@@ -99,46 +116,46 @@ initializeCurrentUser(AuthNotifier authNotifier) async {
 
 //     String url = await firebaseStorageRef.getDownloadURL();
 //     print("download url: $url");
-//     _uploadFood(food, isUpdating, foodUploaded, imageUrl: url);
+//     _uploadBook(book, isUpdating, bookUploaded, imageUrl: url);
 //   } else {
 //     print('...skipping image upload');
-//     _uploadFood(food, isUpdating, foodUploaded);
+//     _uploadBook(book, isUpdating, bookUploaded);
 //   }
 // }
 
-// _uploadFood(Food food, bool isUpdating, Function foodUploaded, {String imageUrl}) async {
-//   CollectionReference foodRef = Firestore.instance.collection('Foods');
+// _uploadBook(Book book, bool isUpdating, Function bookUploaded, {String imageUrl}) async {
+//   CollectionReference bookRef = Firestore.instance.collection('Books');
 
 //   if (imageUrl != null) {
-//     food.image = imageUrl;
+//     book.img = imageUrl;
 //   }
 
 //   if (isUpdating) {
-//     food.updatedAt = Timestamp.now();
+//     book.updatedAt = Timestamp.now();
 
-//     await foodRef.document(food.id).updateData(food.toMap());
+//     await bookRef.document(book.id).updateData(book.toMap());
 
-//     foodUploaded(food);
-//     print('updated food with id: ${food.id}');
+//     bookUploaded(book);
+//     print('updated book with id: ${book.id}');
 //   } else {
-//     food.createdAt = Timestamp.now();
+//     book.createdAt = Timestamp.now();
 
-//     DocumentReference documentRef = await foodRef.add(food.toMap());
+//     DocumentReference documentRef = await bookRef.add(book.toMap());
 
-//     food.id = documentRef.documentID;
+//     book.id = documentRef.documentID;
 
-//     print('uploaded food successfully: ${food.toString()}');
+//     print('uploaded book successfully: ${book.toString()}');
 
-//     await documentRef.setData(food.toMap(), merge: true);
+//     await documentRef.setData(book.toMap(), merge: true);
 
-//     foodUploaded(food);
+//     bookUploaded(book);
 //   }
 // }
 
-// deleteFood(Food food, Function foodDeleted) async {
-//   if (food.image != null) {
+// deleteBook(Book book, Function bookDeleted) async {
+//   if (book.image != null) {
 //     StorageReference storageReference =
-//         await FirebaseStorage.instance.getReferenceFromUrl(food.image);
+//         await FirebaseStorage.instance.getReferenceFromUrl(book.image);
 
 //     print(storageReference.path);
 
@@ -147,6 +164,6 @@ initializeCurrentUser(AuthNotifier authNotifier) async {
 //     print('image deleted');
 //   }
 
-//   await Firestore.instance.collection('Foods').document(food.id).delete();
-//   foodDeleted(food);
+//   await Firestore.instance.collection('Books').document(book.id).delete();
+//   bookDeleted(book);
 // }
