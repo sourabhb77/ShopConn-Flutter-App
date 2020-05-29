@@ -12,7 +12,7 @@ class _ChatPageState extends State<ChatPage> {
     appBar:AppBar(
       leading:Row(children:<Widget>[
       Expanded(child:IconButton(icon:new Icon(IconData(58135, fontFamily: 'MaterialIcons', matchTextDirection: true),color:Colors.black,size:50.0,), onPressed:(){Navigator.pop(context);},)),
-      Expanded(child:CircleAvatar(radius:30.0,backgroundColor:Colors.grey[400],child:Image(image:AssetImage('assets/Symbols.png'),),),),]),
+      Expanded(child:CircleAvatar(radius:30.0,backgroundColor:Colors.grey[400],child:Image(image:AssetImage('assets/images/Symbols.png'),),),),]),
       title: Text('Doctor Daddy'),
       backgroundColor: Colors.blue[300],
       ),
@@ -35,5 +35,3 @@ class _ChatPageState extends State<ChatPage> {
 );
   }
 }
-// void main()=>runApp(MaterialApp(
-//   home: ));

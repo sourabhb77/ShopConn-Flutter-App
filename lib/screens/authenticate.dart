@@ -1,28 +1,28 @@
-// import './login.dart';
-// import './signUP.dart';
-// import 'package:flutter/material.dart';
+import 'package:shopconn/screens/login.dart';
+import 'package:shopconn/screens/signUP.dart';
+import 'package:flutter/material.dart';
 
-// class Authenticate extends StatefulWidget {
+class Authenticate extends StatefulWidget {
 
-//   @override
-//   _AuthenticateState createState() => _AuthenticateState();
-// }
+  @override
+  _AuthenticateState createState() => _AuthenticateState();
+}
 
-// class _AuthenticateState extends State<Authenticate> {
-// bool showSignIn = true;
+class _AuthenticateState extends State<Authenticate> {
+bool showSignIn = true;
 
-// void toggleView(){
-//   setState(()=>showSignIn=!showSignIn);
-// }
+void toggleView(){
+  setState(()=>showSignIn=!showSignIn);
+}
 
-//   @override
-//   Widget build(BuildContext context) {
-//     if(showSignIn)
-//     {
-//       return Login(toggleView:toggleView);
-//     }
-//     else{
-//       return SignUp(toggleView:toggleView);
-//     }
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    if(showSignIn)
+    {
+      return Login(toggleView:toggleView);
+    }
+    else{
+      return SignUp(toggleView:toggleView);
+    }
+  }
+}

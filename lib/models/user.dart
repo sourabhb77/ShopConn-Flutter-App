@@ -1,7 +1,5 @@
-class User {
-  String displayName;
-  String email;
-  String password;
-
-  User();
+class User{
+  final String uid;
+  User({this.uid});
+  
 }

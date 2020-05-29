@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../const/Theme.dart';
+import 'package:shopconn/const/Theme.dart';
 
 class AddProuctScreen_Other extends StatefulWidget {
   AddProuctScreen_Other({Key key}) : super(key: key);
