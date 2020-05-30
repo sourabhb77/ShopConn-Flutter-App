@@ -6,7 +6,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+import 'package:shopconn/api/shopconnApi.dart';
 import 'package:shopconn/const/Theme.dart';
+import 'package:shopconn/notifier/authNotifier.dart';
 import 'package:shopconn/widgets/ImagePicker/ImageCapture.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
@@ -15,7 +18,7 @@ import 'package:flutter/widgets.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
-
+enum ProfilePicState {Default, DB, PICK}
 class Profile extends StatefulWidget {
   @override
   _ProfileState createState() => _ProfileState();
@@ -23,77 +26,85 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   File image;
-  bool selected=false;
+  ProfilePicState state = ProfilePicState.Default;
+  bool selected = false;
+  String name, imageUrl,mobile,email;
   StorageReference storageReference;
-  TextEditingController nameController = TextEditingController(), mobileController = TextEditingController();
+  TextEditingController nameController = TextEditingController(),
+      mobileController = TextEditingController(),
+      emailController =TextEditingController();
+  String _user;
+  AuthNotifier authNotifier;
 
-  Future<String> _uploadImage(FirebaseUser user) async
-  {
-    storageReference=FirebaseStorage.instance.ref().child("users/${user.uid}");
-    StorageUploadTask task= storageReference.putFile(image);
-    final StorageTaskSnapshot downloadUrl = (await task.onComplete);
-    final String url = (await downloadUrl.ref.getDownloadURL());
-    print("URL: $url");
-    return url; 
+  void LoadUserDetails() async {
+    print("*******************************************************");
+    _user = await getCurrentUser(authNotifier);
+    print("USER ID: ${_user}");
+    DocumentSnapshot snapshot = await getProfile(_user);
+    print("SnapShot : ${snapshot.data.toString()}");
+
+    setState(() {
+      print("setting state");
+      imageUrl = snapshot.data["imageUrl"];
+      name = snapshot.data["name"];
+      mobile=snapshot.data["mobile"];
+      email=snapshot.data["email"];
+      // nameController= TextEditingController(text: name);
+      nameController.text=name;
+      mobileController.text=mobile;
+      emailController.text=snapshot.data["email"];
+
+
+      if(imageUrl!=null && imageUrl .length>5)
+      {
+        state=ProfilePicState.DB;
+      }
+    });
+    print("Image URL : $imageUrl Name : $name");
   }
 
-  void uploadToDatabase() async
-  {
-    String name=nameController.text,mobile=mobileController.text;
+  @override
+  void initState() {
+    super.initState();
+    LoadUserDetails();
+  }
+
+
+  void uploadToDatabase() async {
+    String name = nameController.text, mobile = mobileController.text;
 
     print("Name : $name, Mobile: $mobile");
-    if(name.length ==0 || mobile.length<2)
-    {
-      print("incooret");
-    }
-    else
-    {
-
-      
-      final FirebaseUser user= await  FirebaseAuth.instance.currentUser();
+    if (name.length == 0 || mobile.length < 2) {
+      print("incorrect");
+    } else {
+      final FirebaseUser user = await FirebaseAuth.instance.currentUser();
       print("User ID: ${user.uid}");
-
-
       //Firebase Storage
-      String imageUrl = await _uploadImage(user);
-
-
+      UpdateProfile(name, mobile, image);
       //Firestore Uploading
-      
-      DocumentReference ref= Firestore.instance.document("users/${user.uid}");
-      
-      
-      ref.setData({
-        "name":name,
-        "mobile":mobile,
-        "imageUrl":imageUrl
-      },merge: true).then((value) => 
-      print("Success")).catchError((error)=>
-      {
-        print(error)
-        
-      });
+
     }
   }
 
-   Future<void> _selectImage() async {
-    File Timage =await ImagePicker.pickImage(source: ImageSource.gallery);
+  Future<void> _selectImage() async {
+    File Timage = await ImagePicker.pickImage(source: ImageSource.gallery);
     Timage = await ImageCropper.cropImage(
-        sourcePath: Timage.path,
-        // ratioX: 1.0,
-        // ratioY: 1.0,
-        // maxWidth: 512,
-        // maxHeight: 512,
-        toolbarColor: Colors.purple,
-        toolbarWidgetColor: Colors.white,
-      );
-      setState(() {
-        
-        image=Timage;
-        selected=true;
-        print("Selected : $selected");
-      });
-   }
+      sourcePath: Timage.path,
+      // ratioX: 1.0,
+      // ratioY: 1.0,
+      // maxWidth: 512,
+      // maxHeight: 512,
+      toolbarColor: Colors.purple,
+      toolbarWidgetColor: Colors.white,
+    );
+    setState(() {
+      image = Timage;
+      state=ProfilePicState.PICK;
+      selected = true;
+      print("Selected : $selected");
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,8 +113,7 @@ class _ProfileState extends State<Profile> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.save),
-            onPressed: ()
-            {
+            onPressed: () {
               uploadToDatabase();
             },
           )
@@ -112,39 +122,33 @@ class _ProfileState extends State<Profile> {
         automaticallyImplyLeading: true,
       ),
       body: SingleChildScrollView(
-              child: Column(
+        child: Column(
           children: <Widget>[
             InkWell(
-              onTap: ()
-              {
+              onTap: () {
                 _selectImage();
-               
-              //    Navigator.push(
-              // context,
-              // MaterialPageRoute(builder: (context) => ImageCapture()),);
 
+                //    Navigator.push(
+                // context,
+                // MaterialPageRoute(builder: (context) => ImageCapture()),);
               },
-              child: selected==true?  Container(
+              child: Container(
                 alignment: Alignment.center,
-                padding: EdgeInsets.fromLTRB(0, 20.0, 0, 0),
-                child: CircleAvatar(
-                  // child: Image.file(image),
-                  backgroundImage: FileImage(image),
-                  radius: 78.0,),
+                padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                child:  state== ProfilePicState.DB ?
+                CircleAvatar(
+                  backgroundImage: NetworkImage(imageUrl),
+                  radius: 78,
                 ):
-              Container(
-                alignment: Alignment.center,
-                padding: EdgeInsets.fromLTRB(0, 20.0, 0, 0),
-                child: CircleAvatar(
-                  radius: 80.0,
-                  backgroundColor: Colors.teal,
-                  child: CircleAvatar(
-                    radius: 78.0,
-                    backgroundImage: NetworkImage(
-                        "https://image.freepik.com/free-vector/doctor-character-background_1270-84.jpg"),
-                  ),
-                ),
+                state== ProfilePicState.Default ? 
+                CircleAvatar(
+                   backgroundImage: NetworkImage("https://image.freepik.com/free-vector/doctor-character-background_1270-84.jpg"),
+                   radius: 78,)
+                   : CircleAvatar(radius: 78,
+                   backgroundImage: FileImage(image),)
               ),
+              
+          
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -173,7 +177,7 @@ class _ProfileState extends State<Profile> {
                 Padding(
                   padding: const EdgeInsets.only(left: 15, right: 15),
                   child: TextField(
-                    
+                    controller: emailController,
                     maxLength: 20,
                     maxLines: 1,
                     toolbarOptions: ToolbarOptions(
@@ -186,6 +190,7 @@ class _ProfileState extends State<Profile> {
                       labelText: 'Email',
                       prefixIcon: Icon(Icons.person),
                     ),
+                    enabled: false,
                     textCapitalization: TextCapitalization.words,
                     autocorrect: false,
 
@@ -195,7 +200,9 @@ class _ProfileState extends State<Profile> {
                 Padding(
                   padding: const EdgeInsets.only(left: 15, right: 15),
                   child: TextField(
+                    
                     controller: nameController,
+                    
                     maxLength: 20,
                     maxLines: 1,
                     toolbarOptions: ToolbarOptions(
@@ -204,10 +211,13 @@ class _ProfileState extends State<Profile> {
                     ),
                     // obscureText: true,
                     decoration: InputDecoration(
+                      
                       border: OutlineInputBorder(),
                       labelText: 'Full Name',
                       prefixIcon: Icon(Icons.person),
                     ),
+
+                    
                     textCapitalization: TextCapitalization.words,
                     autocorrect: false,
 
@@ -239,7 +249,6 @@ class _ProfileState extends State<Profile> {
                 ),
               ],
             ),
-           
           ],
         ),
       ),

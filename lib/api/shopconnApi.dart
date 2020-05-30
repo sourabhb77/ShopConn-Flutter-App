@@ -1,6 +1,7 @@
 import 'dart:io';
 
 // import 'package:shopconn/model/book.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:shopconn/models/SavedProductData.dart';
 import 'package:shopconn/models/user.dart';
 import 'package:shopconn/notifier/authNotifier.dart';
@@ -74,6 +75,13 @@ initializeCurrentUser(AuthNotifier authNotifier) async {
   }
 }
 
+getProfile(String id) async{
+  DocumentReference ref = Firestore.instance.document("users/$id");
+  DocumentSnapshot snapshot= await ref.get();
+  return snapshot;
+  
+}
+
 
 getBooks(BookNotifier bookNotifier) async {
   QuerySnapshot snapshot = await Firestore.instance
@@ -90,6 +98,35 @@ getBooks(BookNotifier bookNotifier) async {
 
   bookNotifier.bookList = _bookList;
 }
+
+
+//API To Upload User Profile to Database
+
+Future<String> UploadProfileImage(String user,File image) async {
+    StorageReference storageReference =        FirebaseStorage.instance.ref().child("users/$user");
+    StorageUploadTask task = storageReference.putFile(image);
+    final StorageTaskSnapshot downloadUrl = (await task.onComplete);
+    final String url = (await downloadUrl.ref.getDownloadURL());
+    print("URL: $url");
+    return url;
+  }
+
+
+ void UpdateProfile(String name,String mobile,File image) async
+ {
+   FirebaseUser user = await FirebaseAuth.instance.currentUser();
+   String url= await UploadProfileImage(user.uid, image);
+    DocumentReference ref = Firestore.instance.document("users/${user.uid}");
+
+      ref
+          .setData({"name": name, "mobile": mobile, "imageUrl": url,"newUser":false},
+              merge: true)
+          .then((value) => print("Success"))
+          .catchError((error) => {print(error)});
+    }
+
+
+ 
 
 // uploadBookAndImage(Book book, bool isUpdating, File localFile, Function bookUploaded) async {
 //   if (localFile != null) {

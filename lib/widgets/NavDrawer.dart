@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:shopconn/screens/Profile.dart';
 
 class NavDrawer extends StatefulWidget {
   @override
@@ -48,9 +49,17 @@ class _NavDrawer extends State<NavDrawer> {
               ],
             ),
           ),
-          ListTile(
-            title: Text("Profile"),
-            leading: Icon(Icons.person),
+          InkWell(
+            onTap: (){
+               Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Profile()),
+          );
+            },
+                      child: ListTile(
+              title: Text("Profile"),
+              leading: Icon(Icons.person),
+            ),
           ),
           ListTile(
             leading: Icon(Icons.message),
