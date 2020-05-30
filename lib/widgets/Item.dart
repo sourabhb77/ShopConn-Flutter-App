@@ -51,7 +51,7 @@ class _ItemState extends State<Item> {
                             ),
                           ),
                           Text(
-                            "hye how are you detaw wjhevw ew\nwhewh jhbe sfkwej\nwefwglk",
+                            "hye how are you detaw wjhevw ew ja;dfjadkfa sdfa dfasdfa whewh jhbe sfkwej\nwefwglk",
                             style: TextStyle(
                               fontSize: 16.0 ,
                               color: sc_ItemInfoColor,
@@ -76,13 +76,7 @@ class _ItemState extends State<Item> {
               ),
             ),
           ),
-          const Divider(
-            color: Colors.grey,
-            height: 5,
-            thickness: 1,
-            indent: 115,
-            endIndent: 0,
-          ),
+          
         ],
       ),
     );
