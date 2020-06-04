@@ -121,14 +121,24 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Book {
-  String id;
+class product{
   String ownerId;
-  String name;
-  int price;
-  String description;
-  List<String> imgList;
+  String id,name,description;
+  double price;
   String productCategory;
+  List<String> imgList;
+  Timestamp timestamp;
+
+}
+
+class Book extends product{
+  // String id;
+  // String ownerId;
+  // String name;
+  // int price;
+  // String description;
+  // List<String> imgList;
+  // String productCategory;
   bool onSell = true;
   String bookCategory;
   List<String> authorList;
@@ -137,7 +147,6 @@ class Book {
   String condition; //Esthetic condition
   String branch;
   String subject;
-  Timestamp postedAt;
 
   Book();
   
@@ -157,7 +166,7 @@ class Book {
     condition = data['condition'];
     branch = data['branch'];
     subject = data['subject'];
-    postedAt = data['postedAt'];
+    timestamp = data['timeStamp'];
   }
 
   Map<String, dynamic> toMap(){
@@ -177,7 +186,9 @@ class Book {
       'condition': condition,
       'branch': branch,
       'subject': subject,
-      'postedAt': postedAt,
+      'timeStamp': timestamp,
     };
   }
+
+
 }

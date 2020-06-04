@@ -85,7 +85,7 @@ class _LoginState extends State<Login> {
         },
         onSaved: (String value) {
           
-          _user.displayName = value;
+          _user.displayName = value.trim();
           print(value);
         },
 
@@ -134,7 +134,7 @@ class _LoginState extends State<Login> {
           return null;
         },
         onSaved: (String value) {
-          _user.email = value;
+          _user.email = value.trim();
         },
 
       ),
@@ -181,7 +181,7 @@ class _LoginState extends State<Login> {
           return null;
         },
         onSaved: (String value) {
-          _user.password = value;
+          _user.password = value.trim();
         },
       ),
     );
@@ -265,7 +265,9 @@ class _LoginState extends State<Login> {
                   child: RaisedButton(
                     color: sc_PrimaryColor,
                     padding: EdgeInsets.all(10.0),
-                    onPressed: () => _submitForm(),
+                    onPressed: () => 
+                    
+                    _submitForm(),
                     child: Text(
                       _authMode == AuthMode.Login ? 'Login' : 'Signup',
                       style: TextStyle(fontSize: 20, color: sc_AppBarTextColor),
