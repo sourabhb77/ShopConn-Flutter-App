@@ -132,7 +132,7 @@ class Book {
   bool onSell = true;
   String bookCategory;
   List<String> authorList;
-  String edition;
+  int edition;
   String publication;
   String condition; //Esthetic condition
   String branch;
