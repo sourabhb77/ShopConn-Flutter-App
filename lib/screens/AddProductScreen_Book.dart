@@ -1,7 +1,10 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopconn/api/shopconnApi.dart';
+import 'package:shopconn/api/uploadProduct.dart';
 import 'package:shopconn/models/SavedProductData.dart';
 import 'package:shopconn/notifier/authNotifier.dart';
 import 'package:shopconn/notifier/bookNotifier.dart';
@@ -23,13 +26,28 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   Book _currentBook;
   String name;
-  List authorList = [];
+  List<String> authorList = [];
   BookType _bookType =BookType.edu;
   String _branch = 'IT';
+  String _bookCat = "Educational";
   // List newList = List.from(authorList);
   TextEditingController authorListController = new TextEditingController();
   List<File> imageList= List(); //To store Path of each Images
   
+
+  initBook()
+  {
+    print("Initial Constructor");
+    Future<FirebaseUser> user = getCurrendFirebaseUser();
+    user.then((value) => {
+      _currentBook.ownerId= value.uid,
+      _currentBook.postedAt=Timestamp.now(),
+      _currentBook.productCategory ="Book",
+
+    });
+    print("After firebase user call");
+  }
+
   void _SelectImage() async  //Function to keep track of all the image files that are needed to be uploaded
   {
     File image =await ImagePicker.pickImage(
@@ -41,21 +59,40 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
     
   }
 
-  _AddProuctScreen_BookState(this.name);
+  uploadData() async
+  {
+    print("Upload starting");
+    bool ans =await  uploadProduct(_currentBook, imageList);
+
+    print("Upload Finisehd");
+    if(ans==true)
+    {
+        print("\n*******Upload Status********\n");
+    print("Success");
+    print("\n***************\n");
+
+    }
+    else
+    {
+        print("\n*******book screen********\n");
+        print("FAILURE");
+    print("\n***************\n");
+    }
+
+  }
+
+  // _AddProuctScreen_BookState(this.name);
+
+  _AddProuctScreen_BookState(this.name){
+    initBook();
+  }
   @override
   void initState() {
     super.initState();
     AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
     BookNotifier bookNotifier = Provider.of<BookNotifier>(context, listen: false);
     _currentBook = Book();
-    _currentBook.branch = _branch;
-    // dynamic uid = getCurrentUser(authNotifier);
-    // if (bookNotifier.currentBook != null) {
-    //   _currentBook = bookNotifier.currentBook;
-    // } else {
-    //   _currentBook = Book();
-    // }
-    // _imageUrl = _currentFood.image;
+    _currentBook.branch = _branch;    
   }
 
   Widget _buildAuthorNameField() {
@@ -132,7 +169,7 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
           if (value.isEmpty) {
             return 'Edition is required';
           }
-          var edi = int.parse(value);
+          var edi = int.tryParse(value);
           if (edi <1  || edi > 10) {
             return 'Edition must be betweem 1 and 10';
           }
@@ -140,7 +177,7 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
           return null;
         },
         onSaved: (String value) {
-          var edi = int.parse(value);
+          var edi = int.tryParse(value);
           _currentBook.edition =edi;
           print(edi);
         },
@@ -226,7 +263,7 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
           if (value.isEmpty) {
             return 'Price is required';
           }
-          var pr = int.parse(value);
+          var pr = int.tryParse(value);
           if (pr <0  || pr > 30000) {
             return 'Price must be greater equal to 0';
           }
@@ -234,7 +271,7 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
           return null;
         },
         onSaved: (String value) {
-          var pr = int.parse(value);
+          var pr = int.tryParse(value);
           _currentBook.price =pr;
           print(pr);
         },
@@ -253,6 +290,7 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
             onChanged: (BookType value) {
               setState(() {
                 _bookType = value;
+                _bookCat ="Educational";
               });
             },
           ),
@@ -265,6 +303,7 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
             onChanged: (BookType value) {
               setState(() {
                 _bookType = value;
+                _bookCat ="Non-Educational";
               });
             },
           ),
@@ -625,6 +664,15 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
                         ),                      
                       ),
                       onPressed: () {
+                        _currentBook.authorList = authorList;
+                        _currentBook.bookCategory = _bookCat;
+                        if (!_formkey.currentState.validate()) {
+                          print("Errororororororo");
+                        } else { // No Error upload all the details to the database!!
+                          _formkey.currentState.save();
+                          uploadData();
+                          print(_currentBook.toMap());
+                        }
                         // Navigator.push(
                         //   context,
                         //   MaterialPageRoute(builder: (context) => SavedProductScreen()),

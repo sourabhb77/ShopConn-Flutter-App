@@ -60,6 +60,11 @@ getCurrentUser(AuthNotifier authNotifier) async {
 }
 
 
+Future<FirebaseUser> getCurrendFirebaseUser() async
+{
+  return await FirebaseAuth.instance.currentUser();
+}
+
 signout(AuthNotifier authNotifier) async {
   await FirebaseAuth.instance.signOut().catchError((error) => print(error.code));
 
