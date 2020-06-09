@@ -90,8 +90,8 @@ getProfile(String id) async{
 
 getBooks(BookNotifier bookNotifier) async {
   QuerySnapshot snapshot = await Firestore.instance
-      .collection('Books')
-      .orderBy("createdAt", descending: true)
+      .collection('post')
+      // .orderBy("postedAt", descending: true)
       .getDocuments();
 
   List<Book> _bookList = [];

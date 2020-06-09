@@ -115,12 +115,6 @@ class _AddProuctScreenState extends State<AddProuctScreen> {
           ),
         ),
         backgroundColor: sc_AppBarBackgroundColor,
-        // leading: IconButton(
-        //   icon: Icon(Icons.arrow_back),
-        //   onPressed: () {
-        //     // Navigator.pop(context);
-        //   },
-        // ),
       ),
       body: SingleChildScrollView(
         child: Form(

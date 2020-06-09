@@ -25,6 +25,7 @@ class _SavedProductScreenState extends State<SavedProductScreen> {
   Widget build(BuildContext context) {
     AuthNotifier authNotifier = Provider.of<AuthNotifier>(context);
     BookNotifier bookNotifier = Provider.of<BookNotifier>(context);
+    print(bookNotifier.bookList);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -34,15 +35,12 @@ class _SavedProductScreenState extends State<SavedProductScreen> {
           ),
         ),
         backgroundColor: sc_AppBarBackgroundColor,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: ()=> signout(authNotifier),
-        ),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
             ListView.separated(
+              shrinkWrap: true,
               itemBuilder: (BuildContext context, int index){
                 return Item();
               },
@@ -55,8 +53,9 @@ class _SavedProductScreenState extends State<SavedProductScreen> {
                   endIndent: 0,
                 );
               },            
-              itemCount: bookNotifier.bookList.length
-            )
+              itemCount: 5
+            ),
+            Text("hihwih"),
 
           ],
         ),
