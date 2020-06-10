@@ -5,6 +5,8 @@ import 'package:shopconn/api/shopconnApi.dart';
 import 'package:shopconn/const/Theme.dart';
 import 'package:shopconn/notifier/authNotifier.dart';
 import 'package:shopconn/screens/AddProductScreen.dart';
+import 'package:shopconn/screens/SavedProductScreen.dart';
+import 'package:shopconn/screens/chatbox.dart';
 // import 'package:shopconn/widgets/CategorySelector.dart';
 // import 'package:shopconn/widgets/HomeSliver.dart';
 import 'package:shopconn/widgets/Item.dart';
@@ -36,12 +38,22 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
             icon: Icon(Icons.message),
             tooltip: 'Notification',
-            onPressed: () {},
+            onPressed: () {
+               Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ChatPage()),
+              );
+            },
           ),
           IconButton(
             icon: Icon(Icons.bookmark),
             tooltip: 'Saved Product',
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SavedProductScreen()),
+              );
+            },
           ),
         ],
       ),
