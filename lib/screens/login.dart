@@ -1,4 +1,5 @@
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shopconn/api/shopconnApi.dart';
 import 'package:shopconn/const/Theme.dart';
 import 'package:shopconn/models/user.dart';
@@ -26,6 +27,22 @@ class _LoginState extends State<Login> {
   void initState() {
     AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
     initializeCurrentUser(authNotifier);
+    Future<FirebaseUser> user = FirebaseAuth.instance.currentUser();
+    user.then((FirebaseUser _user){
+      if(_user==null)
+      {
+        print("User is null");
+        
+      }
+      else
+      {
+        print("User is not null , uid: ${_user.uid} email: ${_user.email}");
+      }
+
+
+    });
+
+
     super.initState();
   }
 
