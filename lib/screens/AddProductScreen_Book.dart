@@ -27,6 +27,7 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
   List<String> authorList = [];
   String _branch = 'IT';
   String _bookCat = "Educational";
+  String _condition ="Very Good"; //[very good, good , not bad]
   // List newList = List.from(authorList);
   TextEditingController authorListController = new TextEditingController();
   List<File> imageList= List(); //To store Path of each Images
@@ -181,11 +182,14 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
               if (value.isEmpty) {
                 return 'Edition is required';
               }
-              var edi = int.tryParse(value);
-              if (edi <1  || edi > 10) {
-                return 'Edition must be betweem 1 and 10';
+              try {
+                var edi = int.tryParse(value);
+                if (edi <1  || edi > 10) {
+                  return 'Edition must be betweem 1 and 10';
+                }
+              } catch (err) {
+                return 'Edition must be number';
               }
-
               return null;
             },
             onSaved: (String value) {
@@ -274,8 +278,6 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
     );
   }
 
-
-
   Widget _buildPriceField() {
     return Container(
       width: 150.0,
@@ -332,11 +334,14 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
               if (value.isEmpty) {
                 return 'Price is required';
               }
-              var pr = int.tryParse(value);
-              if (pr <0  || pr > 30000) {
-                return 'Price must be greater equal to 0';
+              try {
+                var pr = int.tryParse(value);
+                if (pr <0  || pr > 30000) {
+                  return 'Price must be greater equal to 0';
+                }
+              } catch (err) {
+                return 'Price must be number';
               }
-
               return null;
             },
             onSaved: (String value) {
@@ -349,7 +354,6 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
       ),
     );
   }
-
 
   Widget _buildPublication() {
     return Container(
@@ -420,7 +424,7 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Condition",
+            "Book Condition",
             style: TextStyle(
               fontSize: 16.0,
               color: sc_ItemTitleColor,
@@ -428,140 +432,108 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
             ),
           ),
           SizedBox(height: 5.0,),
-          TextFormField(
-            // maxLines: 5,
-            decoration: InputDecoration(
-              fillColor: sc_InputBackgroundColor,
-              filled: true,
-              isDense: true,
-              contentPadding: EdgeInsets.all(15),
-              hintText: "Good Condition",
-              hintStyle: TextStyle(
-                color: sc_InputHintTextColor,
-                fontSize: 16.0,
-              ),
-              enabledBorder: OutlineInputBorder(      
-                borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                borderSide: BorderSide(color: sc_InputBackgroundColor),   
-              ),  
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: sc_InputBackgroundColor),
-                borderRadius: BorderRadius.all(Radius.circular(8.0)),
-              ),
-              border: OutlineInputBorder(
-                borderSide: BorderSide(color: sc_InputBackgroundColor),
-                borderRadius: BorderRadius.all(Radius.circular(8.0)),
-              ),
-            ),
-            keyboardType: TextInputType.text,
-            validator: (String value) {
-              if (value.isEmpty) {
-                return 'Condition is required';
-              }
+          Row(
+            children: <Widget>[
+              Expanded(
+                flex: 2,
+                child: GestureDetector(
+                  onTap: () => setState(() => _condition = "Very Good"),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: _condition == "Very Good" ? sc_InputBackgroundColor : sc_AppBarTextColor,
+                      border: Border.all(
+                        color: _condition == "Very Good" ? sc_PrimaryColor : sc_InputBackgroundColor,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
 
-              if (value.length <5  || value.length > 100) {
-                return 'Condition must be betweem 4 and 100 characters';
-              }
+                    ),
+                    padding: EdgeInsets.symmetric(vertical: 13.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Very Good",
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            color: sc_ItemTitleColor,
+                            fontWeight: _condition == "Very Good" ? FontWeight.w500 : FontWeight.normal,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: GestureDetector(
+                  onTap: () => setState(() => _condition = "Good"),
+                  child: Container(
+                    // margin: EdgeInsets.symmetric(horizontal: 2.0),
+                    decoration: BoxDecoration(
+                      color: _condition == "Good" ? sc_InputBackgroundColor : sc_AppBarTextColor,
+                      border: Border.all(
+                        color: _condition == "Good" ? sc_PrimaryColor : sc_InputBackgroundColor,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
 
-              return null;
-            },
-            onSaved: (String value) {
-              _currentBook.condition =value;
-              print(value);
-            },
-          ),
+                    ),
+                    padding: EdgeInsets.symmetric(vertical: 13.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Good",
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            color: sc_ItemTitleColor,
+                            fontWeight: _condition == "Good" ? FontWeight.w500 : FontWeight.normal,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: GestureDetector(
+                  onTap: () => setState(() => _condition = "Not Bad"),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: _condition == "Not Bad" ? sc_InputBackgroundColor : sc_AppBarTextColor,
+                      border: Border.all(
+                        color: _condition == "Not Bad" ? sc_PrimaryColor : sc_InputBackgroundColor,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+
+                    ),
+                    padding: EdgeInsets.symmetric(vertical: 13.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Not Bad",
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            color: sc_ItemTitleColor,
+                            fontWeight: _condition == "Not Bad" ? FontWeight.w500 : FontWeight.normal,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          )
         ],
       ),
     );
   }
-
-
-
-  // Widget _buildCondition() {
-  //   return Container(
-  //     margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-  //     child: Column(
-  //       crossAxisAlignment: CrossAxisAlignment.start,
-  //       children: [
-  //         Text(
-  //           "Book Condition",
-  //           style: TextStyle(
-  //             fontSize: 16.0,
-  //             color: sc_ItemTitleColor
-  //           ),
-  //         ),
-  //         SizedBox(height: 5.0,),
-  //         Row(
-  //           children: <Widget>[
-  //             Expanded(
-  //               flex: 3,
-  //               child: GestureDetector(
-  //                 onTap: () => setState(() => _bookCat = "Educational"),
-  //                 child: Container(
-  //                   decoration: BoxDecoration(
-  //                     color: _bookCat == "Educational" ? sc_InputBackgroundColor : sc_AppBarTextColor,
-  //                     border: Border.all(
-  //                       color: _bookCat == "Educational" ? sc_PrimaryColor : sc_InputBackgroundColor,
-  //                       width: 2.0,
-  //                     ),
-  //                     borderRadius: BorderRadius.circular(8.0),
-
-  //                   ),
-  //                   padding: EdgeInsets.symmetric(vertical: 13.0),
-  //                   child: Column(
-  //                     mainAxisAlignment: MainAxisAlignment.center,
-  //                     children: [
-  //                       Text(
-  //                         "Educational",
-  //                         style: TextStyle(
-  //                           fontSize: 16.0,
-  //                           color: sc_ItemTitleColor,
-  //                           fontWeight: _bookCat == "Educational" ? FontWeight.w500 : FontWeight.normal,
-  //                         ),
-  //                       ),
-  //                     ],
-  //                   ),
-  //                 ),
-  //               ),
-  //             ),
-  //             Expanded(
-  //               flex: 3,
-  //               child: GestureDetector(
-  //                 onTap: () => setState(() => _bookCat = "NonEducational"),
-  //                 child: Container(
-  //                   decoration: BoxDecoration(
-  //                     color: _bookCat == "NonEducational" ? sc_InputBackgroundColor : sc_AppBarTextColor,
-  //                     border: Border.all(
-  //                       color: _bookCat == "NonEducational" ? sc_PrimaryColor : sc_InputBackgroundColor,
-  //                       width: 2.0,
-  //                     ),
-  //                     borderRadius: BorderRadius.circular(8.0),
-
-  //                   ),
-  //                   padding: EdgeInsets.symmetric(vertical: 13.0),
-  //                   child: Column(
-  //                     mainAxisAlignment: MainAxisAlignment.center,
-  //                     children: [
-  //                       Text(
-  //                         "NonEducational",
-  //                         style: TextStyle(
-  //                           fontSize: 16.0,
-  //                           color: sc_ItemTitleColor,
-  //                           fontWeight: _bookCat == "NonEducational" ? FontWeight.w500 : FontWeight.normal,
-  //                         ),
-  //                       ),
-  //                     ],
-  //                   ),
-  //                 ),
-  //               ),
-  //             ),
-  //           ],
-  //         )
-  //       ],
-  //     ),
-  //   );
-  // }
-
 
   Widget _buildSubject() {
     return Container(
@@ -670,8 +642,6 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
     );
   }
 
-
-
   Widget _buildBookCategory() {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
@@ -698,7 +668,7 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
                       color: _bookCat == "Educational" ? sc_InputBackgroundColor : sc_AppBarTextColor,
                       border: Border.all(
                         color: _bookCat == "Educational" ? sc_PrimaryColor : sc_InputBackgroundColor,
-                        width: 2.0,
+                        width: 1.0,
                       ),
                       borderRadius: BorderRadius.circular(8.0),
 
@@ -729,7 +699,7 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
                       color: _bookCat == "NonEducational" ? sc_InputBackgroundColor : sc_AppBarTextColor,
                       border: Border.all(
                         color: _bookCat == "NonEducational" ? sc_PrimaryColor : sc_InputBackgroundColor,
-                        width: 2.0,
+                        width: 1.0,
                       ),
                       borderRadius: BorderRadius.circular(8.0),
 
@@ -886,44 +856,58 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
               _buildDescriptionField(),
               _buildPriceField(),
 
+              // SizedBox(
+              //   height: 30.0,
+              // ),
+
+              GestureDetector(
+                onTap: () {
+                    _SelectImage();
+                },
+                child: Container(
+                  height: 80.0,
+                  decoration: BoxDecoration(
+                    color: sc_InputBackgroundColor,
+                    border: Border.all(
+                      color: sc_PrimaryColor,
+                      width: 1.0,
+                    ),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        "Choose Photo",
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          color: sc_ItemTitleColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
               SizedBox(
                 height: 30.0,
               ),
-
-              Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                RaisedButton(
-                  color: sc_InputBackgroundColor,
-                  child: Text('Choose Photo'),
-                  onPressed: () {
-                    _SelectImage();
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => SavedProductScreen()),
-                    // );
-                  },
-                ),
+              GridView.count(
+                shrinkWrap: true,
+                scrollDirection: Axis.vertical,
+                padding: EdgeInsets.fromLTRB(15,0,15,0),
+                crossAxisCount: 2,
+                crossAxisSpacing: 10,
+                // mainAxisSpacing: 2,
                 
-              ],
-            ),
-            SizedBox(
-              height: 30.0,
-            ),
-            GridView.count(
-              shrinkWrap: true,
-              scrollDirection: Axis.vertical,
-              padding: EdgeInsets.fromLTRB(15,0,15,0),
-              crossAxisCount: 2,
-              crossAxisSpacing: 10,
-              // mainAxisSpacing: 2,
-              
-              children: List.generate(imageList.length, (index) {
-                return Container(
-                  child: Image(image:FileImage(imageList[index]))
-                  ,);
-              })
-            ),
+                children: List.generate(imageList.length, (index) {
+                  return Container(
+                    child: Image(image:FileImage(imageList[index]))
+                    ,);
+                })
+              ),
 
 // TODO: FOLLOWING ACTIONS SHOULD STICK TO BOTTOM
               Padding(
@@ -957,6 +941,7 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
                       onPressed: () {
                         _currentBook.authorList = authorList;
                         _currentBook.bookCategory = _bookCat;
+                        _currentBook.condition = _condition;
                         if (!_formkey.currentState.validate()) {
                           print("Errororororororo");
                         } else { // No Error upload all the details to the database!!
