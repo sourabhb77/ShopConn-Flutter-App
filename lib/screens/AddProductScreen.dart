@@ -40,61 +40,76 @@ class _AddProuctScreenState extends State<AddProuctScreen> {
   Widget _buildProductNameField() {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-      child: TextFormField(
-        decoration: InputDecoration(
-          fillColor: sc_InputBackgroundColor,
-          filled: true,
-          prefixIcon: Icon(
-            Icons.print,
-            color: sc_ItemTitleColor,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Product Name",
+            style: TextStyle(
+              fontSize: 16.0,
+              color: sc_ItemTitleColor,
+              fontWeight: FontWeight.w600,
+            ),
           ),
-          hintText: "Product Name",
-          hintStyle: TextStyle(
-            color: sc_InputHintTextColor,
-            fontSize: 16.0,
-          ),
-          enabledBorder: UnderlineInputBorder(      
-            borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),   
-          ),  
-          focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
-          ),
-          border: UnderlineInputBorder(
-            borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
-          ),
-        ),
-        keyboardType: TextInputType.text,
-        validator: (String value) {
-          if (value.isEmpty) {
-            return 'Product Name is required';
-          }
+          SizedBox(height: 5.0,),
+          TextFormField(
+            decoration: InputDecoration(
+              fillColor: sc_InputBackgroundColor,
+              filled: true,
+              isDense: true,
+              contentPadding: EdgeInsets.all(15),
+              hintText: "eg. Boiler Suit, Algorithms",
+              hintStyle: TextStyle(
+                color: sc_InputHintTextColor,
+                fontSize: 16.0,
+              ),
+              enabledBorder: OutlineInputBorder(      
+                borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                borderSide: BorderSide(color: sc_InputBackgroundColor),   
+              ),  
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: sc_InputBackgroundColor),
+                borderRadius: BorderRadius.all(Radius.circular(8.0)),
+              ),
+              border: OutlineInputBorder(
+                borderSide: BorderSide(color: sc_InputBackgroundColor),
+                borderRadius: BorderRadius.all(Radius.circular(8.0)),
+              ),
+            ),
+            keyboardType: TextInputType.text,
+            validator: (String value) {
+              if (value.isEmpty) {
+                return 'Product Name is required';
+              }
 
-          if (value.length < 5 || value.length > 30) {
-            return 'Product Name must be betweem 5 and 30 characters';
-          }
+              if (value.length < 5 || value.length > 30) {
+                return 'Product Name must be betweem 5 and 30 characters';
+              }
 
-          return null;
-        },
-        onChanged: (String value) {
-          // _currentBook.name =value;
-          // // print(value);
-          setState(() {
-            name=value;
-          });
-          print("\n****************\n");
-          print(name);
-          print("\n****************\n");
-        },
-        onSaved: (String value) {
-          // _currentBook.name =value;
-          // // print(value);
-          setState(() {
-            name=value;
-          });
-          print("\n****************\n");
-          print(name);
-          print("\n****************\n");
-        },
+              return null;
+            },
+            onChanged: (String value) {
+              // _currentBook.name =value;
+              // // print(value);
+              setState(() {
+                name=value;
+              });
+              print("\n****************\n");
+              print(name);
+              print("\n****************\n");
+            },
+            onSaved: (String value) {
+              // _currentBook.name =value;
+              // // print(value);
+              setState(() {
+                name=value;
+              });
+              print("\n****************\n");
+              print(name);
+              print("\n****************\n");
+            },
+          ),
+        ],
       ),
     );
   }
@@ -115,12 +130,6 @@ class _AddProuctScreenState extends State<AddProuctScreen> {
           ),
         ),
         backgroundColor: sc_AppBarBackgroundColor,
-        // leading: IconButton(
-        //   icon: Icon(Icons.arrow_back),
-        //   onPressed: () {
-        //     // Navigator.pop(context);
-        //   },
-        // ),
       ),
       body: SingleChildScrollView(
         child: Form(
@@ -135,8 +144,9 @@ class _AddProuctScreenState extends State<AddProuctScreen> {
                   "Whats Your Product Details ?\nfill here",
                   style: TextStyle(
                     color: sc_ItemInfoColor,
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.w500,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 1.0,
                   ),
                 ),
               ),
@@ -146,7 +156,7 @@ class _AddProuctScreenState extends State<AddProuctScreen> {
 
               _buildProductNameField(),
               SizedBox(
-                height: 30.0,
+                height: 10.0,
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -155,7 +165,7 @@ class _AddProuctScreenState extends State<AddProuctScreen> {
                   style: TextStyle(
                     color: sc_ItemInfoColor,
                     fontSize: 16.0,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
