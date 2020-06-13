@@ -56,3 +56,78 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+
+
+
+
+
+
+
+// Container(
+//                   child: Column(
+//                     children: [
+//                       Card(
+//                         margin: EdgeInsets.all(0.0),
+//                         elevation: 0.0,
+//                         child: InkWell(
+//                           splashColor: Colors.red,
+//                           onTap: () {},
+//                           child: Row(
+//                             children: <Widget>[
+//                               Expanded(
+//                                 flex: 2,
+//                                 child: Container(
+//                                   margin: const EdgeInsets.symmetric(horizontal: 15.0),
+//                                   color: Colors.blueGrey,
+//                                   child: Image.network(
+//                                     'https://picsum.photos/250?image=9',
+//                                   ),
+//                                 ),
+//                               ),
+//                               Expanded(
+//                                 flex: 4,
+//                                 child: Container(
+//                                   padding: EdgeInsets.fromLTRB(0, 10, 15, 10),
+//                                   child: Column(
+//                                     crossAxisAlignment: CrossAxisAlignment.stretch,
+//                                     children: <Widget>[
+//                                       Text(
+//                                         bookNotifier.bookList[index].name,
+//                                         style: TextStyle(
+//                                           color: sc_ItemTitleColor,
+//                                           fontWeight: FontWeight.bold,
+//                                           fontSize: 18.0 ,
+//                                           letterSpacing: 1.0,
+//                                         ),
+//                                       ),
+//                                       Text(
+//                                         bookNotifier.bookList[index].description,
+//                                         style: TextStyle(
+//                                           fontSize: 16.0 ,
+//                                           color: sc_ItemInfoColor,
+//                                         ),
+//                                       ),
+//                                       Padding(
+//                                         padding: const EdgeInsets.only(top: 15.0,bottom: 15.0),
+//                                         child: Text(
+//                                           bookNotifier.bookList[index].price.toString(),
+//                                           style: TextStyle(
+//                                             fontSize: 20.0 ,
+//                                             color: sc_PrimaryColor,                                
+//                                             fontWeight: FontWeight.bold,
+//                                           ),
+//                                         ),
+//                                       ),
+//                                     ],
+//                                   )
+//                                 ),
+//                               ),
+//                             ],
+//                           ),
+//                         ),
+//                       ),
+                      
+//                     ],
+//                   ),
+//                 );

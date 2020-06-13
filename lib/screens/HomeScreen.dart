@@ -5,6 +5,8 @@ import 'package:shopconn/api/shopconnApi.dart';
 import 'package:shopconn/const/Theme.dart';
 import 'package:shopconn/notifier/authNotifier.dart';
 import 'package:shopconn/screens/AddProductScreen.dart';
+import 'package:shopconn/screens/SavedProductScreen.dart';
+import 'package:shopconn/screens/chatbox.dart';
 // import 'package:shopconn/widgets/CategorySelector.dart';
 // import 'package:shopconn/widgets/HomeSliver.dart';
 import 'package:shopconn/widgets/Item.dart';
@@ -36,12 +38,22 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
             icon: Icon(Icons.message),
             tooltip: 'Notification',
-            onPressed: () {},
+            onPressed: () {
+               Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ChatPage()),
+              );
+            },
           ),
           IconButton(
             icon: Icon(Icons.bookmark),
             tooltip: 'Saved Product',
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SavedProductScreen()),
+              );
+            },
           ),
         ],
       ),
@@ -131,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 "Categories",
                 style: TextStyle(
                   color: sc_ItemTitleColor,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                   fontSize: 18.0,
                 ),
               ),
@@ -142,9 +154,17 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Image.asset(
-                    'assets/images/CatBooks.png',
-                    height: 80.0,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => SavedProductScreen()),
+                      );
+                    },
+                    child: Image.asset(
+                      'assets/images/CatBooks.png',
+                      height: 80.0,
+                    ),
                   ),
                   Image.asset('assets/images/CatClothes.png', height: 80.0,),
                   Image.asset('assets/images/CatNotes.png', height: 80.0,),
@@ -162,7 +182,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     "Newly Added",
                     style: TextStyle(
                       color: sc_ItemTitleColor,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                       fontSize: 18.0,
                     ),
                     textAlign: TextAlign.start,
