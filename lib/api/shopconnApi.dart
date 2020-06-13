@@ -65,6 +65,11 @@ Future<FirebaseUser> getCurrendFirebaseUser() async
 }
 
 
+// Future<FirebaseUser> getCurrendFirebaseUser() async
+// {
+//   return await FirebaseAuth.instance.currentUser();
+// }
+
 signout(AuthNotifier authNotifier) async {
   await FirebaseAuth.instance.signOut().catchError((error) => print(error.code));
 
@@ -90,8 +95,8 @@ getProfile(String id) async{
 
 getBooks(BookNotifier bookNotifier) async {
   QuerySnapshot snapshot = await Firestore.instance
-      .collection('Books')
-      .orderBy("createdAt", descending: true)
+      .collection('post')
+      // .orderBy("postedAt", descending: true)
       .getDocuments();
 
   List<Book> _bookList = [];
@@ -100,6 +105,8 @@ getBooks(BookNotifier bookNotifier) async {
     Book book = Book.fromMap(document.data);
     _bookList.add(book);
   });
+
+  print("Size of BOok Array : ${_bookList.length}");
 
   bookNotifier.bookList = _bookList;
 }
