@@ -17,10 +17,6 @@ class _ProductDetailScreen_BookState extends State<ProductDetailScreen_Book> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: sc_AppBarBackgroundColor,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {},
-        ),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.search),

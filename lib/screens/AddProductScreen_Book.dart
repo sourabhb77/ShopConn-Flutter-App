@@ -746,6 +746,62 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
         ),
         backgroundColor: sc_AppBarBackgroundColor,
       ),
+      bottomSheet: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            OutlineButton(
+              padding: EdgeInsets.all(13.0),
+              color: sc_InputBackgroundColor,
+              child: Text('Cancel',
+                style: TextStyle(
+                  fontSize: 18.0,
+                ),
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0)
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            RaisedButton(
+              color: sc_PrimaryColor,
+              padding: EdgeInsets.all(13.0),
+              child: Text(
+                'Post',
+                style: TextStyle(
+                  color: sc_AppBarTextColor,
+                  fontSize: 18.0,
+                ),                      
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0)
+              ),
+              onPressed: () {
+                _currentBook.authorList = authorList;
+                _currentBook.bookCategory = _bookCat;
+                _currentBook.condition = _condition;
+                if (!_formkey.currentState.validate()) {
+                  print("Errororororororo");
+                } else { // No Error upload all the details to the database!!
+                  _formkey.currentState.save();
+                  uploadData();
+                  print(_currentBook.toMap());
+                }
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => SavedProductScreen()),
+                // );
+              },
+            ),
+            
+          ],
+        ),
+      ),
+
+
       body: SingleChildScrollView(
         child: Form(
           key: _formkey,
@@ -908,59 +964,6 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
                     ,);
                 })
               ),
-
-// TODO: FOLLOWING ACTIONS SHOULD STICK TO BOTTOM
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    RaisedButton(
-                      color: sc_InputBackgroundColor,
-                      child: Text('Cancel',
-                        style: TextStyle(
-                          fontSize: 18.0,
-                        ),
-                      ),
-                      onPressed: () {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(builder: (context) => SavedProductScreen()),
-                        // );
-                      },
-                    ),
-                    RaisedButton(
-                      color: sc_PrimaryColor,
-                      child: Text(
-                        'Post',
-                        style: TextStyle(
-                          color: sc_AppBarTextColor,
-                          fontSize: 18.0,
-                        ),                      
-                      ),
-                      onPressed: () {
-                        _currentBook.authorList = authorList;
-                        _currentBook.bookCategory = _bookCat;
-                        _currentBook.condition = _condition;
-                        if (!_formkey.currentState.validate()) {
-                          print("Errororororororo");
-                        } else { // No Error upload all the details to the database!!
-                          _formkey.currentState.save();
-                          uploadData();
-                          print(_currentBook.toMap());
-                        }
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(builder: (context) => SavedProductScreen()),
-                        // );
-                      },
-                    ),
-                    
-                  ],
-                ),
-              ),
-              
-              
             ],
           ),
         ),

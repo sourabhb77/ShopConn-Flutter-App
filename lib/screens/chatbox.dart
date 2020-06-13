@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shopconn/const/Theme.dart';
+import 'package:shopconn/notifier/bookNotifier.dart';
+import 'package:shopconn/api/shopconnApi.dart';
 
 class ChatPage extends StatefulWidget {
   @override
