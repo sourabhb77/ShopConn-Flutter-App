@@ -1,4 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shopconn/api/MessageApi.dart';
+import 'package:shopconn/models/Message.dart';
+import 'package:shopconn/notifier/authNotifier.dart';
+import 'package:shopconn/widgets/MessageWidgets/RequestMessageBox.dart';
 import './chatbox.dart';
 import '../services/auth.dart';
 
@@ -9,8 +15,50 @@ class ChatBox extends StatefulWidget {
 
 class _ChatBoxState extends State < ChatBox > {
   // final AuthService _auth=AuthService();
+  // List<MessageRequest> _reqList ; //List of all the new Requests
+
+  List<String> _reqList = List();
+
+  LoadNewRequest() async
+  {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    // var getList = getNewRequest(user.uid);
+    // getList.then((value) => 
+    // _reqList=value);
+
+    // _reqList.addAll({"12312","2","3"});
+    _reqList.add("1");
+    _reqList.add("2");
+    _reqList.add("3");
+    _reqList.add("1");
+    _reqList.add("2");
+    // _reqList.add("3");_reqList.add("1");
+    // _reqList.add("2");
+    // _reqList.add("3");_reqList.add("1");
+    // _reqList.add("2");
+    // _reqList.add("3");_reqList.add("1");
+    // _reqList.add("2");
+    // _reqList.add("3");_reqList.add("1");
+    // _reqList.add("2");
+    // _reqList.add("3");_reqList.add("1");
+    // _reqList.add("2");
+    _reqList.add("3");
+ 
+
+  }
+
+@override
+void initState()
+{
+  super.initState();
+  LoadNewRequest();
+  
+}
+
   @override
   Widget build(BuildContext context) {
+    AuthNotifier authNotifier = Provider.of<AuthNotifier>(context);
+
     return MaterialApp(
       home: DefaultTabController(
         length: 2,
@@ -59,7 +107,7 @@ class _ChatBoxState extends State < ChatBox > {
                       padding: const EdgeInsets.fromLTRB(0.0, 8.0, 0.0, 8.0),
                         child: Row(
                           children: < Widget > [
-                            Expanded(child: CircleAvatar(radius: 30.0, backgroundColor: Colors.grey[400], child: Image(image: AssetImage('assets/Symbols.png'), ), ), ),
+                            Expanded(child: CircleAvatar(radius: 30.0, backgroundColor: Colors.grey[400], child: Image(image: AssetImage('assets/images/CatBooks.png'), ), ), ),
                             Expanded(child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisSize: MainAxisSize.min,
@@ -100,25 +148,45 @@ class _ChatBoxState extends State < ChatBox > {
                     ],
                   ),
                   SizedBox(height: 10.0),
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(0.0, 8.0, 0.0, 8.0),
-                        child: Row(
-                          children: < Widget > [
-                            SizedBox(width: 5, ),
-                            Expanded(child: CircleAvatar(radius: 30.0, backgroundColor: Colors.grey[400], child: Image(image: AssetImage('assets/Symbols.png'), ), ), ),
-                            SizedBox(width: 5, ),
-                            Expanded(flex: 5, child: Text('Doctor daddy', textAlign: TextAlign.start, style: new TextStyle(fontSize: 15.0, color: Colors.black))),
-                            Expanded(child: IconButton(icon: new Icon(IconData(59510, fontFamily: 'MaterialIcons'), color: Colors.green, size: 30.0, ), onPressed: () {}, )),
-                            Expanded(child: IconButton(icon: new Icon(IconData(57676, fontFamily: 'MaterialIcons'), color: Colors.red, size: 30.0, ), onPressed: () {})),
-                          ],
-                        ),
-                    ),
-                  ),
+                  // Expanded(child: ListView.builder(
+                  //     itemCount: 2, itemBuilder: (BuildContext context, int index)
+                  //     {
+                  //       RequestBox(name:"123123");
+                  //     })),
+
+                  for(String x in _reqList)
+                    RequestBox(name:x),
+                  
+
+                 
+
+               
+
+
+                  
+                  // Card(
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.fromLTRB(0.0, 8.0, 0.0, 8.0),
+                  //       child: Row(
+                  //         children: < Widget > [
+                  //           SizedBox(width: 5, ),
+                  //           Expanded(child: CircleAvatar(radius: 30.0, backgroundColor: Colors.grey[400], child: Image(image: AssetImage('assets/Symbols.png'), ), ), ),
+                  //           SizedBox(width: 5, ),
+                  //           Expanded(flex: 5, child: Text('Doctor daddy', textAlign: TextAlign.start, style: new TextStyle(fontSize: 15.0, color: Colors.black))),
+                  //           Expanded(child: IconButton(icon: new Icon(IconData(59510, fontFamily: 'MaterialIcons'), color: Colors.green, size: 30.0, ), onPressed: () {}, )),
+                  //           Expanded(child: IconButton(icon: new Icon(IconData(57676, fontFamily: 'MaterialIcons'), color: Colors.red, size: 30.0, ), onPressed: () {})),
+                  //         ],
+                  //       ),
+                  //   ),
+                  // ),
+                  
                   SizedBox(height: 10.0),
 
                 ],
               ),
+
+             
+
             ],
           ),
         ),

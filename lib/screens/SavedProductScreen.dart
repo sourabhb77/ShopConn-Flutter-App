@@ -18,13 +18,16 @@ class _SavedProductScreenState extends State<SavedProductScreen> {
   @override
   void initState() { 
     BookNotifier bookNotifier = Provider.of<BookNotifier>(context, listen: false);
-    getBooks(bookNotifier);
     super.initState();
+    print("**********************************************************");
+    getBooks(bookNotifier);
+
   }
   @override
   Widget build(BuildContext context) {
     AuthNotifier authNotifier = Provider.of<AuthNotifier>(context);
     BookNotifier bookNotifier = Provider.of<BookNotifier>(context);
+    print("Printing ALl the List Data *************************************");
     print(bookNotifier.bookList);
     return Scaffold(
       appBar: AppBar(

@@ -3,7 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:shopconn/api/shopconnApi.dart';
+import 'package:shopconn/models/Message.dart';
+import 'package:shopconn/screens/AddProductScreen.dart';
 import 'package:shopconn/screens/Profile.dart';
+import 'package:shopconn/screens/SavedProductScreen.dart';
+import 'package:shopconn/screens/msg-request.dart';
 
 class NavDrawer extends StatefulWidget {
   @override
@@ -93,10 +97,22 @@ class _NavDrawer extends State<NavDrawer> {
             ),
           ),
           ListTile(
+            onTap: (){
+               Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ChatBox()));
+            },
+            
             leading: Icon(Icons.message),
             title: Text("Message"),
           ),
           ListTile(
+            onTap: ()
+            {
+                 Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => SavedProductScreen()));
+            },
             title: Text("Settings"),
             leading: Icon(Icons.settings),
           )

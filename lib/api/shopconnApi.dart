@@ -101,6 +101,8 @@ getBooks(BookNotifier bookNotifier) async {
     _bookList.add(book);
   });
 
+  print("Size of BOok Array : ${_bookList.length}");
+
   bookNotifier.bookList = _bookList;
 }
 
