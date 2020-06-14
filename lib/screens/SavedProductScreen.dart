@@ -4,6 +4,7 @@ import 'package:shopconn/api/shopconnApi.dart';
 import 'package:shopconn/const/Theme.dart';
 import 'package:shopconn/notifier/authNotifier.dart';
 import 'package:shopconn/notifier/bookNotifier.dart';
+import 'package:shopconn/notifier/productNotifier.dart';
 import 'package:shopconn/screens/ProductDetailScreen_Book.dart';
 
 class SavedProductScreen extends StatefulWidget {
@@ -16,13 +17,14 @@ class SavedProductScreen extends StatefulWidget {
 class _SavedProductScreenState extends State<SavedProductScreen> {
   @override
   void initState() { 
-    BookNotifier bookNotifier = Provider.of<BookNotifier>(context, listen: false);
-    getBooks(bookNotifier);
+    ProductNotifier productNotifier = Provider.of<ProductNotifier>(context, listen: false);
+    getProducts(productNotifier);
     super.initState();
   }
   @override
   Widget build(BuildContext context) {
     AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
+    ProductNotifier productNotifier = Provider.of<ProductNotifier>(context);
     BookNotifier bookNotifier = Provider.of<BookNotifier>(context);
     return Scaffold(
       appBar: AppBar(
@@ -47,11 +49,13 @@ class _SavedProductScreenState extends State<SavedProductScreen> {
                       child: InkWell(
                         splashColor: Colors.red,
                         onTap: () {
-                          bookNotifier.currentBook=bookNotifier.bookList[index];
-                          Navigator.push(
+                          if(productNotifier.productList[index].productCategory== "Book"){
+                            bookNotifier.currentBook=productNotifier.productList[index];
+                            Navigator.push(
                               context,
                               MaterialPageRoute(builder: (context) => ProductDetailScreen_Book()),
-                          );
+                            );
+                          }
                         },
                         child: Row(
                           children: <Widget>[
@@ -61,8 +65,8 @@ class _SavedProductScreenState extends State<SavedProductScreen> {
                                 margin: const EdgeInsets.symmetric(horizontal: 15.0),
                                 color: Colors.blueGrey,
                                 child: Image.network(
-                                  bookNotifier.bookList[index].imgList[0] != null
-                                    ? bookNotifier.bookList[index].imgList[0]
+                                  productNotifier.productList[index].imgList[0] != null
+                                    ? productNotifier.productList[index].imgList[0]
                                     : 'https://www.testingxperts.com/wp-content/uploads/2019/02/placeholder-img.jpg',
                                   // width: 120,
                                   // fit: BoxFit.fitWidth,
@@ -79,7 +83,7 @@ class _SavedProductScreenState extends State<SavedProductScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.stretch,
                                   children: <Widget>[
                                     Text(
-                                      bookNotifier.bookList[index].name,
+                                      productNotifier.productList[index].name,
                                       style: TextStyle(
                                         color: sc_ItemTitleColor,
                                         fontWeight: FontWeight.w600,
@@ -88,7 +92,7 @@ class _SavedProductScreenState extends State<SavedProductScreen> {
                                       ),
                                     ),
                                     Text(
-                                      bookNotifier.bookList[index].description,
+                                      productNotifier.productList[index].description,
                                       style: TextStyle(
                                         fontSize: 16.0 ,
                                         color: sc_ItemInfoColor,
@@ -97,7 +101,7 @@ class _SavedProductScreenState extends State<SavedProductScreen> {
                                     Padding(
                                       padding: const EdgeInsets.only(top: 15.0),
                                       child: Text(
-                                        "Rs ${bookNotifier.bookList[index].price}",
+                                        "Rs ${productNotifier.productList[index].price}",
                                         style: TextStyle(
                                           fontSize: 20.0 ,
                                           color: sc_PrimaryColor,                                
@@ -118,7 +122,8 @@ class _SavedProductScreenState extends State<SavedProductScreen> {
                 ),
               );
             },
-            itemCount: bookNotifier.bookList.length,
+            itemCount: productNotifier.productList.length,
+            // itemCount: 1,
             separatorBuilder: (BuildContext context, int index) {
               return Divider(
                 height: 10.0,

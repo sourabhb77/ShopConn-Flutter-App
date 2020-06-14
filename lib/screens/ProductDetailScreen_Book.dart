@@ -1,5 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shopconn/api/shopconnApi.dart';
 import 'package:shopconn/const/Theme.dart';
+import 'package:shopconn/notifier/authNotifier.dart';
+import 'package:shopconn/notifier/bookNotifier.dart';
+import 'package:shopconn/screens/chatbox.dart';
 import '../widgets/Carousel.dart';
 
 class ProductDetailScreen_Book extends StatefulWidget {
@@ -10,10 +16,24 @@ class ProductDetailScreen_Book extends StatefulWidget {
 }
 
 class _ProductDetailScreen_BookState extends State<ProductDetailScreen_Book> {
-  var data = ['Avi Silberschatz', 'Henry F. Korth', 'S. Sudarshan'];
+
+  dynamic _receiver;
 
   @override
+  void initState() { 
+    AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
+    BookNotifier bookNotifier = Provider.of<BookNotifier>(context, listen: false);
+    Future<FirebaseUser> user = getCurrendFirebaseUser();
+    user.then((value) => {
+      print(value.displayName),
+    });
+    print("\n**************************\n");
+    super.initState();
+  }
+  
+  @override
   Widget build(BuildContext context) {
+    BookNotifier bookNotifier = Provider.of<BookNotifier>(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: sc_AppBarBackgroundColor,
@@ -38,7 +58,7 @@ class _ProductDetailScreen_BookState extends State<ProductDetailScreen_Book> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget> [
               Text(
-                'Database System Concepts',
+                bookNotifier.currentBook.name,
                 style: TextStyle(
                   fontSize: 18.0,
                   fontWeight: FontWeight.w500,
@@ -54,7 +74,7 @@ class _ProductDetailScreen_BookState extends State<ProductDetailScreen_Book> {
               //   height: 30.0,
               // ),
               Text(
-                'Rs 400',
+                'Rs ${bookNotifier.currentBook.price}',
                 style: TextStyle(
                   fontSize: 20.0,
                   fontWeight: FontWeight.bold,
@@ -108,7 +128,7 @@ class _ProductDetailScreen_BookState extends State<ProductDetailScreen_Book> {
                           ),
                           padding: EdgeInsets.all(10.0),
                           child: Column(
-                            children: data.map((name){
+                            children: bookNotifier.currentBook.authorList.map((name){
                               return Text(
                                 '$name',
                                 style: TextStyle(
@@ -142,7 +162,7 @@ class _ProductDetailScreen_BookState extends State<ProductDetailScreen_Book> {
                           width: 70.0,
                           child: Center(
                             child: Text(
-                              '6',
+                              bookNotifier.currentBook.edition.toString(),
                               style: TextStyle(
                                 fontSize: 20.0,
                                 color: sc_ItemInfoColor,
@@ -173,7 +193,7 @@ class _ProductDetailScreen_BookState extends State<ProductDetailScreen_Book> {
                     padding: EdgeInsets.all(10.0),
                     color: sc_grey,
                     child: Text(
-                      'wejfwgejf wwfgwe wehfw wfgf\nfewgw wefhefgwe hjg\nwsc sdhc sdc kas mhwewebwj scvsc akh',
+                      bookNotifier.currentBook.description,
                       style: TextStyle(
                         color: sc_ItemTitleColor,
                         fontSize: 16.0,
@@ -226,13 +246,14 @@ class _ProductDetailScreen_BookState extends State<ProductDetailScreen_Book> {
                         ),
                       ),
                       onPressed: () {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(builder: (context) =>AddProuctScreen_Book()),
-                        // );
+                        print(bookNotifier.currentBook.ownerId);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => ChatPage(ownerId: bookNotifier.currentBook.ownerId)),
+                        );
                       },
                     ),
-                    RaisedButton(
+                    OutlineButton(
                       color: sc_PrimaryColor,
                       child: Text(
                         'Add to WishList',

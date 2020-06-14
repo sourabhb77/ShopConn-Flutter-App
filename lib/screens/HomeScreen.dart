@@ -7,6 +7,7 @@ import 'package:shopconn/notifier/authNotifier.dart';
 import 'package:shopconn/screens/AddProductScreen.dart';
 import 'package:shopconn/screens/SavedProductScreen.dart';
 import 'package:shopconn/screens/chatbox.dart';
+import 'package:shopconn/screens/msg-request.dart';
 // import 'package:shopconn/widgets/CategorySelector.dart';
 // import 'package:shopconn/widgets/HomeSliver.dart';
 import 'package:shopconn/widgets/Item.dart';
@@ -41,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () {
                Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ChatPage()),
+                MaterialPageRoute(builder: (context) => ChatBox()),
               );
             },
           ),

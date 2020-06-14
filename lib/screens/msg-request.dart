@@ -24,7 +24,7 @@ class _ChatBoxState extends State < ChatBox > {
             ),
             leading: Icon(IconData(58135, fontFamily: 'MaterialIcons', matchTextDirection: true), color: Colors.black, size: 30.0, ),
             title: Text('Chat box', style: TextStyle(color: Colors.black), ),
-            actions: < Widget > [IconButton(icon: Icon(IconData(59576, fontFamily: 'MaterialIcons'), color: Colors.black, size: 30.0, ), onPressed: ()  {
+            actions: < Widget > [IconButton(icon: Icon(IconData(59576, fontFamily: 'MaterialIcons'), color: Colors.black, size: 30.0, ), onPressed: () {
               // await _auth.signOut();
             }, ), ],
             backgroundColor: Colors.blue[300],
