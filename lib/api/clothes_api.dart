@@ -1,37 +1,37 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:path/path.dart' as path;
-import 'package:shopconn/models/clothes.dart';
-import 'package:uuid/uuid.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
-uploadClothesDetails(Clothes clothes)async{
-  // if(localFile!=null)
-  // {
-    // var fileExtension= path.extension(localFile.path);
-    // var uuid=Uuid().v4();
-    // final StorageReference firebaseStorageRef =FirebaseStorage.instance.ref().child('clothes/images/$uuid$fileExtension');
+uploadClothesImages(List<File> imgLislt, String clothesId) async {
+  List<String> urls=List();
+  int i=1;
+  for (File file in imgLislt) {
+    StorageReference storageReference =
+        FirebaseStorage.instance.ref().child("clothes/$clothesId");
+    StorageUploadTask task = storageReference.child("$i").putFile(file);
+    final StorageTaskSnapshot downloadUrl = (await task.onComplete);
+    final String url = (await downloadUrl.ref.getDownloadURL());
 
-    // await firebaseStorageRef.putFile(localFile.onComplete.catchError(
-    //   (onError){
-    //     return false;
-    //   }
-    // ));
-    // String url=await firebaseStorageRef.getDownloadURL();
-  _uploadClothesDetails(clothes);
-  // }
-  // else
-  // {
-  //   print('skipping image upload');
-  // }
+    urls.add(url);
+    ++i;
+  }
+  return urls;
 }
 
-_uploadClothesDetails(Clothes clothes)async{
-  CollectionReference clothesRef=Firestore.instance.collection('Clothes');
-  clothes.postedAt=Timestamp.now();
-  DocumentReference documentRef=await clothesRef.add(clothes.toMap());
-
+Future<bool> uploadClothesDetails(dynamic clothes,List<File> images)async{
+  try{
+  DocumentReference documentRef=Firestore.instance.collection("clothes").document();
   clothes.id=documentRef.documentID;
   print("uploaded clothes details succesfully.");
-
   await documentRef.setData(clothes.toMap(),merge:true);
-
+  List<String> list = await uploadClothesImages(images, clothes.id);
+  clothes.imgList = list;
+  return true;
+}catch(err){
+  print("Error uploading Product:$err");
+  return false;
 }
+}
+
+

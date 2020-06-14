@@ -20,4 +20,15 @@ class ClothesNotifier with ChangeNotifier{
     _currentClothes= clothes;
     notifyListeners();
   } 
+
+   addCloth(Clothes clothes){
+     _clothesList.insert(0,clothes);
+      notifyListeners();
+   }
+
+   deleteCloth(Clothes clothes){
+     _clothesList.remove((_clothes)=>_clothes.id==clothes.id);
+      notifyListeners();
+   }
+
 }
