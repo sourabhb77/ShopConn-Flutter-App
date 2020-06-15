@@ -9,6 +9,7 @@ class Other {
   String productCategory;
   bool onSell=true;
   List<String> imgList;
+  String condition;
   Timestamp postedAt;
 
   Other();
@@ -21,6 +22,8 @@ class Other {
     price=data['price'];
     productCategory=data['productCategory'];
     onSell=data['onSell'];
+    imgList=data['imgList'];
+    condition=data['condition'];
     postedAt=data['postedAt'];
   }
   
@@ -33,6 +36,8 @@ class Other {
     'price':price,
     'productCategory':productCategory,
     'onSell':onSell,
+    'imgList':imgList,
+    'condition':condition,
     'postedAt':postedAt,
   };
 }

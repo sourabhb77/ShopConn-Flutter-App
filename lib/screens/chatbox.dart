@@ -4,20 +4,24 @@ import 'package:shopconn/const/Theme.dart';
 import 'package:shopconn/notifier/bookNotifier.dart';
 import 'package:shopconn/api/shopconnApi.dart';
 
+const defaultUserName = "Doctor Daddy";
+
 class ChatPage extends StatefulWidget {
   @override
-  _ChatPageState createState() => _ChatPageState();
+  State createState() => Chat();
 }
 
-class _ChatPageState extends State < ChatPage > {
-  @override
+class Chat extends State<ChatPage> with TickerProviderStateMixin{
+  final List<Msg> _messages=<Msg>[];
+  final TextEditingController _textController = new TextEditingController();
+  bool _isWriting =false;
+   
+
+
+    @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // leading:Row(children:<Widget>[
-        // Expanded(child:IconButton(icon:new Icon(IconData(58135, fontFamily: 'MaterialIcons', matchTextDirection: true),color:Colors.black,size:50.0,), onPressed:(){Navigator.pop(context);},)),
-        // Expanded(child:CircleAvatar(radius:30.0,backgroundColor:Colors.grey[400],child:Image(image:AssetImage('assets/Symbols.png'),),),),]),
-        // title: Text('Doctor Daddy'),
         title: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -47,12 +51,16 @@ class _ChatPageState extends State < ChatPage > {
       ),
       body: (
         Column(
-          mainAxisAlignment: MainAxisAlignment.end,
           children: < Widget > [
+            new Flexible(child: 
+            new ListView.builder(itemBuilder: (_,int index)=>_messages[index],
+            itemCount:_messages.length,
+            reverse:true,
+            padding:new EdgeInsets.all(6.0))),
+            Divider(height: 1.0,),        
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
-                // color: Colors.white,
                 color: sc_InputBackgroundColor,
               ),
               padding: EdgeInsets.symmetric(vertical: 5.0),
@@ -61,9 +69,15 @@ class _ChatPageState extends State < ChatPage > {
                   SizedBox(width: 10.0,),
                   Expanded(
                     flex: 6,
-                    child: TextFormField(
+                    child: TextField(
+                      controller: _textController,
+                      onChanged: (String txt){
+                        setState(() {
+                          _isWriting=txt.length>0;
+                        });
+                      },
+                      onSubmitted: _submitMsg,
                       decoration: InputDecoration(
-
                         fillColor: sc_InputBackgroundColor,
                         filled: true,
                         prefixIcon: Padding(
@@ -82,14 +96,16 @@ class _ChatPageState extends State < ChatPage > {
                   ),
                   Expanded(
                     flex: 1,
-                    child: Icon(
-                      IconData(
+                    child:IconButton(
+                            icon: Icon(IconData(
                         57699,
                         fontFamily: 'MaterialIcons',
                         matchTextDirection: true
-                      )
-                    )
-                  )
+                      )),
+                            onPressed: _isWriting?()=>_submitMsg(_textController.text):
+                            null,
+                          ),
+                  ),
                 ],
               ), 
             ),
@@ -99,6 +115,78 @@ class _ChatPageState extends State < ChatPage > {
       ),
     );
   }
+
+//message dipose function
+
+  void _submitMsg(String txt){
+  _textController.clear();
+  setState((){
+    _isWriting=false;
+  });
+  Msg msg = new Msg(
+    txt:txt,
+    animationController: new AnimationController(
+      vsync:this,
+      duration: new Duration(milliseconds: 800)
+      ),
+      );
+      setState(() {
+        _messages.insert(0,msg);
+      });
+      msg.animationController.forward();
+    
+    @override
+    void dispose(){
+      for (Msg msg in _messages){
+        msg.animationController.dispose();
+      }
+      super.dispose();
+    }
+
 }
-// void main()=>runApp(MaterialApp(
-//   home: ))
+
+}
+
+class Msg extends StatelessWidget{
+    Msg({this.txt,this.animationController});
+    final String txt;
+    final AnimationController animationController;
+
+    @override
+    Widget build(BuildContext context){
+      return new SizeTransition(sizeFactor: new CurvedAnimation(
+        parent: animationController,
+         curve: Curves.bounceOut
+         ),
+         axisAlignment: 0.0,
+         //message container
+         child:new Container(
+           margin: const EdgeInsets.symmetric(vertical:8.0),
+           child:new Row(
+             crossAxisAlignment: CrossAxisAlignment.start,
+             children: <Widget>[
+               new Container(
+                 margin:EdgeInsets.only(right:10.0),
+                 child: new CircleAvatar(child:new Text(defaultUserName[0])),//can add image here
+               ),
+               new Expanded(child:Padding(
+                 padding: const EdgeInsets.fromLTRB(0, 0, 10,0),
+                 child: new Container(
+                  child: new Column(crossAxisAlignment: CrossAxisAlignment.start,
+                 children: <Widget>[
+                   new Text(defaultUserName,
+                   style:new TextStyle(fontWeight:FontWeight.w600,
+                  ),),
+                   new Container(
+                     margin: const EdgeInsets.only(top:6.0),
+                     child:new Text(txt,
+                      style:new TextStyle(fontWeight:FontWeight.w300,)
+                   ),)
+                 ],)),
+               ))
+             ],
+           ),
+         ),
+      );
+    }
+}

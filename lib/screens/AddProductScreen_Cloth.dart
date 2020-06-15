@@ -1,50 +1,101 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shopconn/api/clothes_api.dart';
 import 'package:shopconn/const/Theme.dart';
 import 'package:shopconn/models/clothes.dart';
-import 'package:shopconn/notifier/clothes_notifier.dart';
-import 'dart:js';
+import 'package:shopconn/notifier/clothesNotifier.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+
+import '../api/shopconnApi.dart';
+
+
 
 class AddProuctScreen_Cloth extends StatefulWidget {
-  AddProuctScreen_Cloth({Key key}) : super(key: key);
+  String name;
+  AddProuctScreen_Cloth({Key key,@required this.name}) : super(key: key);
 
   @override
-  _AddProuctScreen_ClothState createState() => _AddProuctScreen_ClothState();
+  _AddProuctScreen_ClothState createState() => _AddProuctScreen_ClothState(name);
 }
 
 class _AddProuctScreen_ClothState extends State<AddProuctScreen_Cloth> {
 
   final GlobalKey<FormState> _formKey =GlobalKey<FormState>();
-  List _imgList =[];
   Clothes _currentClothes;
+  String _description="Clothes to sell";
+  // String type="boiler suit";
+  String _size="34";
+  String name;
+  String _price="750";
+  List <String> _typeslist=['Boiler suit ','Labcoat'];
+  String _type;
+  TextEditingController authorListController = new TextEditingController();
+  List<File> imageList= List(); 
 
-  @override
-  void initState() {
-    super.initState();
-    ClothesNotifier clothesNotifier =Provider.of<ClothesNotifier>(context);
-    if(clothesNotifier!=null)
+  initClothes()
+  {
+    print("Initial Constructor");
+    Future<FirebaseUser> user = getCurrendFirebaseUser();
+    user.then((value) => {
+      _currentClothes.ownerId= value.uid,
+      _currentClothes.postedAt=Timestamp.now(),
+      _currentClothes.productCategory ="Clothes",
+
+    });
+    print("After firebase user call");
+  }
+
+    void _SelectClothesImage() async  //Function to keep track of all the image files that are needed to be uploaded
+  {
+    File image =await ImagePicker.pickImage(
+      source: ImageSource.gallery
+      );
+      setState(() {
+        imageList.add(image);
+      });
+    
+  }
+
+  saveClothes()async
+{
+ print("Uploading data");
+ bool ans=await uploadClothesDetails(_currentClothes, imageList);
+  print("Upload Finisehd");
+    if(ans==true)
     {
-      _currentClothes=clothesNotifier.currentClothes;
+        print("\n*******Upload Status********\n");
+    print("Success");
+    print("\n***************\n");
+
     }
     else
     {
-      _currentClothes=new Clothes();
+        print("\n*******book screen********\n");
+        print("FAILURE");
+    print("\n***************\n");
     }
-  }
-
-_saveClothes(context)
-{
- if(!_formKey.currentState.validate())
- {
-   return;
- }
-
- _formKey.currentState.save();
 }
 
+_AddProuctScreen_ClothState(this.name)
+{
+  initClothes();
+}
+  @override
+  void initState() {
+    super.initState();
+    ClothesNotifier clothesNotifier =Provider.of<ClothesNotifier>(context,listen:false);
+    _currentClothes=Clothes();
+    _currentClothes.size=_size;
+    _currentClothes.description=_description;
+    _currentClothes.price=_price;
+  }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    _currentClothes.name=name;
+      return Scaffold(
       appBar: AppBar(
         title: Text(
           "Add Product",
@@ -83,7 +134,7 @@ _saveClothes(context)
               margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
               color: sc_InputBackgroundColor,
               child: TextFormField(
-                initialValue: _currentClothes.size,
+                // initialValue: _currentClothes.size,
                 decoration: InputDecoration(
                   prefixIcon: Icon(
                     Icons.print,
@@ -104,6 +155,7 @@ _saveClothes(context)
                     borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
                   ),
                 ),
+                keyboardType: TextInputType.number,
                 validator: (val){
                   if(val.isEmpty)
                   {
@@ -128,7 +180,7 @@ _saveClothes(context)
               color: sc_InputBackgroundColor,
               child: TextFormField(
                 maxLines: 5,
-                initialValue: _currentClothes.description,
+                // initialValue: _currentClothes.description,
                 decoration: InputDecoration(
                   prefixIcon: Icon(
                     Icons.print,
@@ -149,7 +201,8 @@ _saveClothes(context)
                     borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
                   ),
                 ),
-                validator: (val){
+                keyboardType: TextInputType.text,
+                validator: (String val){
                   if(val.isEmpty)
                   {
                     return "Description is required";
@@ -171,7 +224,7 @@ _saveClothes(context)
               margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
               color: sc_InputBackgroundColor,
               child: TextFormField(
-                initialValue: _currentClothes.price,
+                // initialValue: _currentClothes.price,
                 decoration: InputDecoration(
                   prefixIcon: Icon(
                     Icons.print,
@@ -192,6 +245,7 @@ _saveClothes(context)
                     borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
                   ),
                 ),
+                keyboardType: TextInputType.number,
                 validator: (val){
                   // if(val is String){
                   //   return "Price should be in number";
@@ -209,6 +263,28 @@ _saveClothes(context)
             ),
             // -----------------Price ends here-----------------//
 
+Container(
+              margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
+              color: sc_InputBackgroundColor,
+              child: 
+               DropdownButtonFormField(
+                  decoration: const InputDecoration(
+                   border: const OutlineInputBorder(),
+                    ),
+               hint:Text('Cloth type'),
+               value: _type,
+               items: _typeslist.map((type){
+                 return DropdownMenuItem(
+                child: new Text(type),
+                value: type,
+              );
+               }).toList(), 
+               onChanged: (newValue){
+                 setState((){
+                 _type=newValue;
+               });},
+            ),),
+            //type ends here//
             SizedBox(
               height: 30.0,
             ),
@@ -220,26 +296,42 @@ _saveClothes(context)
                   color: sc_InputBackgroundColor,
                   child: Text('Choose Photo'),
                   onPressed: () {
+                    _SelectClothesImage();
                     // Navigator.push(
                     //   context,
                     //   MaterialPageRoute(builder: (context) => SavedProductScreen()),
                     // );
                   },
                 ),
-                Column(
-                  children: <Widget> [
-                    Text("image1.jpeg"),
-                    Text("image2.jpeg"),
-                    Text("image3.jpeg"),
-                    Text("image4.jpeg"),
-                  ],
-                )
+                // Column(
+                //   children: <Widget> [
+                //     Text("image1.jpeg"),
+                //     Text("image2.jpeg"),
+                //     Text("image3.jpeg"),
+                //     Text("image4.jpeg"),
+                //   ],
+                // )
                 
               ],
             ),
             SizedBox(
               height: 30.0,
             ),
+             GridView.count(
+              shrinkWrap: true,
+              scrollDirection: Axis.vertical,
+              padding: EdgeInsets.fromLTRB(15,0,15,0),
+              crossAxisCount: 2,
+              crossAxisSpacing: 10,
+              // mainAxisSpacing: 2,
+              
+              children: List.generate(imageList.length, (index) {
+                return Container(
+                  child: Image(image:FileImage(imageList[index]))
+                  ,);
+              })
+            ),
+
 
 
 // TODO: FOLLOWING ACTIONS SHOULD STICK TO BOTTOM
@@ -273,7 +365,14 @@ _saveClothes(context)
                       ),                      
                     ),
                     onPressed: () {
-                      _saveClothes(context);
+                      if(!_formKey.currentState.validate())
+                      {
+                         print("Errorrr");
+                      }
+                      else{
+                         _formKey.currentState.save();
+                          saveClothes();
+                      }
                     },
                   ),
                   

@@ -51,7 +51,7 @@ class _ItemState extends State<Item> {
                             ),
                           ),
                           Text(
-                            "hye how are you detaw wjhevw ew\nwhewh jhbe sfkwej\nwefwglk",
+                            "hye how are you detaw wjhevw ew ja;dfjadkfa sdfa dfasdfa whewh jhbe sfkwej\nwefwglk",
                             style: TextStyle(
                               fontSize: 16.0 ,
                               color: sc_ItemInfoColor,

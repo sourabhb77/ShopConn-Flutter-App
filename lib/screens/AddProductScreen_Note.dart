@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shopconn/const/Theme.dart';
+import '../const/Theme.dart';
 
 class AddProuctScreen_Note extends StatefulWidget {
   AddProuctScreen_Note({Key key}) : super(key: key);
