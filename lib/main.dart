@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopconn/const/Theme.dart';
+import 'package:shopconn/models/user.dart';
+import 'package:shopconn/notifier/ChatNotifier.dart';
 
 import 'package:shopconn/notifier/authNotifier.dart';
 import 'package:shopconn/notifier/bookNotifier.dart';
@@ -25,6 +27,10 @@ void main() {
         ChangeNotifierProvider(
           create: (context) => BookNotifier(),
         ),
+        ChangeNotifierProvider(
+          create: (context) => ChatNotifier()
+          ),
+    
       ],
       child: MyApp(),
     )

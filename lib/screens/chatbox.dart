@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shopconn/const/Theme.dart';
+import 'package:shopconn/models/user.dart';
+import 'package:shopconn/notifier/ChatNotifier.dart';
 
 class ChatPage extends StatefulWidget {
   @override
@@ -7,8 +10,20 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State < ChatPage > {
+
+  ChatUser _user = ChatUser();
+
   @override
   Widget build(BuildContext context) {
+
+    ChatNotifier chatNotifier = Provider.of<ChatNotifier>(context);
+    setState(() {
+
+      _user = chatNotifier.currentUser;
+      print("User: $_user");
+    });
+
+
     return Scaffold(
       appBar: AppBar(
         // leading:Row(children:<Widget>[
@@ -25,18 +40,23 @@ class _ChatPageState extends State < ChatPage > {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(28),
                     child: Image.network(
+
                       'https://image.freepik.com/free-vector/doctor-character-background_1270-84.jpg',
                       height: 45,
                       width: 45,
                       fit: BoxFit.fill,
                     ),
                   )
-
                 ),
+
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 10.0),
-                child: Text('Doctor Daddy')
-              ),
+
+                child : _user.userId == null ? Text("Doctor Daddy") : 
+                Text(_user.userId)
+               
+              )
+
             ],
 
           ),

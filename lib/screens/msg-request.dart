@@ -61,15 +61,6 @@ class _ChatBoxState extends State<ChatBox> {
         ),
         body: TabBarView(
           children: [
-            // ListView(
-            //   children: <Widget>[
-            //     for(int i = 1; i<=5; i++)
-            //     Messagebox()
-                
-            //   ],
-            // ),
-            
-
             Container(
               child: StreamBuilder(
                 stream: Firestore.instance.collection("users").snapshots(),
@@ -87,7 +78,7 @@ class _ChatBoxState extends State<ChatBox> {
                       itemBuilder: (BuildContext context, index){
                         
                         // print("Data : ${snapshot.data.documents[index]['email']}");
-                        return Messagebox(email: snapshot.data.documents[index]['email']);
+                        return Messagebox(email: snapshot.data.documents[index]['userId']);
 
                       },
                       itemCount: snapshot.data.documents.length,
