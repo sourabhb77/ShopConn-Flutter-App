@@ -88,9 +88,10 @@ _AddProuctScreen_ClothState(this.name)
     super.initState();
     ClothesNotifier clothesNotifier =Provider.of<ClothesNotifier>(context,listen:false);
     _currentClothes=Clothes();
-    _currentClothes.size=_size;
+    _currentClothes.size= int.parse(_size);
     _currentClothes.description=_description;
-    _currentClothes.price=_price;
+    
+    _currentClothes.price=int.parse(_price);
   }
   @override
   Widget build(BuildContext context) {
@@ -168,7 +169,7 @@ _AddProuctScreen_ClothState(this.name)
                   return null;
               },
               onSaved:(String val){
-                _currentClothes.size=val;
+                _currentClothes.size=int.parse(val);
               },
               ),
             ),
@@ -257,7 +258,7 @@ _AddProuctScreen_ClothState(this.name)
                 },
                 onSaved:(val)
                 {
-                  _currentClothes.price=val;
+                  _currentClothes.price=int.parse(val);
                 },
               ),
             ),
