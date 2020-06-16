@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shopconn/const/Theme.dart';
+import 'package:shopconn/widgets/MessageWidgets/RequestMessageBox.dart';
 import './chatbox.dart';
 import '../services/auth.dart';
 
@@ -59,131 +61,44 @@ class _ChatBoxState extends State<ChatBox> {
         ),
         body: TabBarView(
           children: [
-            ListView(
-              children: <Widget>[
-                for(int i = 1; i<=5; i++)
-                Card(
-                  elevation: 0.0,
-                  child: InkWell(
-                    splashColor: Colors.blue.withAlpha(30),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => ChatPage()),
-                      );
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(0.0, 8.0, 0.0, 8.0),
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: CircleAvatar(
-                                radius: 30.0,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(28),
-                                  child: Image.network(
-                                    'https://image.freepik.com/free-vector/doctor-character-background_1270-84.jpg',
-                                    fit: BoxFit.fill,
-                                  ),
-                                )),
-                          ),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                Text('Doctor daddy',
-                                    textAlign: TextAlign.center,
-                                    style: new TextStyle(
-                                        fontSize: 14.0, color: Colors.black)),
-                                Text('I love flutter',
-                                    textAlign: TextAlign.center,
-                                    style: new TextStyle(
-                                        fontSize: 14.0,
-                                        color: Colors.grey[400])),
-                              ],
-                            ),
-                          ),
-                          SizedBox(width: 100.0),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                Text('yesterday',
-                                    textAlign: TextAlign.center,
-                                    style: new TextStyle(
-                                        fontSize: 14.0, color: Colors.black)),
-                                Text('12.00pm',
-                                    textAlign: TextAlign.center,
-                                    style: new TextStyle(
-                                        fontSize: 14.0,
-                                        color: Colors.grey[400])),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+            // ListView(
+            //   children: <Widget>[
+            //     for(int i = 1; i<=5; i++)
+            //     Messagebox()
                 
-              ],
+            //   ],
+            // ),
+            
+
+            Container(
+              child: StreamBuilder(
+                stream: Firestore.instance.collection("users").snapshots(),
+                builder: (context, snapshot){
+                  if(!snapshot.hasData)
+                  {
+                    return Center(child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
+                    ),);
+                  }
+                  else
+                  {
+                    return ListView.builder(
+                      padding: EdgeInsets.all(5.0),
+                      itemBuilder: (BuildContext context, index){
+                        
+                        // print("Data : ${snapshot.data.documents[index]['email']}");
+                        return Messagebox(email: snapshot.data.documents[index]['email']);
+
+                      },
+                      itemCount: snapshot.data.documents.length,
+                    );
+                  }
+                },),
             ),
             ListView(
               children: <Widget>[
                 for(int i =1 ;i<6; i++)
-                Card(
-                  elevation: 0.0,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(0.0, 8.0, 0.0, 8.0),
-                    child: Row(
-                      children: <Widget>[
-                        // SizedBox(width: 5, ),
-                        Expanded(
-                          flex: 2,
-                          child: CircleAvatar(
-                              radius: 40.0,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(40),
-                                child: Image.network(
-                                  'https://image.freepik.com/free-vector/doctor-character-background_1270-84.jpg',
-                                  fit: BoxFit.fill,
-                                ),
-                              )),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Expanded(
-                            flex: 6,
-                            child: Text('Doctor daddy',
-                                textAlign: TextAlign.start,
-                                style: new TextStyle(
-                                    fontSize: 15.0, color: Colors.black))),
-                        Expanded(
-                            flex: 2,
-                            child: IconButton(
-                              icon: new Icon(
-                                IconData(59510, fontFamily: 'MaterialIcons'),
-                                color: Colors.green,
-                                size: 30.0,
-                              ),
-                              onPressed: () {},
-                            )),
-                        Expanded(
-                            flex: 2,
-                            child: IconButton(
-                                icon: new Icon(
-                                  IconData(57676, fontFamily: 'MaterialIcons'),
-                                  color: Colors.red,
-                                  size: 30.0,
-                                ),
-                                onPressed: () {})),
-                      ],
-                    ),
-                  ),
-                ),
+                RequestBox(name: "hello",)
               ],
             ),
           ],
