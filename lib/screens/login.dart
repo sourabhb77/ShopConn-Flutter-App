@@ -282,7 +282,9 @@ class _LoginState extends State<Login> {
                   child: RaisedButton(
                     color: sc_PrimaryColor,
                     padding: EdgeInsets.all(10.0),
-                    onPressed: () => _submitForm(),
+                    onPressed: () => 
+                    
+                    _submitForm(),
                     child: Text(
                       _authMode == AuthMode.Login ? 'Login' : 'Signup',
                       style: TextStyle(fontSize: 20, color: sc_AppBarTextColor),
