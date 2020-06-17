@@ -11,6 +11,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart' as path;
 import 'package:shopconn/notifier/bookNotifier.dart';
+import 'package:shopconn/notifier/productNotifier.dart';
 // import 'package:uuid/uuid.dart';
 
 login(User user, AuthNotifier authNotifier) async {
@@ -59,21 +60,11 @@ getCurrentUser(AuthNotifier authNotifier) async {
     return uid;
 }
 
+
 Future<FirebaseUser> getCurrendFirebaseUser() async
 {
   return await FirebaseAuth.instance.currentUser();
 }
-
-
-// Future<FirebaseUser> getCurrendFirebaseUser() async
-// {
-//   return await FirebaseAuth.instance.currentUser();
-// }
-
-// Future<FirebaseUser> getCurrendFirebaseUser() async
-// {
-//   return await FirebaseAuth.instance.currentUser();
-// }
 
 signout(AuthNotifier authNotifier) async {
   await FirebaseAuth.instance.signOut().catchError((error) => print(error.code));
@@ -98,22 +89,37 @@ getProfile(String id) async{
 }
 
 
-getBooks(BookNotifier bookNotifier) async {
-  QuerySnapshot snapshot = await Firestore.instance
-      .collection('post')
-      // .orderBy("postedAt", descending: true)
-      .getDocuments();
+// getBooks(BookNotifier bookNotifier) async {
+//   QuerySnapshot snapshot = await Firestore.instance.collection('post').getDocuments();
 
-  List<Book> _bookList = [];
+//   List<Book> _bookList = [];
+//   snapshot.documents.forEach((document) {
+//     Book book = Book.fromMap(document.data);
+//     _bookList.add(book);
+//   });
+//   bookNotifier.bookList = _bookList;
+//   print("Got your products");
+// }
 
+
+
+
+
+// to get all types of products
+Future<void> getProducts(ProductNotifier productNotifier) async {
+  QuerySnapshot snapshot = await Firestore.instance.collection('post').getDocuments();
+
+  List _productList = [];
   snapshot.documents.forEach((document) {
-    Book book = Book.fromMap(document.data);
-    _bookList.add(book);
+    print(document.data["productCategory"]);
+
+    if(document.data["productCategory"]=="Book"){
+      Book book = Book.fromMap(document.data);
+      _productList.add(book);
+    }
   });
-
-  print("Size of BOok Array : ${_bookList.length}");
-
-  bookNotifier.bookList = _bookList;
+  productNotifier.productList = _productList;
+  print("Got your products");
 }
 
 

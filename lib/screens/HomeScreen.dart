@@ -7,6 +7,10 @@ import 'package:shopconn/notifier/authNotifier.dart';
 import 'package:shopconn/screens/AddProductScreen.dart';
 import 'package:shopconn/screens/SavedProductScreen.dart';
 import 'package:shopconn/screens/chatbox.dart';
+//<<<<<<< shubham
+=======
+//import 'package:shopconn/screens/msg-request.dart';
+//>>>>>>> sourabhNew
 // import 'package:shopconn/widgets/CategorySelector.dart';
 // import 'package:shopconn/widgets/HomeSliver.dart';
 import 'package:shopconn/widgets/Item.dart';
@@ -41,7 +45,11 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () {
                Navigator.push(
                 context,
+// <<<<<<< shubham
                 MaterialPageRoute(builder: (context) => ChatPage()),
+// =======
+//                 MaterialPageRoute(builder: (context) => ChatBox()),
+// >>>>>>> sourabhNew
               );
             },
           ),
@@ -143,7 +151,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 "Categories",
                 style: TextStyle(
                   color: sc_ItemTitleColor,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                   fontSize: 18.0,
                 ),
               ),
@@ -154,9 +162,17 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Image.asset(
-                    'assets/images/CatBooks.png',
-                    height: 80.0,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => SavedProductScreen()),
+                      );
+                    },
+                    child: Image.asset(
+                      'assets/images/CatBooks.png',
+                      height: 80.0,
+                    ),
                   ),
                   Image.asset('assets/images/CatClothes.png', height: 80.0,),
                   Image.asset('assets/images/CatNotes.png', height: 80.0,),
@@ -174,7 +190,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     "Newly Added",
                     style: TextStyle(
                       color: sc_ItemTitleColor,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                       fontSize: 18.0,
                     ),
                     textAlign: TextAlign.start,

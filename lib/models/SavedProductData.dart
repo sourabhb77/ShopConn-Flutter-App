@@ -121,18 +121,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class product{
-  String ownerId;
-  String id,name,description;
-  double price;
-  String productCategory;
-  List<String> imgList;
-  Timestamp timestamp;
-
-}
-
-// 
-
 class Book {
   String id;
   String ownerId;
@@ -154,19 +142,18 @@ class Book {
   Book();
   
   Book.fromMap(Map<String, dynamic> data){
+    // Map data = snapshot.data;
     id = data['id'];
     ownerId = data['ownerId'];
     name = data['name'];
     price = data['price'];
     description = data['description'];
-
     // imgList = data['imgList'];
-    
-    imgList = List.from(data["imgList"]);
-   
+    imgList = List.from(data['imgList']);
     productCategory = data['productCategory'];
     onSell = data['onSell'];
     bookCategory = data['bookCategory'];
+    // authorList = data['authorList'];
     authorList = List.from(data['authorList']);
     edition = data['edition'];
     publication = data['publication'];

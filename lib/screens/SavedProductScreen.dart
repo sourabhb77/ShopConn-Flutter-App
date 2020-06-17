@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopconn/api/shopconnApi.dart';
 import 'package:shopconn/const/Theme.dart';
-import 'package:shopconn/models/SavedProductData.dart';
 import 'package:shopconn/notifier/authNotifier.dart';
 import 'package:shopconn/notifier/bookNotifier.dart';
-import 'package:shopconn/widgets/Item.dart';
+import 'package:shopconn/notifier/productNotifier.dart';
+import 'package:shopconn/screens/ProductDetailScreen_Book.dart';
 
 class SavedProductScreen extends StatefulWidget {
   const SavedProductScreen({Key key}) : super(key: key);
@@ -17,18 +17,15 @@ class SavedProductScreen extends StatefulWidget {
 class _SavedProductScreenState extends State<SavedProductScreen> {
   @override
   void initState() { 
-    BookNotifier bookNotifier = Provider.of<BookNotifier>(context, listen: false);
+    ProductNotifier productNotifier = Provider.of<ProductNotifier>(context, listen: false);
+    getProducts(productNotifier);
     super.initState();
-    print("**********************************************************");
-    getBooks(bookNotifier);
-
   }
   @override
   Widget build(BuildContext context) {
-    AuthNotifier authNotifier = Provider.of<AuthNotifier>(context);
+    AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
+    ProductNotifier productNotifier = Provider.of<ProductNotifier>(context);
     BookNotifier bookNotifier = Provider.of<BookNotifier>(context);
-    print("Printing ALl the List Data *************************************");
-    print(bookNotifier.bookList);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -39,29 +36,101 @@ class _SavedProductScreenState extends State<SavedProductScreen> {
         ),
         backgroundColor: sc_AppBarBackgroundColor,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            ListView.separated(
-              shrinkWrap: true,
-              itemBuilder: (BuildContext context, int index){
-                return Item();
-              },
-              separatorBuilder: (BuildContext context, int index){
-                return const Divider(
-                  color: Colors.grey,
-                  height: 5,
-                  thickness: 1,
-                  indent: 115,
-                  endIndent: 0,
-                );
-              },            
-              itemCount: 5
-            ),
-            Text("hihwih"),
-
-          ],
-        ),
+      body: Container(
+        margin: EdgeInsets.only(top: 10.0),
+        child: ListView.separated(
+            itemBuilder: (BuildContext context, int index) {
+              return Container(
+                child: Column(
+                  children: [
+                    Card(
+                      margin: EdgeInsets.all(0.0),
+                      elevation: 0.0,
+                      child: InkWell(
+                        splashColor: Colors.red,
+                        onTap: () {
+                          if(productNotifier.productList[index].productCategory== "Book"){
+                            bookNotifier.currentBook=productNotifier.productList[index];
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => ProductDetailScreen_Book()),
+                            );
+                          }
+                        },
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                              flex: 2,
+                              child: Container(
+                                margin: const EdgeInsets.symmetric(horizontal: 15.0),
+                                color: Colors.blueGrey,
+                                child: Image.network(
+                                  productNotifier.productList[index].imgList[0] != null
+                                    ? productNotifier.productList[index].imgList[0]
+                                    : 'https://www.testingxperts.com/wp-content/uploads/2019/02/placeholder-img.jpg',
+                                  // width: 120,
+                                  // fit: BoxFit.fitWidth,
+                                  height: 130,
+                                  fit: BoxFit.fitHeight,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 4,
+                              child: Container(
+                                padding: EdgeInsets.fromLTRB(0, 10, 15, 10),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: <Widget>[
+                                    Text(
+                                      productNotifier.productList[index].name,
+                                      style: TextStyle(
+                                        color: sc_ItemTitleColor,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 18.0 ,
+                                        letterSpacing: 1.0,
+                                      ),
+                                    ),
+                                    Text(
+                                      productNotifier.productList[index].description,
+                                      style: TextStyle(
+                                        fontSize: 16.0 ,
+                                        color: sc_ItemInfoColor,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 15.0),
+                                      child: Text(
+                                        "Rs ${productNotifier.productList[index].price}",
+                                        style: TextStyle(
+                                          fontSize: 20.0 ,
+                                          color: sc_PrimaryColor,                                
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    
+                  ],
+                ),
+              );
+            },
+            itemCount: productNotifier.productList.length,
+            // itemCount: 1,
+            separatorBuilder: (BuildContext context, int index) {
+              return Divider(
+                height: 10.0,
+                color: Colors.white,
+              );
+            },
+          ),
       ),
     );
   }

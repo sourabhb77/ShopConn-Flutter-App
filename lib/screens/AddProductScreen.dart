@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shopconn/api/shopconnApi.dart';
 import 'package:shopconn/models/SavedProductData.dart';
 import 'package:shopconn/notifier/bookNotifier.dart';
 import 'package:shopconn/screens/AddProductScreen_Book.dart';
@@ -77,6 +78,7 @@ class _AddProuctScreenState extends State<AddProuctScreen> {
               ),
             ),
             keyboardType: TextInputType.text,
+            autofocus: true,
             validator: (String value) {
               if (value.isEmpty) {
                 return 'Product Name is required';
@@ -89,18 +91,6 @@ class _AddProuctScreenState extends State<AddProuctScreen> {
               return null;
             },
             onChanged: (String value) {
-              // _currentBook.name =value;
-              // // print(value);
-              setState(() {
-                name=value;
-              });
-              print("\n****************\n");
-              print(name);
-              print("\n****************\n");
-            },
-            onSaved: (String value) {
-              // _currentBook.name =value;
-              // // print(value);
               setState(() {
                 name=value;
               });
@@ -130,6 +120,75 @@ class _AddProuctScreenState extends State<AddProuctScreen> {
           ),
         ),
         backgroundColor: sc_AppBarBackgroundColor,
+      ),
+      bottomSheet: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            OutlineButton(
+              padding: EdgeInsets.all(13.0),
+              color: sc_InputBackgroundColor,
+              child: Text('Cancel',
+                style: TextStyle(
+                  fontSize: 18.0,
+                ),
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0)
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            RaisedButton(
+              color: sc_PrimaryColor,
+              padding: EdgeInsets.all(13.0),
+              child: Text(
+                'Next',
+                style: TextStyle(
+                  color: sc_AppBarTextColor,
+                  fontSize: 18.0,
+                ),                      
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0)
+              ),
+              onPressed: () {
+                if(name!=null){
+                  if (category== "Book") {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AddProuctScreen_Book(name:name)),
+                    );
+                  }
+                  else if (category == "Cloth"){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AddProuctScreen_Cloth()),
+                    );
+                  }
+                  else if (category == "Note"){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AddProuctScreen_Note()),
+                    );
+                  }else if (category == "Other"){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AddProuctScreen_Other()),
+                    );
+                  }
+                }
+                else{
+                  print("no name given");
+                }
+                
+              },
+            ),
+            
+          ],
+        ),
       ),
       body: SingleChildScrollView(
         child: Form(
@@ -233,77 +292,6 @@ class _AddProuctScreenState extends State<AddProuctScreen> {
                   ),
                 ],
               ),
-
-              SizedBox(
-                height: 20.0,
-              ),
-              
-// TODO: FOLLOWING ACTIONS SHOULD STICK TO BOTTOM
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    RaisedButton(
-                      color: sc_InputBackgroundColor,
-                      child: Text(
-                        'Cancel',
-                        style: TextStyle(
-                          fontSize: 18.0,
-                        ),
-                      ),
-                      onPressed: () {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(builder: (context) =>AddProuctScreen_Book()),
-                        // );
-                      },
-                    ),
-                    RaisedButton(
-                      color: sc_PrimaryColor,
-                      child: Text(
-                        'Next',
-                        style: TextStyle(
-                          color: sc_AppBarTextColor,
-                          fontSize: 18.0,
-                        ),                      
-                      ),
-                      onPressed: () {
-                        if (category== "Book") {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => AddProuctScreen_Book(name:name)),
-                          );
-                        }
-                        else if (category == "Cloth"){
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => AddProuctScreen_Cloth(name:name)),
-                          );
-                        }
-                        else if (category == "Note"){
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => AddProuctScreen_Note()),
-                          );
-                        }else if (category == "Other"){
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => AddProuctScreen_Other()),
-                          );
-                        }
-                        
-                      },
-                    ),
-                    
-                  ],
-                ),
-              ),
-
-
-
-
-
             ],
           ),
         ),
