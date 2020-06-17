@@ -278,7 +278,7 @@ class _AddProuctScreenState extends State<AddProuctScreen> {
                         else if (category == "Cloth"){
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => AddProuctScreen_Cloth()),
+                            MaterialPageRoute(builder: (context) => AddProuctScreen_Cloth(name:name)),
                           );
                         }
                         else if (category == "Note"){

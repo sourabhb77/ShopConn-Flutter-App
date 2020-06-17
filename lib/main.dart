@@ -12,8 +12,10 @@ import 'package:shopconn/screens/ProductDetailScreen_Book.dart';
 import 'package:shopconn/screens/SavedProductScreen.dart';
 import 'package:shopconn/screens/Wrapper.dart';
 import 'package:shopconn/screens/boarding/boarding.dart';
+import 'package:shopconn/screens/msg-request.dart';
 import 'package:shopconn/screens/signUP.dart';
 import 'package:shopconn/screens/login.dart';
+import 'notifier/clothesNotifier.dart';
 
 
 
@@ -31,6 +33,9 @@ void main() {
           create: (context) => ChatNotifier()
           ),
     
+         ChangeNotifierProvider(
+          create: (context) => ClothesNotifier(),
+        ),
       ],
       child: MyApp(),
     )
@@ -52,13 +57,13 @@ class MyApp extends StatelessWidget {
             bodyText2: TextStyle(color: sc_BodyTextColor),
           )
       ),
-
+      home: ChatBox(),
       // home: AddProuctScreen(),
-      home: Consumer<AuthNotifier>(
-        builder: (context, notifier, child) {
-          return notifier.user != null ? HomeScreen() : Login();
-        },
-      ),
+      // home: Consumer<AuthNotifier>(
+      //   builder: (context, notifier, child) {
+      //     return notifier.user != null ? HomeScreen() : Login();
+      //   },
+      // ),
     );
   }
 }

@@ -8,6 +8,7 @@ import 'package:shopconn/screens/AddProductScreen.dart';
 import 'package:shopconn/screens/Profile.dart';
 import 'package:shopconn/screens/SavedProductScreen.dart';
 import 'package:shopconn/screens/msg-request.dart';
+import 'package:shopconn/screens/Profile.dart';
 
 class NavDrawer extends StatefulWidget {
   @override
