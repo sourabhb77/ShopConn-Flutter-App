@@ -7,6 +7,8 @@ import 'package:shopconn/notifier/ChatNotifier.dart';
 
 import 'package:shopconn/notifier/authNotifier.dart';
 import 'package:shopconn/notifier/bookNotifier.dart';
+import 'package:shopconn/notifier/notesNotifier.dart';
+import 'package:shopconn/notifier/otherNotifier.dart';
 import 'package:shopconn/notifier/productNotifier.dart';
 import 'package:shopconn/screens/HomeScreen.dart';
 import 'package:shopconn/screens/ProductDetailScreen_Book.dart';
@@ -39,6 +41,12 @@ void main() {
         ChangeNotifierProvider(
           create: (context) => ProductNotifier(),
         ),
+        ChangeNotifierProvider(
+          create: (context)=>NotesNotifier(),
+          ),
+        ChangeNotifierProvider(
+          create: (context)=>OtherNotifier(),
+          ),
       ],
       child: MyApp(),
     )

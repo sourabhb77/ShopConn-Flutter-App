@@ -165,18 +165,18 @@ class _AddProuctScreenState extends State<AddProuctScreen> {
                   else if (category == "Cloth"){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => AddProuctScreen_Cloth()),
+                      MaterialPageRoute(builder: (context) => AddProuctScreen_Cloth(name:name)),
                     );
                   }
                   else if (category == "Note"){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => AddProuctScreen_Note()),
+                      MaterialPageRoute(builder: (context) => AddProuctScreen_Note(name:name)),
                     );
                   }else if (category == "Other"){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => AddProuctScreen_Other()),
+                      MaterialPageRoute(builder: (context) => AddProuctScreen_Other(name:name)),
                     );
                   }
                 }

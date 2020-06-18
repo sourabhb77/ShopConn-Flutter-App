@@ -29,12 +29,6 @@ class _ChatBoxState extends State<ChatBox> {
               Tab(text: "NEW REQUEST"),
             ],
           ),
-          leading: Icon(
-            IconData(58135,
-                fontFamily: 'MaterialIcons', matchTextDirection: true),
-            color: Colors.white,
-            size: 30.0,
-          ),
           title: Text(
             'Chat box',
             style: TextStyle(color: Colors.white),
@@ -77,8 +71,8 @@ class _ChatBoxState extends State<ChatBox> {
                       padding: EdgeInsets.all(5.0),
                       itemBuilder: (BuildContext context, index){
                         
-                        // print("Data : ${snapshot.data.documents[index]['email']}");
-                        return Messagebox(email: snapshot.data.documents[index]['userId']);
+                        // print("Data : ${snapshot.data.documents[index]["userId"]}");
+                        return Messagebox(email: snapshot.data.documents[index]["email"]);
 
                       },
                       itemCount: snapshot.data.documents.length,

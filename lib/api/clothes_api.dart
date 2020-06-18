@@ -1,14 +1,13 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
-uploadClothesImages(List<File> imgLislt, String clothesId) async {
+uploadClothesImages(List<File> imgList, String postId) async {
   List<String> urls=List();
   int i=1;
-  for (File file in imgLislt) {
+  for (File file in imgList) {
     StorageReference storageReference =
-        FirebaseStorage.instance.ref().child("clothes/$clothesId");
+        FirebaseStorage.instance.ref().child("post/$postId");
     StorageUploadTask task = storageReference.child("$i").putFile(file);
     final StorageTaskSnapshot downloadUrl = (await task.onComplete);
     final String url = (await downloadUrl.ref.getDownloadURL());
@@ -21,7 +20,7 @@ uploadClothesImages(List<File> imgLislt, String clothesId) async {
 
 Future<bool> uploadClothesDetails(dynamic clothes,List<File> images)async{
   try{
-  DocumentReference documentRef=Firestore.instance.collection("clothes").document();
+  DocumentReference documentRef=Firestore.instance.collection("post").document();
   clothes.id=documentRef.documentID;
   print("uploaded clothes details succesfully.");
   await documentRef.setData(clothes.toMap(),merge:true);
@@ -33,5 +32,3 @@ Future<bool> uploadClothesDetails(dynamic clothes,List<File> images)async{
   return false;
 }
 }
-
-

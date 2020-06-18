@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopconn/api/shopconnApi.dart';
 import 'package:shopconn/const/Theme.dart';
+import 'package:shopconn/models/user.dart';
+import 'package:shopconn/notifier/ChatNotifier.dart';
 import 'package:shopconn/notifier/authNotifier.dart';
 import 'package:shopconn/notifier/bookNotifier.dart';
 import 'package:shopconn/screens/chatbox.dart';
@@ -34,6 +36,7 @@ class _ProductDetailScreen_BookState extends State<ProductDetailScreen_Book> {
   @override
   Widget build(BuildContext context) {
     BookNotifier bookNotifier = Provider.of<BookNotifier>(context);
+    ChatNotifier chatNotifier = Provider.of<ChatNotifier>(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: sc_AppBarBackgroundColor,
@@ -246,10 +249,12 @@ class _ProductDetailScreen_BookState extends State<ProductDetailScreen_Book> {
                         ),
                       ),
                       onPressed: () {
+                        chatNotifier.setChatUser = bookNotifier.currentBook.ownerId;
                         print(bookNotifier.currentBook.ownerId);
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => ChatPage(ownerId: bookNotifier.currentBook.ownerId)),
+                          // MaterialPageRoute(builder: (context) => ChatPage(receiver: bookNotifier.currentBook.ownerId)),
+                          MaterialPageRoute(builder: (context) => ChatPage()),
                         );
                       },
                     ),

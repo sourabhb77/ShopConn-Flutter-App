@@ -9,6 +9,7 @@ import 'package:shopconn/api/shopconnApi.dart';
 const defaultUserName = "Doctor Daddy";
 
 class ChatPage extends StatefulWidget {
+  ChatPage({Key key}) : super(key: key);
   @override
   State createState() => Chat();
 }
@@ -20,9 +21,6 @@ class Chat extends State<ChatPage> with TickerProviderStateMixin{
   final List<Msg> _messages=<Msg>[];
   final TextEditingController _textController = new TextEditingController();
   bool _isWriting =false;
-   
-
-
     @override
   Widget build(BuildContext context) {
 
@@ -46,7 +44,8 @@ class Chat extends State<ChatPage> with TickerProviderStateMixin{
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(28),
                     child: Image.network(
-                      'https://image.freepik.com/free-vector/doctor-character-background_1270-84.jpg',
+                      // 'https://image.freepik.com/free-vector/doctor-character-background_1270-84.jpg',
+                      _user.imageUrl != null ? _user.imageUrl: 'https://image.freepik.com/free-vector/doctor-character-background_1270-84.jpg',
                       height: 45,
                       width: 45,
                       fit: BoxFit.fill,
@@ -56,7 +55,9 @@ class Chat extends State<ChatPage> with TickerProviderStateMixin{
                 ),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 10.0),
-                child: _user.userId == null? Text('Doctor Daddy') : Text(_user.userId),
+                child: Text(
+                  _user.displayName != null ? _user.displayName : ""
+                ),
               ),
             ],
 

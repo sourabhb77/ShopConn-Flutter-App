@@ -101,10 +101,11 @@ class Messagebox extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    Text(email,
-                        textAlign: TextAlign.center,
-                        style:
-                            new TextStyle(fontSize: 14.0, color: Colors.black)),
+                    Text(
+                      email,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 14.0, color: Colors.black)
+                    ),
                     Text('I love flutter',
                         textAlign: TextAlign.center,
                         style: new TextStyle(

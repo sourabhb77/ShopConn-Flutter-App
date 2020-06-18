@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:shopconn/models/SavedProductData.dart';
 
 class BookNotifier with ChangeNotifier {
-  List _bookList = [];
+  List<Book> _bookList = [];
   Book _currentBook;
 
-  UnmodifiableListView<dynamic> get bookList => UnmodifiableListView(_bookList);
+  UnmodifiableListView<Book> get bookList => UnmodifiableListView(_bookList);
 
   Book get currentBook => _currentBook;
 
-  set bookList(List bookList) {
+  set bookList(List<Book> bookList) {
     _bookList = bookList;
     notifyListeners();
   }
