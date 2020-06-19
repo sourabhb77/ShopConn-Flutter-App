@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Notes{
+class Note{
   String id;
   String ownerId;
   String name;
@@ -16,9 +16,9 @@ class Notes{
   String condition;
   Timestamp postedAt;
    
-  Notes();
+  Note();
 
-  Notes.fromMap(Map<String,dynamic>data)
+  Note.fromMap(Map<String,dynamic>data)
   {
     id=data['id'];
     ownerId = data['ownerId'];

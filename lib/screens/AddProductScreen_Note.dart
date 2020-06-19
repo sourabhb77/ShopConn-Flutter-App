@@ -1,292 +1,60 @@
-// import 'package:flutter/material.dart';
-// import '../const/Theme.dart';
-
-// class AddProuctScreen_Note extends StatefulWidget {
-//   AddProuctScreen_Note({Key key}) : super(key: key);
-
-//   @override
-//   _AddProuctScreen_NoteState createState() => _AddProuctScreen_NoteState();
-// }
-
-// class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text(
-//           "Add Product",
-//           style: TextStyle(
-//             color: sc_AppBarTextColor,
-//           ),
-//         ),
-//         backgroundColor: sc_AppBarBackgroundColor,
-//         leading: IconButton(
-//           icon: Icon(Icons.arrow_back),
-//           onPressed: () {
-//             Navigator.pop(context);
-//           },
-//         ),
-//       ),
-//       body: SingleChildScrollView(
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: <Widget>[
-//             Padding(
-//               padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
-//               child: Text(
-//                 "You Are Almost Done !!!!!!",
-//                 style: TextStyle(
-//                   color: sc_ItemInfoColor,
-//                   fontSize: 16.0,
-//                 ),
-//               ),
-//             ),
-
-//             // -----------------Subject name Starts here-----------------//
-//             Container(
-//               margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
-//               color: sc_InputBackgroundColor,
-//               child: TextField(
-//                 decoration: InputDecoration(
-//                   prefixIcon: Icon(
-//                     Icons.print,
-//                     color: sc_ItemTitleColor,
-//                   ),
-//                   hintText: "Subject Name",
-//                   hintStyle: TextStyle(
-//                     color: sc_InputHintTextColor,
-//                     fontSize: 16.0,
-//                   ),
-//                   enabledBorder: UnderlineInputBorder(      
-//                     borderSide: BorderSide(color: sc_InputHintTextColor, width: 3.0),   
-//                   ),  
-//                   focusedBorder: UnderlineInputBorder(
-//                     borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
-//                   ),
-//                   border: UnderlineInputBorder(
-//                     borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
-//                   ),
-//                 ),
-//               ),
-//             ),
-//             // -----------------Subject name ends here-----------------//
-
-//              // -----------------Description Starts here-----------------//
-//             Container(
-//               margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
-//               color: sc_InputBackgroundColor,
-//               child: TextField(
-//                 maxLines: 5,
-//                 decoration: InputDecoration(
-//                   prefixIcon: Icon(
-//                     Icons.print,
-//                     color: sc_ItemTitleColor,
-//                   ),
-//                   hintText: "Description",
-//                   hintStyle: TextStyle(
-//                     color: sc_InputHintTextColor,
-//                     fontSize: 16.0,
-//                   ),
-//                   enabledBorder: UnderlineInputBorder(      
-//                     borderSide: BorderSide(color: sc_InputHintTextColor, width: 3.0),   
-//                   ),  
-//                   focusedBorder: UnderlineInputBorder(
-//                     borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
-//                   ),
-//                   border: UnderlineInputBorder(
-//                     borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
-//                   ),
-//                 ),
-//               ),
-//             ),
-//             // -----------------Description ends here-----------------//
-
-//              // -----------------Price Starts here-----------------//
-//             Container(
-//               margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
-//               color: sc_InputBackgroundColor,
-//               child: TextField(
-//                 decoration: InputDecoration(
-//                   prefixIcon: Icon(
-//                     Icons.print,
-//                     color: sc_ItemTitleColor,
-//                   ),
-//                   hintText: "Price",
-//                   hintStyle: TextStyle(
-//                     color: sc_InputHintTextColor,
-//                     fontSize: 16.0,
-//                   ),
-//                   enabledBorder: UnderlineInputBorder(      
-//                     borderSide: BorderSide(color: sc_InputHintTextColor, width: 3.0),   
-//                   ),  
-//                   focusedBorder: UnderlineInputBorder(
-//                     borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
-//                   ),
-//                   border: UnderlineInputBorder(
-//                     borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
-//                   ),
-//                 ),
-//               ),
-//             ),
-//             // -----------------Price ends here-----------------//
-
-//             SizedBox(
-//               height: 30.0,
-//             ),
-
-//             Row(
-//               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//               children: <Widget>[
-//                 RaisedButton(
-//                   color: sc_InputBackgroundColor,
-//                   child: Text('Choose Photo'),
-//                   onPressed: () {
-//                     // Navigator.push(
-//                     //   context,
-//                     //   MaterialPageRoute(builder: (context) => SavedProductScreen()),
-//                     // );
-//                   },
-//                 ),
-//                 Column(
-//                   children: <Widget> [
-//                     Text("image1.jpeg"),
-//                     Text("image2.jpeg"),
-//                     Text("image3.jpeg"),
-//                     Text("image4.jpeg"),
-//                   ],
-//                 )
-                
-//               ],
-//             ),
-//             SizedBox(
-//               height: 30.0,
-//             ),
-
-//             Padding(
-//               padding: const EdgeInsets.symmetric(horizontal: 20.0),
-//               child: Row(
-//                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                 children: <Widget>[
-//                   RaisedButton(
-//                     color: sc_InputBackgroundColor,
-//                     child: Text('Cancel',
-//                       style: TextStyle(
-//                         fontSize: 18.0,
-//                       ),
-//                     ),
-//                     onPressed: () {
-//                       // Navigator.push(
-//                       //   context,
-//                       //   MaterialPageRoute(builder: (context) => SavedProductScreen()),
-//                       // );
-//                     },
-//                   ),
-//                   RaisedButton(
-//                     color: sc_PrimaryColor,
-//                     child: Text(
-//                       'Post',
-//                       style: TextStyle(
-//                         color: sc_AppBarTextColor,
-//                         fontSize: 18.0,
-//                       ),                      
-//                     ),
-//                     onPressed: () {
-//                       // Navigator.push(
-//                       //   context,
-//                       //   MaterialPageRoute(builder: (context) => SavedProductScreen()),
-//                       // );
-//                     },
-//                   ),
-                  
-//                 ],
-//               ),
-//             ),
-            
-            
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
-import 'package:shopconn/api/notesApi.dart';
 import 'package:shopconn/api/shopconnApi.dart';
 import 'package:shopconn/api/uploadProduct.dart';
-import 'package:shopconn/models/notes.dart';
-import 'package:shopconn/notifier/notesNotifier.dart';
+import 'package:shopconn/models/note.dart';
 import '../const/Theme.dart';
+import 'package:image_picker/image_picker.dart';
+
 
 class AddProuctScreen_Note extends StatefulWidget {
   String name;
-  AddProuctScreen_Note({Key key,@required this.name}) : super(key: key);
+  AddProuctScreen_Note({Key key, @required this.name}) : super(key: key);
 
   @override
   _AddProuctScreen_NoteState createState() => _AddProuctScreen_NoteState(name);
 }
 
 class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
-
-  final GlobalKey <FormState> _formKey= GlobalKey<FormState>();
-  Notes _currentNotes;
+  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+  Note _currentNote;
   String name;
-  String _description="Best notes on sell";
-  int _price=50;
-  List<File> imageList=List();
-  List<String> _branchesList=['COMPS','IT','MECH','EXTC','ETRX'];
-  String _branch;
-  List <String> _yearList=['I','II','III','IV'];
-  String _year;
-  String _subject="maths";
-  String _condition="good";
-  String _facultyName="saurabh Bujawade";
+  String _branch = 'IT';
+  String _year = "FY"; 
+  String _condition ="Very Good"; //[very good, good , not bad]
+  List<File> imageList= List(); //To store Path of each Images
+  
 
-
-    initNotes()
-    {
+  initNote()
+  {
     print("Initial Constructor");
-    Future<FirebaseUser> user =getCurrendFirebaseUser();
+    Future<FirebaseUser> user = getCurrendFirebaseUser();
     user.then((value) => {
-      _currentNotes.ownerId=value.uid,
-      _currentNotes.postedAt=Timestamp.now(),
-      _currentNotes.productCategory="Notes",
-    }
-    );
+      _currentNote.ownerId= value.uid,
+      _currentNote.postedAt=Timestamp.now(),
+      _currentNote.productCategory ="Note",
+
+    });
     print("After firebase user call");
   }
 
-    void _SelectNotesImages() async {
-    File image=await ImagePicker.pickImage(
-      source: ImageSource.gallery);
+  void _SelectImage() async  //Function to keep track of all the image files that are needed to be uploaded
+  {
+    File image =await ImagePicker.pickImage(
+      source: ImageSource.gallery
+      );
       setState(() {
         imageList.add(image);
       });
+    
   }
 
-  
-  uploadNotesData() async {
+  uploadData() async
+  {
     print("Upload starting");
-    bool ans =await  uploadProduct(_currentNotes, imageList);
+    bool ans =await  uploadProduct(_currentNote, imageList);
 
     print("Upload Finisehd");
     if(ans==true)
@@ -302,27 +70,512 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
         print("FAILURE");
     print("\n***************\n");
     }
+
   }
 
-
-    _AddProuctScreen_NoteState(this.name){
-    initNotes();
+  _AddProuctScreen_NoteState(this.name){
+    initNote();
   }
   @override
-  void initState(){
+  void initState() {
     super.initState();
-    NotesNotifier notesNotifier=Provider.of<NotesNotifier>(context,listen: false);
-    _currentNotes=Notes();
-    _currentNotes.subject=_subject;
-    _currentNotes.description=_description;
-    _currentNotes.price=_price;
-    _currentNotes.condition=_condition;
-    _currentNotes.facultyName=_facultyName;
+    _currentNote = Note();
+    _currentNote.branch = _branch;    
   }
 
+  Widget _buildDescriptionField() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Description",
+                style: TextStyle(
+                  fontSize: 16.0,
+                  color: sc_ItemTitleColor,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              Text(
+                "optional",
+                style: TextStyle(
+                  fontSize: 15.0,
+                  color: sc_ItemTitleColor
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 5.0,),
+          TextFormField(
+            maxLines: 5,
+            decoration: InputDecoration(
+              fillColor: sc_InputBackgroundColor,
+              filled: true,
+              isDense: true,
+              contentPadding: EdgeInsets.all(15),
+              hintText: "This book is good for something .....",
+              hintStyle: TextStyle(
+                color: sc_InputHintTextColor,
+                fontSize: 16.0,
+              ),
+              enabledBorder: OutlineInputBorder(      
+                borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                borderSide: BorderSide(color: sc_InputBackgroundColor),   
+              ),  
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: sc_InputBackgroundColor),
+                borderRadius: BorderRadius.all(Radius.circular(8.0)),
+              ),
+              border: OutlineInputBorder(
+                borderSide: BorderSide(color: sc_InputBackgroundColor),
+                borderRadius: BorderRadius.all(Radius.circular(8.0)),
+              ),
+            ),
+            keyboardType: TextInputType.text,
+            validator: (String value) {
+              if (value.isEmpty) {
+                return 'Description is required';
+              }
+
+              if (value.length <5  || value.length > 200) {
+                return 'Description must be betweem 4 and 200 characters';
+              }
+
+              return null;
+            },
+            onSaved: (String value) {
+              _currentNote.description =value;
+              print(value);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPriceField() {
+    return Container(
+      width: 150.0,
+      margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Price",
+            style: TextStyle(
+              fontSize: 16.0,
+              color: sc_ItemTitleColor,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          SizedBox(height: 5.0,),
+          TextFormField(
+            decoration: InputDecoration(
+              fillColor: sc_InputBackgroundColor,
+              filled: true,
+              isDense: true,
+              contentPadding: EdgeInsets.all(15),
+              prefixIcon: Padding(
+                padding: const EdgeInsets.fromLTRB(10.0, 12.0, 10.0, 10.0),
+                child: Text(
+                  "Rs",
+                  style: TextStyle(
+                    color: sc_ItemTitleColor,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              hintText: "200",
+              hintStyle: TextStyle(
+                color: sc_InputHintTextColor,
+                fontSize: 16.0,
+              ),
+              enabledBorder: OutlineInputBorder(      
+                borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                borderSide: BorderSide(color: sc_InputBackgroundColor),   
+              ),  
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: sc_InputBackgroundColor),
+                borderRadius: BorderRadius.all(Radius.circular(8.0)),
+              ),
+              border: OutlineInputBorder(
+                borderSide: BorderSide(color: sc_InputBackgroundColor),
+                borderRadius: BorderRadius.all(Radius.circular(8.0)),
+              ),
+            ),
+            keyboardType: TextInputType.number,
+            validator: (String value) {
+              if (value.isEmpty) {
+                return 'Price is required';
+              }
+              try {
+                var pr = int.tryParse(value);
+                if (pr <0  || pr > 30000) {
+                  return 'Price must be greater equal to 0';
+                }
+              } catch (err) {
+                return 'Price must be number';
+              }
+              return null;
+            },
+            onSaved: (String value) {
+              var pr = int.tryParse(value);
+              _currentNote.price =pr;
+              print(pr);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+
+  Widget _buildCondition() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Notes Condition",
+            style: TextStyle(
+              fontSize: 16.0,
+              color: sc_ItemTitleColor,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          SizedBox(height: 5.0,),
+          Row(
+            children: <Widget>[
+              Expanded(
+                flex: 2,
+                child: GestureDetector(
+                  onTap: () => setState(() => _condition = "Very Good"),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: _condition == "Very Good" ? sc_InputBackgroundColor : sc_AppBarTextColor,
+                      border: Border.all(
+                        color: _condition == "Very Good" ? sc_PrimaryColor : sc_InputBackgroundColor,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+
+                    ),
+                    padding: EdgeInsets.symmetric(vertical: 13.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Very Good",
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            color: sc_ItemTitleColor,
+                            fontWeight: _condition == "Very Good" ? FontWeight.w500 : FontWeight.normal,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: GestureDetector(
+                  onTap: () => setState(() => _condition = "Good"),
+                  child: Container(
+                    // margin: EdgeInsets.symmetric(horizontal: 2.0),
+                    decoration: BoxDecoration(
+                      color: _condition == "Good" ? sc_InputBackgroundColor : sc_AppBarTextColor,
+                      border: Border.all(
+                        color: _condition == "Good" ? sc_PrimaryColor : sc_InputBackgroundColor,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+
+                    ),
+                    padding: EdgeInsets.symmetric(vertical: 13.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Good",
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            color: sc_ItemTitleColor,
+                            fontWeight: _condition == "Good" ? FontWeight.w500 : FontWeight.normal,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: GestureDetector(
+                  onTap: () => setState(() => _condition = "Not Bad"),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: _condition == "Not Bad" ? sc_InputBackgroundColor : sc_AppBarTextColor,
+                      border: Border.all(
+                        color: _condition == "Not Bad" ? sc_PrimaryColor : sc_InputBackgroundColor,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+
+                    ),
+                    padding: EdgeInsets.symmetric(vertical: 13.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Not Bad",
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            color: sc_ItemTitleColor,
+                            fontWeight: _condition == "Not Bad" ? FontWeight.w500 : FontWeight.normal,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSubject() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Subject",
+            style: TextStyle(
+              fontSize: 16.0,
+              color: sc_ItemTitleColor,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          SizedBox(height: 5.0,),
+          TextFormField(
+            decoration: InputDecoration(
+              fillColor: sc_InputBackgroundColor,
+              filled: true,
+              isDense: true,
+              contentPadding: EdgeInsets.all(15),
+              hintText: "Advanced Algorithms",
+              hintStyle: TextStyle(
+                color: sc_InputHintTextColor,
+                fontSize: 16.0,
+              ),
+              enabledBorder: OutlineInputBorder(      
+                borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                borderSide: BorderSide(color: sc_InputBackgroundColor),   
+              ),  
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: sc_InputBackgroundColor),
+                borderRadius: BorderRadius.all(Radius.circular(8.0)),
+              ),
+              border: OutlineInputBorder(
+                borderSide: BorderSide(color: sc_InputBackgroundColor),
+                borderRadius: BorderRadius.all(Radius.circular(8.0)),
+              ),
+            ),
+            keyboardType: TextInputType.text,
+            validator: (String value) {
+              if (value.isEmpty) {
+                return 'Subject is required';
+              }
+
+              if (value.length <2  || value.length > 100) {
+                return 'Subject must be betweem 2 and 100 characters';
+              }
+
+              return null;
+            },
+            onSaved: (String value) {
+              _currentNote.subject =value;
+              print(value);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFacultyName() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Faculty Name",
+            style: TextStyle(
+              fontSize: 16.0,
+              color: sc_ItemTitleColor,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          SizedBox(height: 5.0,),
+          TextFormField(
+            decoration: InputDecoration(
+              fillColor: sc_InputBackgroundColor,
+              filled: true,
+              isDense: true,
+              contentPadding: EdgeInsets.all(15),
+              hintText: "Mr. A. B. Cajasc",
+              hintStyle: TextStyle(
+                color: sc_InputHintTextColor,
+                fontSize: 16.0,
+              ),
+              enabledBorder: OutlineInputBorder(      
+                borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                borderSide: BorderSide(color: sc_InputBackgroundColor),   
+              ),  
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: sc_InputBackgroundColor),
+                borderRadius: BorderRadius.all(Radius.circular(8.0)),
+              ),
+              border: OutlineInputBorder(
+                borderSide: BorderSide(color: sc_InputBackgroundColor),
+                borderRadius: BorderRadius.all(Radius.circular(8.0)),
+              ),
+            ),
+            keyboardType: TextInputType.text,
+            validator: (String value) {
+              if (value.isEmpty) {
+                return 'Faculty Name is required';
+              }
+
+              if (value.length <2  || value.length > 100) {
+                return 'Faculty Name must be betweem 2 and 100 characters';
+              }
+
+              return null;
+            },
+            onSaved: (String value) {
+              _currentNote.facultyName =value;
+              print(value);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBranch() {
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Branch",
+            style: TextStyle(
+              fontSize: 16.0,
+              color: sc_ItemTitleColor,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          SizedBox(height: 5.0,),
+          Container(
+            decoration: BoxDecoration(
+              color: sc_InputBackgroundColor,
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            padding: EdgeInsets.symmetric(horizontal: 10.0),
+            child: DropdownButton<String>(
+              value: _branch,
+              // icon: Icon(Icons.arrow_downward),    
+              iconSize: 30,
+              // elevation: 16,
+              style: TextStyle(color: sc_ItemTitleColor),
+              onChanged: (String newValue) {
+                setState(() {
+                  _branch = newValue;
+                  _currentNote.branch= newValue;
+                });
+              },
+              items: <String>['IT', 'CS', 'ETRX', 'EXTC','MECH']
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+
+   Widget _buildYearField() {
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Year",
+            style: TextStyle(
+              fontSize: 16.0,
+              color: sc_ItemTitleColor,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          SizedBox(height: 5.0,),
+          Container(
+            decoration: BoxDecoration(
+              color: sc_InputBackgroundColor,
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            padding: EdgeInsets.symmetric(horizontal: 10.0),
+            child: DropdownButton<String>(
+              value: _year,
+              // icon: Icon(Icons.arrow_downward),    
+              iconSize: 30,
+              // elevation: 16,
+              style: TextStyle(color: sc_ItemTitleColor),
+              onChanged: (String newValue) {
+                setState(() {
+                  _year = newValue;
+                  _currentNote.year= newValue;
+                });
+              },
+              items: <String>["FY","SY","TY","LY"]
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+
+
   @override
-   Widget build(BuildContext context) {
-    _currentNotes.name=name;
+  Widget build(BuildContext context) {
+    _currentNote.name=name;
+    print("\n*******book screen********\n");
+    print(_currentNote.name);
+    print("\n***************\n");
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -332,428 +585,155 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
           ),
         ),
         backgroundColor: sc_AppBarBackgroundColor,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+      ),
+      bottomSheet: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            OutlineButton(
+              padding: EdgeInsets.all(13.0),
+              color: sc_InputBackgroundColor,
+              child: Text('Cancel',
+                style: TextStyle(
+                  fontSize: 18.0,
+                ),
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0)
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            RaisedButton(
+              color: sc_PrimaryColor,
+              padding: EdgeInsets.all(13.0),
+              child: Text(
+                'Post',
+                style: TextStyle(
+                  color: sc_AppBarTextColor,
+                  fontSize: 18.0,
+                ),                      
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0)
+              ),
+              onPressed: () {
+                _currentNote.condition = _condition;
+                if (!_formkey.currentState.validate()) {
+                  print("Errororororororo");
+                } else { // No Error upload all the details to the database!!
+                  _formkey.currentState.save();
+                  uploadData();
+                  print(_currentNote.toMap());
+                }
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => SavedProductScreen()),
+                // );
+              },
+            ),
+            
+          ],
         ),
       ),
+
+
       body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
-              child: Text(
-                "You Are Almost Done !!!!!!",
-                style: TextStyle(
-                  color: sc_ItemInfoColor,
-                  fontSize: 16.0,
-                ),
-              ),
-            ),
+        child: Form(
+          key: _formkey,
+          autovalidate: true,
+            child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+              //   child: Text(
+              //     "You Are Almost Done !!!!!!",
+              //     style: TextStyle(
+              //       color: sc_ItemInfoColor,
+              //       fontWeight: FontWeight.w500,
+              //       fontSize: 16.0,
+              //     ),
+              //   ),
+              // ),
 
-            // -----------------Subject name Starts here-----------------//
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
-              color: sc_InputBackgroundColor,
-              child: TextFormField(
-                decoration: InputDecoration(
-                  prefixIcon: Icon(
-                    Icons.print,
-                    color: sc_ItemTitleColor,
-                  ),
-                  hintText: "Subject Name",
-                  hintStyle: TextStyle(
-                    color: sc_InputHintTextColor,
-                    fontSize: 16.0,
-                  ),
-                  enabledBorder: UnderlineInputBorder(      
-            borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),   
-          ),  
-          focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
-          ),
-          border: UnderlineInputBorder(
-            borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
-          ),
-                ),
-                keyboardType: TextInputType.text,
-                validator: (String val){
-                  if(val.isEmpty){
-                    return "Subject name field is empty";
-                  }
-                  return null;
-                },
-                onSaved: (String val){
-                    _currentNotes.subject=val;
-                },
-              ),
-            ),
-            // -----------------Subject name ends here-----------------//
+              SizedBox(height: 15.0,),
 
-             // -----------------Description Starts here-----------------//
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
-              color: sc_InputBackgroundColor,
-              child: TextFormField(
-                maxLines: 5,
-                decoration: InputDecoration(
-                  prefixIcon: Icon(
-                    Icons.print,
-                    color: sc_ItemTitleColor,
-                  ),
-                  hintText: "Description",
-                  hintStyle: TextStyle(
-                    color: sc_InputHintTextColor,
-                    fontSize: 16.0,
-                  ),
-                  enabledBorder: UnderlineInputBorder(      
-            borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),   
-          ),  
-          focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
-          ),
-          border: UnderlineInputBorder(
-            borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
-          ),
-                ),
-                keyboardType:TextInputType.text,
-                validator: (String val){
-                  if(val.isEmpty){
-                    return "Description field is Empty.";
-                  }
-                  else if(val.length>20 && val.length<50){
-                    return "Description should between 20 to 50 word";
-                  }
-                  return null;
-                },
-                onSaved:(val){
-                    _currentNotes.description=val;
-                },
-              ),
-            ),
-            // -----------------Description ends here-----------------//
-
-             // -----------------Price Starts here-----------------//
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
-              color: sc_InputBackgroundColor,
-              child: TextFormField(
-                decoration: InputDecoration(
-                  prefixIcon: Icon(
-                    Icons.print,
-                    color: sc_ItemTitleColor,
-                  ),
-                  hintText: "Price",
-                  hintStyle: TextStyle(
-                    color: sc_InputHintTextColor,
-                    fontSize: 16.0,
-                  ),
-                  enabledBorder: UnderlineInputBorder(      
-            borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),   
-          ),  
-          focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
-          ),
-          border: UnderlineInputBorder(
-            borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
-          ),
-                ),
-                keyboardType: TextInputType.number,
-                validator:(String val){
-                  if(val.isEmpty){
-                    return "Price field cannot be empty.";
-                  }
-                  if(int.parse(val)<0){
-                    return "Price cannot be zero or less.";
-                  }
-                   return null;
-                },
-                onSaved: (val){
-                  _currentNotes.price=int.parse(val);
-                },
-              ),
-            ),
-            // -----------------Price ends here-----------------//
-
-
-              ///......................Year start here............///
-Container(
-              margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
-              color: sc_InputBackgroundColor,
-              child: 
-               Padding(
-                 padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-                 child: DropdownButtonFormField(
-                    decoration: const InputDecoration(  
-                 enabledBorder: UnderlineInputBorder(      
-            borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),   
-          ),  
-          focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
-          ),
-          border: UnderlineInputBorder(
-            borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
-          ),
-                  prefixIcon: Icon(Icons.print,color:Colors.black,),
-                      ),
-                      
-                 hint:Text('Year',style:TextStyle( color: sc_InputHintTextColor,
-                      fontSize: 16.0,),),
-                 value: _year,
-                 items: _yearList.map((type){
-                   return DropdownMenuItem(
-                  child: new Text(type),
-                  value: type,
-              );
-                 }).toList(),
-                  onChanged: (val){
-                   setState((){
-                   _year=val;
-                 });}, 
-                 onSaved: (val)
-                 {
-                   _currentNotes.year=val;
-                 },
-            ),
-               ),),
-
-//................................year end here.............../////
-
+              _buildSubject(),
+              _buildFacultyName(),
               
-
-
-              ///......................Branch start here............///
-Container(
-              margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
-              color: sc_InputBackgroundColor,
-              child: 
-               Padding(
-                 padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-                 child: DropdownButtonFormField(
-                    decoration: const InputDecoration(  
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color:sc_PrimaryColor,width:3.0),
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
-                  ),
-                  border: UnderlineInputBorder(
-                    borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
-                  ),
-                  prefixIcon: Icon(Icons.print,color:Colors.black,),
-                      ),
-                      
-                 hint:Text('Branch',style:TextStyle( color: sc_InputHintTextColor,
-                      fontSize: 16.0,),),
-                 value: _branch,
-                 items: _branchesList.map((type){
-                   return DropdownMenuItem(
-                  child: new Text(type),
-                  value: type,
-              );
-                 }).toList(),
-                  onChanged: (val){
-                   setState((){
-                   _branch=val;
-                 });}, 
-                 onSaved: (val)
-                 {
-                   _currentNotes.branch=val;
-                 },
-            ),
-               ),),
-               //................branch end here..............................//
-
-// -----------------Faculty name Starts here-----------------//
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
-              color: sc_InputBackgroundColor,
-              child: TextFormField(
-                decoration: InputDecoration(
-                  prefixIcon: Icon(
-                    Icons.print,
-                    color: sc_ItemTitleColor,
-                  ),
-                  hintText: "Faculty name",
-                  hintStyle: TextStyle(
-                    color: sc_InputHintTextColor,
-                    fontSize: 16.0,
-                  ),
-                 enabledBorder: UnderlineInputBorder(      
-            borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),   
-          ),  
-          focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
-          ),
-          border: UnderlineInputBorder(
-            borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
-          ),
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    _buildYearField(),
+                    _buildBranch(),
+                  ],
                 ),
-                keyboardType: TextInputType.text,
-                validator: (val){
-                  // if(val is String){
-                  //   return "Price should be in number";
-                  // }
-                  if(val.isEmpty)
-                  {
-                    return "Faculty name field is empty.";
-                  }
-                   return null;
-                },
-                onSaved:(val)
-                {
-                  _currentNotes.facultyName=val;
-                },
               ),
-            ),
-            // -----------------faculty name ends here-----------------//
+              // _buildPublication(),
+              // _buildBookCategory(),
+              _buildCondition(),
+              _buildDescriptionField(),
+              _buildPriceField(),
 
+              // SizedBox(
+              //   height: 30.0,
+              // ),
 
-  // -----------------condition Starts here-----------------//
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
-              color: sc_InputBackgroundColor,
-              child: TextFormField(
-                decoration: InputDecoration(
-                  prefixIcon: Icon(
-                    Icons.print,
-                    color: sc_ItemTitleColor,
-                  ),
-                  hintText: "Condition",
-                  hintStyle: TextStyle(
-                    color: sc_InputHintTextColor,
-                    fontSize: 16.0,
-                  ),
-                 enabledBorder: UnderlineInputBorder(      
-            borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),   
-          ),  
-          focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
-          ),
-          border: UnderlineInputBorder(
-            borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
-          ),
-                ),
-                keyboardType: TextInputType.text,
-                validator: (val){
-                  // if(val is String){
-                  //   return "Price should be in number";
-                  // }
-                  if(val.isEmpty)
-                  {
-                    return "Condition field is empty.";
-                  }
-                   return null;
+              GestureDetector(
+                onTap: () {
+                    _SelectImage();
                 },
-                onSaved:(val)
-                {
-                  _currentNotes.condition=val;
-                },
-              ),
-            ),
-            // -----------------Condition ends here-----------------//
-
-            SizedBox(
-              height: 30.0,
-            ),
-
-          Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                RaisedButton(
-                  color: sc_InputBackgroundColor,
-                  child: Text('Choose Photo'),
-                  onPressed: () {
-                    _SelectNotesImages();
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => SavedProductScreen()),
-                    // );
-                  },
-                ),
-                // Column(
-                //   children: <Widget> [
-                //     Text("image1.jpeg"),
-                //     Text("image2.jpeg"),
-                //     Text("image3.jpeg"),
-                //     Text("image4.jpeg"),
-                //   ],
-                // )
-                
-              ],
-            ),
-            SizedBox(
-              height: 30.0,
-            ),
-            GridView.count(
-              shrinkWrap: true,
-              scrollDirection: Axis.vertical,
-              padding: EdgeInsets.fromLTRB(15,0,15,0),
-              crossAxisCount: 2,
-              crossAxisSpacing: 10,
-              // mainAxisSpacing: 2,
-              
-              children: List.generate(imageList.length, (index) {
-                return Container(
-                  child: Image(image:FileImage(imageList[index]))
-                  ,);
-              })
-            ),
-            SizedBox(
-              height: 30.0,
-            ),
-
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  RaisedButton(
+                child: Container(
+                  height: 80.0,
+                  decoration: BoxDecoration(
                     color: sc_InputBackgroundColor,
-                    child: Text('Cancel',
-                      style: TextStyle(
-                        fontSize: 18.0,
-                      ),
+                    border: Border.all(
+                      color: sc_PrimaryColor,
+                      width: 1.0,
                     ),
-                    onPressed: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(builder: (context) => SavedProductScreen()),
-                      // );
-                    },
+                    borderRadius: BorderRadius.circular(8.0),
                   ),
-                  RaisedButton(
-                    color: sc_PrimaryColor,
-                    child: Text(
-                      'Post',
-                      style: TextStyle(
-                        color: sc_AppBarTextColor,
-                        fontSize: 18.0,
-                      ),                      
-                    ),
-                    onPressed: () {
-                      if(!_formKey.currentState.validate())
-                      {
-                        print("Error");
-                      }
-                      else{
-                        _formKey.currentState.save();
-                        uploadNotesData();
-                        print(_currentNotes.toMap());
-                      }
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(builder: (context) => SavedProductScreen()),
-                      // );
-                    },
-                  ),  
-                ],
+                  margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        "Choose Photo",
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          color: sc_ItemTitleColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
-            ),
-          ],
+              SizedBox(
+                height: 30.0,
+              ),
+              GridView.count(
+                shrinkWrap: true,
+                scrollDirection: Axis.vertical,
+                padding: EdgeInsets.fromLTRB(15,0,15,0),
+                crossAxisCount: 2,
+                crossAxisSpacing: 10,
+                // mainAxisSpacing: 2,
+                
+                children: List.generate(imageList.length, (index) {
+                  return Container(
+                    child: Image(image:FileImage(imageList[index]))
+                    ,);
+                })
+              ),
+            ],
+          ),
         ),
       ),
     );
