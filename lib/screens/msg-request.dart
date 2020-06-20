@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:shopconn/api/MessageApi.dart';
 import 'package:shopconn/const/Theme.dart';
 import 'package:shopconn/models/user.dart';
+import 'package:shopconn/notifier/authNotifier.dart';
 import 'package:shopconn/widgets/MessageWidgets/RequestMessageBox.dart';
 import './chatbox.dart';
 import '../services/auth.dart';
@@ -134,7 +135,7 @@ void getUser()
                 },
               ),
             ),
-            Rabit(stream: widget.getNewRequestsStream().asBroadcastStream()),
+            Rabit(id:"userId"),
 
             //  StreamBuilder(
 
@@ -191,9 +192,9 @@ void getUser()
 }
 
 class Rabit extends StatefulWidget {
-  final Stream stream;
+  final String id;
 
-  const Rabit({Key key, this.stream}) : super(key: key);
+  const Rabit({Key key, this.id}) : super(key: key);
 
   @override
   _RabitState createState() => _RabitState();
@@ -204,7 +205,7 @@ class _RabitState extends State<Rabit> {
   Widget build(BuildContext context) {
     return StreamBuilder(
       // stream: Firestore.instance.collection("request").where("requesterId", isEqualTo:"12312" ).snapshots(),
-      stream: getNewRequest("userId").asStream(),
+      stream: getNewRequest(widget.id).asStream().asBroadcastStream(),
 
       builder: (context, snapshot) {
         print("*********************************");
@@ -232,10 +233,6 @@ class _RabitState extends State<Rabit> {
   }
   
   
-  @override
-  void dispose()
-  {
-    super.dispose();
-  }
+ 
 
 }

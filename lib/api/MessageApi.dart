@@ -19,17 +19,22 @@ Future<List<MessageRequest>> getNewRequest(String userId) async
 {
   
   CollectionReference ref = Firestore.instance.collection("request");
-  ref .where("requesterId", isEqualTo: userId)
+  var query =ref .where("requesterId", isEqualTo: userId)
   .orderBy('timestamp',descending:true);
 
  
   
   List<MessageRequest> list = List();
-  QuerySnapshot  snaps = await ref.getDocuments();
+  QuerySnapshot  snaps = await query.getDocuments();
   for (DocumentSnapshot doc in snaps.documents)
   {
+    print("DOC data: ${doc.data}");
     list.add(MessageRequest.fromMap(doc.data));
+
   }
+  print("***************************");
+  print("list size: ${list.length}");
+  print("***************************");
 
   return list;
 }
