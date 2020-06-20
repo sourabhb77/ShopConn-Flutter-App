@@ -243,11 +243,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
                         return SliverList(
                           delegate: SliverChildBuilderDelegate((context,index)
+                          
                           {
                             print("Posted At: ${snapshot.data.documents[index]["postedAt"]}");
 
-                            return ProductItem(data: snapshot.data.documents[index],);
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: ProductItem(data: snapshot.data.documents[index],),
+                            );
                           },
+
                           childCount: snapshot.data.documents.length),
                         );
 
