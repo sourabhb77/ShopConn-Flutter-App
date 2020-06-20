@@ -1,12 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shopconn/api/MessageApi.dart';
 import 'package:shopconn/api/shopconnApi.dart';
 import 'package:shopconn/const/Theme.dart';
 import 'package:shopconn/models/user.dart';
 import 'package:shopconn/notifier/ChatNotifier.dart';
 import 'package:shopconn/notifier/authNotifier.dart';
 import 'package:shopconn/notifier/bookNotifier.dart';
+import 'package:shopconn/notifier/productNotifier.dart';
 import 'package:shopconn/screens/chatbox.dart';
 import '../widgets/Carousel.dart';
 
@@ -20,11 +22,23 @@ class ProductDetailScreen_Book extends StatefulWidget {
 class _ProductDetailScreen_BookState extends State<ProductDetailScreen_Book> {
 
   dynamic _receiver;
+  AuthNotifier authNotifier;
+    BookNotifier bookNotifier ;
+    ChatNotifier chatNotifier ;
+
+  sendRequest() async
+  {
+      await sendNewRequest(authNotifier.userId, bookNotifier.currentBook.ownerId,
+                                        
+                                        bookNotifier.currentBook.id
+                                        
+                                         );
+
+  }
 
   @override
   void initState() { 
-    AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
-    BookNotifier bookNotifier = Provider.of<BookNotifier>(context, listen: false);
+  
     Future<FirebaseUser> user = getCurrendFirebaseUser();
     user.then((value) => {
       print(value.displayName),
@@ -35,8 +49,10 @@ class _ProductDetailScreen_BookState extends State<ProductDetailScreen_Book> {
   
   @override
   Widget build(BuildContext context) {
-    BookNotifier bookNotifier = Provider.of<BookNotifier>(context);
-    ChatNotifier chatNotifier = Provider.of<ChatNotifier>(context);
+    bookNotifier = Provider.of<BookNotifier>(context);
+    chatNotifier = Provider.of<ChatNotifier>(context);
+    authNotifier = Provider.of<AuthNotifier>(context);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: sc_AppBarBackgroundColor,
@@ -250,12 +266,18 @@ class _ProductDetailScreen_BookState extends State<ProductDetailScreen_Book> {
                       ),
                       onPressed: () {
                         chatNotifier.setChatUser = bookNotifier.currentBook.ownerId;
-                        print(bookNotifier.currentBook.ownerId);
-                        Navigator.push(
-                          context,
-                          // MaterialPageRoute(builder: (context) => ChatPage(receiver: bookNotifier.currentBook.ownerId)),
-                          MaterialPageRoute(builder: (context) => ChatPage()),
-                        );
+                        print(bookNotifier.currentBook.ownerId);;
+                        print("Sending Chat Request NOW ****************");
+
+                        sendRequest();
+                        print("REQUEST SENT ************************");
+
+                      
+                        // Navigator.push(
+                        //   context,
+                        //   // MaterialPageRoute(builder: (context) => ChatPage(receiver: bookNotifier.currentBook.ownerId)),
+                        //   MaterialPageRoute(builder: (context) => ChatPage()),
+                        // );
                       },
                     ),
                     OutlineButton(

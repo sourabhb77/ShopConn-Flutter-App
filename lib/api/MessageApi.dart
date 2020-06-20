@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
 import 'package:shopconn/models/Message.dart';
 import 'package:shopconn/models/SavedProductData.dart';
 
@@ -17,10 +18,11 @@ import 'package:shopconn/models/SavedProductData.dart';
 Future<List<MessageRequest>> getNewRequest(String userId) async
 {
   
-  CollectionReference ref = Firestore.instance.collection("requests");
-  ref.where("ownerId", isEqualTo:userId)
+  CollectionReference ref = Firestore.instance.collection("request");
+  ref .where("requesterId", isEqualTo: userId)
   .orderBy('timestamp',descending:true);
 
+ 
   
   List<MessageRequest> list = List();
   QuerySnapshot  snaps = await ref.getDocuments();
@@ -28,5 +30,28 @@ Future<List<MessageRequest>> getNewRequest(String userId) async
   {
     list.add(MessageRequest.fromMap(doc.data));
   }
+
   return list;
+}
+
+Future<bool> sendNewRequest(String requesterId, String requestedId, String productId) async
+{
+  DocumentReference ref = Firestore.instance.collection("request").document();
+  MessageRequest requestObject = MessageRequest(requesterId: requesterId, requestedId: requestedId,
+                                          productId: productId);
+  requestObject.id = ref.documentID;
+
+  try
+  {
+    await ref.setData(requestObject.toMap(), merge: true);
+    return true;
+
+  }
+  catch(err)
+  {
+    print("Error sending chat request: $err");
+    return false;
+  }
+
+
 }

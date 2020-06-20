@@ -56,7 +56,7 @@ class Chat extends State<ChatPage> with TickerProviderStateMixin{
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 10.0),
                 child: Text(
-                  _user.displayName != null ? _user.displayName : ""
+                  _user.name != null ? _user.name : ""
                 ),
               ),
             ],

@@ -5,6 +5,8 @@ class AuthNotifier with ChangeNotifier {
   FirebaseUser _user;
 
   FirebaseUser get user => _user;
+
+  String get userId => _user.uid;
   
   set currentUser(FirebaseUser user) {
     _user = user;

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shopconn/const/Theme.dart';
+import 'package:shopconn/models/SavedProductData.dart';
+import 'package:shopconn/notifier/bookNotifier.dart';
 import 'package:shopconn/screens/ProductDetailScreen_Book.dart';
 
 
@@ -90,6 +93,7 @@ class ProductItem extends StatelessWidget {
   ProductItem({this.data});
   @override
   Widget build(BuildContext context) {
+    BookNotifier bookNotifier = Provider.of<BookNotifier>(context);
     return Container(
                 child: Column(
                   children: [
@@ -100,7 +104,7 @@ class ProductItem extends StatelessWidget {
                         splashColor: Colors.red,
                         onTap: () {
                           if(data["productCategory"]== "Book"){
-                            // bookNotifier.currentBook=productNotifier.productList[index];
+                            bookNotifier.currentBook=Book.fromMap(data.data);
                             Navigator.push(
                               context,
                               MaterialPageRoute(builder: (context) => ProductDetailScreen_Book()),
@@ -133,7 +137,7 @@ class ProductItem extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.stretch,
                                   children: <Widget>[
                                     Text(
-                                     data["name"],
+                                     data["name"]== null ? "NULL NAME" : data["name"],
                                       style: TextStyle(
                                         color: sc_ItemTitleColor,
                                         fontWeight: FontWeight.w600,
@@ -151,7 +155,8 @@ class ProductItem extends StatelessWidget {
                                     Padding(
                                       padding: const EdgeInsets.only(top: 15.0),
                                       child: Text(
-                                        "Rs ${data["price"]}",
+                                        data["price"] != null  ? 
+                                        "Rs ${data["price"]}" : "NULL PRICE",
                                         style: TextStyle(
                                           fontSize: 20.0 ,
                                           color: sc_PrimaryColor,                                
