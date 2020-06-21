@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:shopconn/models/Message.dart';
 import 'package:shopconn/models/SavedProductData.dart';
@@ -15,12 +16,16 @@ import 'package:shopconn/models/SavedProductData.dart';
 //Get all the new message request for the current user 
 
 
-Future<List<MessageRequest>> getNewRequest(String userId) async
+Future<List<MessageRequest>> getNewRequest() async
 {
+  FirebaseUser user = await FirebaseAuth.instance.currentUser();
+  String userId = user.uid;
+
+
   
   CollectionReference ref = Firestore.instance.collection("request");
   var query =ref .where("requesterId", isEqualTo: userId)
-  .orderBy('timestamp',descending:true);
+  .orderBy('timeStamp',descending:true);
 
  
   
@@ -34,6 +39,7 @@ Future<List<MessageRequest>> getNewRequest(String userId) async
   }
   print("***************************");
   print("list size: ${list.length}");
+  print("userID : $userId ");
   print("***************************");
 
   return list;

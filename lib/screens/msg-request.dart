@@ -205,7 +205,7 @@ class _RabitState extends State<Rabit> {
   Widget build(BuildContext context) {
     return StreamBuilder(
       // stream: Firestore.instance.collection("request").where("requesterId", isEqualTo:"12312" ).snapshots(),
-      stream: getNewRequest(widget.id).asStream().asBroadcastStream(),
+      stream: getNewRequest().asStream().asBroadcastStream(),
 
       builder: (context, snapshot) {
         print("*********************************");
