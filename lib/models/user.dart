@@ -5,23 +5,32 @@ class User {
   User();
 
 }
+
 class ChatUser
 {
-  String displayName;
-  String email;
-  String imageUrl;
-  String userId;
+  String userId, name, email , imageUrl , mobile;
+
   ChatUser();
 
   ChatUser.fromMap(Map<String, dynamic> data)
   {
-    displayName = data["name"];
-
+    userId = data["userId"];
+    name = data ["name"];
     email = data["email"];
-
     imageUrl = data["imageUrl"];
+    mobile = data["mobile"];
+  }
 
-    userId = data["userId"]; 
+  Map<String , dynamic> toMap()
+  {
+    return 
+    {
+      "userId" : userId,
+      "name" : name,
+      "email" : email,
+      "imageUrl" : imageUrl,
+      "mobile" : imageUrl,
 
+    };
   }
 }

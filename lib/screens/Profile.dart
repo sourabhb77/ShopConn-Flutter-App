@@ -109,6 +109,7 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         title: Text("My Profile"),
         actions: <Widget>[
           IconButton(
@@ -124,56 +125,57 @@ class _ProfileState extends State<Profile> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            InkWell(
-              onTap: () {
-                _selectImage();
+            Container(
+              color: sc_PrimaryColor,
+              child: Column(
+                children: <Widget>[
+                  InkWell(
+                    onTap: () {
+                      _selectImage();
 
-                //    Navigator.push(
-                // context,
-                // MaterialPageRoute(builder: (context) => ImageCapture()),);
-              },
-              child: Container(
-                alignment: Alignment.center,
-                padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                child:  state== ProfilePicState.DB ?
-                CircleAvatar(
-                  backgroundImage: NetworkImage(imageUrl),
-                  radius: 78,
-                ):
-                state== ProfilePicState.Default ? 
-                CircleAvatar(
-                   backgroundImage: NetworkImage("https://image.freepik.com/free-vector/doctor-character-background_1270-84.jpg"),
-                   radius: 78,)
-                   : CircleAvatar(radius: 78,
-                   backgroundImage: FileImage(image),)
-              ),
-              
-          
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                  child: Text(
-                    "Doctor Daddy",
-                    style: TextStyle(
-                      fontSize: 20.0,
+                      //    Navigator.push(
+                      // context,
+                      // MaterialPageRoute(builder: (context) => ImageCapture()),);
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                      child:  state== ProfilePicState.DB ?
+                      CircleAvatar(
+                        backgroundImage: NetworkImage(imageUrl),
+                        radius: 60,
+                      ):
+                      state== ProfilePicState.Default ? 
+                      CircleAvatar(
+                        backgroundImage: NetworkImage("https://image.freepik.com/free-vector/doctor-character-background_1270-84.jpg"),
+                        radius: 60,)
+                        : CircleAvatar(radius: 60,
+                        backgroundImage: FileImage(image),)
                     ),
                   ),
-                ),
-                Container(
-                  child: IconButton(
-                    icon: Icon(Icons.perm_phone_msg),
-                    onPressed: () => {},
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.fromLTRB(0, 10, 0, 15),
+                        child: Text(
+                          name != null ? name : "",
+                          style: TextStyle(
+                            fontSize: 22.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                )
-              ],
+                ],
+              )
             ),
+            
+
             Column(
               // crossAxisAlignment: CrossAxisAlignment.baseline,
               children: <Widget>[
-                Container(child: Text("Mail")),
                 Padding(
                   padding: const EdgeInsets.only(left: 15, right: 15),
                   child: TextField(

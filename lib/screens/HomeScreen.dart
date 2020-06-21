@@ -1,3 +1,4 @@
+// import 'dart:js';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -6,18 +7,13 @@ import 'package:provider/provider.dart';
 import 'package:shopconn/api/shopconnApi.dart';
 import 'package:shopconn/const/Theme.dart';
 import 'package:shopconn/notifier/authNotifier.dart';
+import 'package:shopconn/notifier/productNotifier.dart';
 import 'package:shopconn/screens/AddProductScreen.dart';
 import 'package:shopconn/screens/SavedProductScreen.dart';
-import 'package:shopconn/screens/chatbox.dart';
+// import 'package:shopconn/screens/chatbox.dart';
 import 'package:shopconn/screens/msg-request.dart';
-//<<<<<<< shubham
-// =======
-//import 'package:shopconn/screens/msg-request.dart';
-//>>>>>>> sourabhNew
-// import 'package:shopconn/widgets/CategorySelector.dart';
-// import 'package:shopconn/widgets/HomeSliver.dart';
 import 'package:shopconn/widgets/Item.dart';
-import 'package:shopconn/widgets/MessageWidgets/RequestMessageBox.dart';
+// import 'package:shopconn/widgets/MessageWidgets/RequestMessageBox.dart';
 import 'package:shopconn/widgets/NavDrawer.dart';
 // import 'package:shopconn/widgets/ProductDisplay.dart';
 
@@ -105,7 +101,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       SizedBox(height: 15.0,),
                       GestureDetector(
-                        onTap: (){ print("going to search screen");},
+                        onTap: (){ 
+                          print("going to search screen");
+                          // showSearch(context: context, delegate: SearchProduct());
+                        },
                         child: Container(
                           height: 45.0,
                           decoration: BoxDecoration(
@@ -243,11 +242,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
                         return SliverList(
                           delegate: SliverChildBuilderDelegate((context,index)
+                          
                           {
                             print("Posted At: ${snapshot.data.documents[index]["postedAt"]}");
 
-                            return ProductItem(data: snapshot.data.documents[index],);
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: ProductItem(data: snapshot.data.documents[index],),
+                            );
                           },
+
                           childCount: snapshot.data.documents.length),
                         );
 
@@ -274,3 +278,55 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
+
+// class SearchProduct extends SearchDelegate<dynamic> {
+//   @override
+//   List<Widget> buildActions(BuildContext context) {
+//     return [
+//       IconButton(
+//         icon: Icon(Icons.clear),
+//         onPressed: (){
+//         }
+//       ),
+
+//     ];
+//   }
+
+//   @override
+//   Widget buildLeading(BuildContext contexntext) {
+//     return IconButton(
+//       icon: Icon(Icons.arrow_back),
+//       onPressed: (){
+//         // Navigator.pop(context);
+//       }
+//     );
+//   }
+
+//   @override
+//   Widget buildResults(BuildContext context ) {
+//     return null;
+//   }
+
+//   @override
+//   Widget buildSuggestions(BuildContext context) {
+//     ProductNotifier productNotifier = Provider.of<ProductNotifier>(context, listen: false);
+//     getProducts(productNotifier);
+//     // productNotifier.productList;
+//     return ListView.builder(
+//       itemCount: productNotifier.productList.length,
+//       itemBuilder: (context,index) {
+//         // var product = productNotifier.productList[index];
+//         // print("***\n");
+//         // print(product.data);
+//         return ListTile(
+//           title: Text(
+//             productNotifier.productList[index].name != null ? productNotifier.productList[index].name : "",
+//           ),
+//         );
+//       }
+//     );
+//   }
+  
+  
+// }

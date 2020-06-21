@@ -3,6 +3,9 @@ import 'dart:io';
 // import 'package:shopconn/model/book.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:shopconn/models/SavedProductData.dart';
+import 'package:shopconn/models/clothes.dart';
+import 'package:shopconn/models/note.dart';
+import 'package:shopconn/models/other.dart';
 import 'package:shopconn/models/user.dart';
 import 'package:shopconn/notifier/authNotifier.dart';
 // import 'package:shopconn/notifier/book_notifier.dart';
@@ -117,6 +120,18 @@ Future<void> getProducts(ProductNotifier productNotifier) async {
       Book book = Book.fromMap(document.data);
       _productList.add(book);
     }
+    // else if(document.data["productCategory"]=="Cloths"){
+    //   Clothes cloth = Clothes.fromMap(document.data);
+    //   _productList.add(cloth);
+    // }
+    // else if(document.data["productCategory"]=="Note"){
+    //   Note note = Note.fromMap(document.data);
+    //   _productList.add(note);
+    // }
+    // else if(document.data["productCategory"]=="Other"){
+    //   Other other = Other.fromMap(document.data);
+    //   _productList.add(other);
+    // }
   });
   productNotifier.productList = _productList;
   print("Got your products");
