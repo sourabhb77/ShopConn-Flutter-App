@@ -27,7 +27,8 @@ class Clothes{
     price=data['price'];
     size=data['size'];
     description=data['description'];
-    imgList=data['imgList'];
+    // imgList=data['imgList'];
+    imgList = List.from(data['imgList']);
     productCategory=data['productCategory'];
     onSell=data['onSell'];
     postedAt=data['postedAt'];

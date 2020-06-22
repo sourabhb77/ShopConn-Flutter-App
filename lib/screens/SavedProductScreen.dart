@@ -4,8 +4,14 @@ import 'package:shopconn/api/shopconnApi.dart';
 import 'package:shopconn/const/Theme.dart';
 import 'package:shopconn/notifier/authNotifier.dart';
 import 'package:shopconn/notifier/bookNotifier.dart';
+import 'package:shopconn/notifier/clothesNotifier.dart';
+import 'package:shopconn/notifier/noteNotifier.dart';
+import 'package:shopconn/notifier/otherNotifier.dart';
 import 'package:shopconn/notifier/productNotifier.dart';
 import 'package:shopconn/screens/ProductDetailScreen_Book.dart';
+import 'package:shopconn/screens/ProductDetailScreen_Cloth.dart';
+import 'package:shopconn/screens/ProductDetailScreen_Note.dart';
+import 'package:shopconn/screens/ProductDetailScreen_Other.dart';
 
 class SavedProductScreen extends StatefulWidget {
   const SavedProductScreen({Key key}) : super(key: key);
@@ -26,6 +32,9 @@ class _SavedProductScreenState extends State<SavedProductScreen> {
     AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
     ProductNotifier productNotifier = Provider.of<ProductNotifier>(context);
     BookNotifier bookNotifier = Provider.of<BookNotifier>(context);
+    ClothesNotifier clothNotifier = Provider.of<ClothesNotifier>(context);
+    NoteNotifier noteNotifier = Provider.of<NoteNotifier>(context);
+    OtherNotifier otherNotifier = Provider.of<OtherNotifier>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -37,7 +46,7 @@ class _SavedProductScreenState extends State<SavedProductScreen> {
         backgroundColor: sc_AppBarBackgroundColor,
       ),
       body: Container(
-        margin: EdgeInsets.only(top: 10.0),
+        padding: EdgeInsets.only(top: 10.0),
         child: ListView.separated(
             itemBuilder: (BuildContext context, int index) {
               return Container(
@@ -49,12 +58,36 @@ class _SavedProductScreenState extends State<SavedProductScreen> {
                       child: InkWell(
                         splashColor: Colors.red,
                         onTap: () {
-                          if(productNotifier.productList[index].productCategory== "Book"){
-                            bookNotifier.currentBook=productNotifier.productList[index];
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => ProductDetailScreen_Book()),
-                            );
+                          switch (productNotifier.productList[index].productCategory) {
+                            case "Book":
+                              bookNotifier.currentBook=productNotifier.productList[index];
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => ProductDetailScreen_Book()),
+                              );
+                              break;
+                            case "Clothes":
+                              clothNotifier.currentClothes=productNotifier.productList[index];
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => ProductDetailScreen_Cloth()),
+                              );
+                              break;
+                            case "Note":
+                              noteNotifier.currentNote=productNotifier.productList[index];
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => ProductDetailScreen_Note()),
+                              );
+                              break;
+                            case "Other":
+                              otherNotifier.currentOther=productNotifier.productList[index];
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => ProductDetailScreen_Other()),
+                              );
+                              break;
+                            default:
                           }
                         },
                         child: Row(

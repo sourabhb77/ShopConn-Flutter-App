@@ -22,7 +22,7 @@ class Other {
     price=data['price'];
     productCategory=data['productCategory'];
     onSell=data['onSell'];
-    imgList=data['imgList'];
+    imgList = List.from(data['imgList']);
     condition=data['condition'];
     postedAt=data['postedAt'];
   }

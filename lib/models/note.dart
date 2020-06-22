@@ -25,7 +25,8 @@ class Note{
     name=data['name'];
     price = data['price'];
     description = data['description'];
-    imgList=data['imgList'];
+    // imgList=data['imgList'];
+    imgList = List.from(data['imgList']);
     productCategory = data['productCategory'];
     onSell = data['onSell'];
     subject=data['subject'];

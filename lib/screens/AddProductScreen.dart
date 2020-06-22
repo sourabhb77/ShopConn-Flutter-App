@@ -78,6 +78,7 @@ class _AddProuctScreenState extends State<AddProuctScreen> {
               ),
             ),
             keyboardType: TextInputType.text,
+            textCapitalization: TextCapitalization.words,
             autofocus: true,
             validator: (String value) {
               if (value.isEmpty) {

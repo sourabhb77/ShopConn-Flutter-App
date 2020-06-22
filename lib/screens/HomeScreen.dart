@@ -1,5 +1,3 @@
-// import 'dart:js';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -103,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       GestureDetector(
                         onTap: (){ 
                           print("going to search screen");
-                          // showSearch(context: context, delegate: SearchProduct());
+                          showSearch(context: context, delegate: SearchProduct());
                         },
                         child: Container(
                           height: 45.0,
@@ -280,53 +278,55 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 
-// class SearchProduct extends SearchDelegate<dynamic> {
-//   @override
-//   List<Widget> buildActions(BuildContext context) {
-//     return [
-//       IconButton(
-//         icon: Icon(Icons.clear),
-//         onPressed: (){
-//         }
-//       ),
+class SearchProduct extends SearchDelegate<dynamic> {
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: Icon(Icons.clear),
+        onPressed: (){
+          query ="";
+        }
+      ),
 
-//     ];
-//   }
+    ];
+  }
 
-//   @override
-//   Widget buildLeading(BuildContext contexntext) {
-//     return IconButton(
-//       icon: Icon(Icons.arrow_back),
-//       onPressed: (){
-//         // Navigator.pop(context);
-//       }
-//     );
-//   }
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.arrow_back),
+      onPressed: (){
+        close(context, null);
+      }
+    );
+  }
 
-//   @override
-//   Widget buildResults(BuildContext context ) {
-//     return null;
-//   }
+  @override
+  Widget buildResults(BuildContext context ) {
+    return null;
+  }
 
-//   @override
-//   Widget buildSuggestions(BuildContext context) {
-//     ProductNotifier productNotifier = Provider.of<ProductNotifier>(context, listen: false);
-//     getProducts(productNotifier);
-//     // productNotifier.productList;
-//     return ListView.builder(
-//       itemCount: productNotifier.productList.length,
-//       itemBuilder: (context,index) {
-//         // var product = productNotifier.productList[index];
-//         // print("***\n");
-//         // print(product.data);
-//         return ListTile(
-//           title: Text(
-//             productNotifier.productList[index].name != null ? productNotifier.productList[index].name : "",
-//           ),
-//         );
-//       }
-//     );
-//   }
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    ProductNotifier productNotifier = Provider.of<ProductNotifier>(context, listen: false);
+    getProducts(productNotifier);
+    final pList = query.isEmpty 
+                  ? productNotifier.productList 
+                  : productNotifier.productList.where((element) => element.name.startsWith(query)).toList();
+    return pList.isEmpty ? Text("no result found") : ListView.builder(
+      itemCount: pList.length,
+      itemBuilder: (context,index) {
+        return ListTile(
+          title: Text(
+            pList[index].name != null 
+            ? pList[index].name 
+            : "",
+          ),
+        );
+      }
+    );
+  }
   
   
-// }
+}
