@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shopconn/const/Theme.dart';
 import 'package:shopconn/widgets/Carousel.dart';
@@ -12,7 +13,6 @@ class ProductDetailScreen_Other extends StatefulWidget {
 }
 
 class _ProductDetailScreen_OtherState extends State < ProductDetailScreen_Other > {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

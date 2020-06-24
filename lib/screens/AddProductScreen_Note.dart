@@ -25,8 +25,8 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
   String _year = "FY"; 
   String _condition ="Very Good"; //[very good, good , not bad]
   List<File> imageList= List(); //To store Path of each Images
+  List<String> tagList = []; // to store tags for searching
   
-
   initNote()
   {
     print("Initial Constructor");
@@ -71,6 +71,16 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
     print("\n***************\n");
     }
 
+  }
+
+  addToTagList(String tag){
+    tag= tag.toLowerCase();
+    for (var i = 0; i < tag.length; i++) {
+      for (var j = i; j < tag.length ; j++) {
+        tagList.add(tag.substring(i,j+1));
+      }
+    }
+    print(tagList);
   }
 
   _AddProuctScreen_NoteState(this.name){
@@ -406,6 +416,7 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
             },
             onSaved: (String value) {
               _currentNote.subject =value;
+              addToTagList(_currentNote.subject);
               print(value);
             },
           ),
@@ -504,7 +515,7 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
               onChanged: (String newValue) {
                 setState(() {
                   _branch = newValue;
-                  _currentNote.branch= newValue;
+                  _currentNote.branch= _branch;
                 });
               },
               items: <String>['IT', 'CS', 'ETRX', 'EXTC','MECH']
@@ -572,10 +583,7 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
 
   @override
   Widget build(BuildContext context) {
-    _currentNote.name=name;
-    print("\n*******book screen********\n");
-    print(_currentNote.name);
-    print("\n***************\n");
+    print("\n*******note screen********\n");
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -620,7 +628,12 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
                 borderRadius: BorderRadius.circular(8.0)
               ),
               onPressed: () {
+                _currentNote.name=name;
+                addToTagList(_currentNote.name);
+                tagList.add(_currentNote.year.toLowerCase());
+                tagList.add(_currentNote.branch.toLowerCase());
                 _currentNote.condition = _condition;
+                _currentNote.tagList = tagList;
                 if (!_formkey.currentState.validate()) {
                   print("Errororororororo");
                 } else { // No Error upload all the details to the database!!

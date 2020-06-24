@@ -31,6 +31,7 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
   // List newList = List.from(authorList);
   TextEditingController authorListController = new TextEditingController();
   List<File> imageList= List(); //To store Path of each Images
+  List<String> tagList = []; // to store tags for searching
   
 
   initBook()
@@ -79,7 +80,15 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
 
   }
 
-  // _AddProuctScreen_BookState(this.name);
+  addToTagList(String tag){
+    tag= tag.toLowerCase();
+    for (var i = 0; i < tag.length; i++) {
+      for (var j = i; j < tag.length ; j++) {
+        tagList.add(tag.substring(i,j+1));
+      }
+    }
+    print(tagList);
+  }
 
   _AddProuctScreen_BookState(this.name){
     initBook();
@@ -90,7 +99,7 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
     AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
     BookNotifier bookNotifier = Provider.of<BookNotifier>(context, listen: false);
     _currentBook = Book();
-    _currentBook.branch = _branch;    
+    _currentBook.branch = _branch;  
   }
 
   Widget _buildAuthorNameField() {
@@ -131,7 +140,8 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
       setState(() {
         authorList.add(text);
       });
-      print(authorList);
+      // print(authorList);
+      addToTagList(text);
       authorListController.clear();
     }
   }
@@ -377,7 +387,7 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
               filled: true,
               isDense: true,
               contentPadding: EdgeInsets.all(15),
-              hintText: "McGrawHill Educarion",
+              hintText: "McGrawHill Education",
               hintStyle: TextStyle(
                 color: sc_InputHintTextColor,
                 fontSize: 16.0,
@@ -410,6 +420,7 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
             onSaved: (String value) {
               _currentBook.publication =value;
               print(value);
+              addToTagList(value);
             },
           ),
         ],
@@ -589,6 +600,7 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
             onSaved: (String value) {
               _currentBook.subject =value;
               print(value);
+              addToTagList(value);
             },
           ),
         ],
@@ -732,10 +744,8 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
 
   @override
   Widget build(BuildContext context) {
-    _currentBook.name=name;
+    
     print("\n*******book screen********\n");
-    print(_currentBook.name);
-    print("\n***************\n");
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -780,9 +790,12 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
                 borderRadius: BorderRadius.circular(8.0)
               ),
               onPressed: () {
+                _currentBook.name=name;
+                addToTagList(_currentBook.name);
                 _currentBook.authorList = authorList;
                 _currentBook.bookCategory = _bookCat;
                 _currentBook.condition = _condition;
+                _currentBook.tagList = tagList;
                 if (!_formkey.currentState.validate()) {
                   print("Errororororororo");
                 } else { // No Error upload all the details to the database!!

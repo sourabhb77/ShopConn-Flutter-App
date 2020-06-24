@@ -15,7 +15,7 @@ class Clothes{
   bool onSell = true;
   Timestamp postedAt;
   String condition;
-
+  List<String> tagList;
 
   Clothes();
 
@@ -33,6 +33,7 @@ class Clothes{
     onSell=data['onSell'];
     postedAt=data['postedAt'];
     condition=data['condition'];
+    tagList = List.from(data['tagList']);
   }
 
   Map<String,dynamic>toMap(){

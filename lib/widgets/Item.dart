@@ -2,9 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopconn/const/Theme.dart';
 import 'package:shopconn/models/SavedProductData.dart';
+import 'package:shopconn/models/clothes.dart';
+import 'package:shopconn/models/note.dart';
+import 'package:shopconn/models/other.dart';
 import 'package:shopconn/notifier/bookNotifier.dart';
+import 'package:shopconn/notifier/clothesNotifier.dart';
+import 'package:shopconn/notifier/noteNotifier.dart';
+import 'package:shopconn/notifier/otherNotifier.dart';
 import 'package:shopconn/screens/ProductDetailScreen_Book.dart';
-
+import 'package:shopconn/screens/ProductDetailScreen_Cloth.dart';
+import 'package:shopconn/screens/ProductDetailScreen_Note.dart';
+import 'package:shopconn/screens/ProductDetailScreen_Other.dart';
 
 class Item extends StatefulWidget {
   Item({Key key}) : super(key: key);
@@ -94,6 +102,9 @@ class ProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     BookNotifier bookNotifier = Provider.of<BookNotifier>(context);
+    ClothesNotifier clothNotifier = Provider.of<ClothesNotifier>(context);
+    NoteNotifier noteNotifier = Provider.of<NoteNotifier>(context);
+    OtherNotifier otherNotifier = Provider.of<OtherNotifier>(context);
     return Container(
                 child: Column(
                   children: [
@@ -103,12 +114,40 @@ class ProductItem extends StatelessWidget {
                       child: InkWell(
                         splashColor: Colors.red,
                         onTap: () {
-                          if(data["productCategory"]== "Book"){
-                            bookNotifier.currentBook=Book.fromMap(data.data);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => ProductDetailScreen_Book()),
-                            );
+                          switch (data["productCategory"]) {
+                            case "Book":
+                              Book book = Book.fromMap(data.data);
+                              bookNotifier.currentBook = book;
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => ProductDetailScreen_Book()),
+                              );
+                              break;
+                            case "Clothes":
+                              Clothes cloth = Clothes.fromMap(data.data);
+                              clothNotifier.currentClothes = cloth;
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => ProductDetailScreen_Cloth()),
+                              );
+                              break;
+                            case "Note":
+                              Note note = Note.fromMap(data.data);
+                              noteNotifier.currentNote = note;
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => ProductDetailScreen_Note()),
+                              );
+                              break;
+                            case "Other":
+                              Other other = Other.fromMap(data.data);
+                              otherNotifier.currentOther = other;
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => ProductDetailScreen_Other()),
+                              );
+                              break;
+                            default:
                           }
                         },
                         child: Row(
@@ -172,7 +211,10 @@ class ProductItem extends StatelessWidget {
                         ),
                       ),
                     ),
-                    
+                    Divider(
+                      height: 10.0,
+                      color: Colors.white,
+                    )
                   ],
                 ),
               );

@@ -5,14 +5,15 @@ import 'package:provider/provider.dart';
 import 'package:shopconn/api/shopconnApi.dart';
 import 'package:shopconn/const/Theme.dart';
 import 'package:shopconn/notifier/authNotifier.dart';
-import 'package:shopconn/notifier/productNotifier.dart';
 import 'package:shopconn/screens/AddProductScreen.dart';
+import 'package:shopconn/screens/OnlyCategoryProductScreen.dart';
 import 'package:shopconn/screens/SavedProductScreen.dart';
 // import 'package:shopconn/screens/chatbox.dart';
 import 'package:shopconn/screens/msg-request.dart';
 import 'package:shopconn/widgets/Item.dart';
 // import 'package:shopconn/widgets/MessageWidgets/RequestMessageBox.dart';
 import 'package:shopconn/widgets/NavDrawer.dart';
+import 'package:shopconn/widgets/SearchProduct.dart';
 // import 'package:shopconn/widgets/ProductDisplay.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -168,7 +169,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => SavedProductScreen()),
+                            MaterialPageRoute(builder: (context) => OnlyCategoryProductScreen(category: "Book")),
                           );
                         },
                         child: Image.asset(
@@ -176,9 +177,42 @@ class _HomeScreenState extends State<HomeScreen> {
                           height: 80.0,
                         ),
                       ),
-                      Image.asset('assets/images/CatClothes.png', height: 80.0,),
-                      Image.asset('assets/images/CatNotes.png', height: 80.0,),
-                      Image.asset('assets/images/CatOther.png', height: 80.0,),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => OnlyCategoryProductScreen(category: "Clothes")),
+                          );
+                        },
+                        child: Image.asset(
+                          'assets/images/CatClothes.png',
+                          height: 80.0,
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => OnlyCategoryProductScreen(category: "Note")),
+                          );
+                        },
+                        child: Image.asset(
+                          'assets/images/CatNotes.png',
+                          height: 80.0,
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => OnlyCategoryProductScreen(category: "Other")),
+                          );
+                        },
+                        child: Image.asset(
+                          'assets/images/CatOther.png',
+                          height: 80.0,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -209,22 +243,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
-              
-                // for(int i = 0 ; i< 10 ;i++)
-                //   RequestBox(name: "hello +$i",),
-                // Item(),
-                // Item(),
-                // Item(),
-                // Item(),
-              
-                 
               ],
             ),
             
           ),
           
-               StreamBuilder(
-                    stream: Firestore.instance.collection("post").orderBy('postedAt', descending: true).snapshots(),
+              StreamBuilder(
+                  stream: Firestore.instance.collection("post").orderBy('postedAt', descending: true)
+                          .limit(5)
+                          .snapshots(),
                    builder: (context, snapshot){
                       if(!snapshot.hasData)
                       {
@@ -245,7 +272,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             print("Posted At: ${snapshot.data.documents[index]["postedAt"]}");
 
                             return Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: const EdgeInsets.all(5.0),
                               child: ProductItem(data: snapshot.data.documents[index],),
                             );
                           },
@@ -275,58 +302,4 @@ class _HomeScreenState extends State<HomeScreen> {
       drawer: NavDrawer(),
     );
   }
-}
-
-
-class SearchProduct extends SearchDelegate<dynamic> {
-  @override
-  List<Widget> buildActions(BuildContext context) {
-    return [
-      IconButton(
-        icon: Icon(Icons.clear),
-        onPressed: (){
-          query ="";
-        }
-      ),
-
-    ];
-  }
-
-  @override
-  Widget buildLeading(BuildContext context) {
-    return IconButton(
-      icon: Icon(Icons.arrow_back),
-      onPressed: (){
-        close(context, null);
-      }
-    );
-  }
-
-  @override
-  Widget buildResults(BuildContext context ) {
-    return null;
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    ProductNotifier productNotifier = Provider.of<ProductNotifier>(context, listen: false);
-    getProducts(productNotifier);
-    final pList = query.isEmpty 
-                  ? productNotifier.productList 
-                  : productNotifier.productList.where((element) => element.name.startsWith(query)).toList();
-    return pList.isEmpty ? Text("no result found") : ListView.builder(
-      itemCount: pList.length,
-      itemBuilder: (context,index) {
-        return ListTile(
-          title: Text(
-            pList[index].name != null 
-            ? pList[index].name 
-            : "",
-          ),
-        );
-      }
-    );
-  }
-  
-  
 }

@@ -26,8 +26,8 @@ class _AddProuctScreen_OtherState extends State<AddProuctScreen_Other> {
   String name;
   String _condition ="Very Good"; //[very good, good , not bad]
   List<File> imageList= List(); //To store Path of each Images
+  List<String> tagList = []; // to store tags for searching
   
-
   initOther()
   {
     print("Initial Constructor");
@@ -72,6 +72,16 @@ class _AddProuctScreen_OtherState extends State<AddProuctScreen_Other> {
     print("\n***************\n");
     }
 
+  }
+
+  addToTagList(String tag){
+    tag= tag.toLowerCase();
+    for (var i = 0; i < tag.length; i++) {
+      for (var j = i; j < tag.length ; j++) {
+        tagList.add(tag.substring(i,j+1));
+      }
+    }
+    print(tagList);
   }
 
   _AddProuctScreen_OtherState(this.name){
@@ -362,10 +372,7 @@ class _AddProuctScreen_OtherState extends State<AddProuctScreen_Other> {
 
   @override
   Widget build(BuildContext context) {
-    _currentOther.name=name;
-    print("\n*******book screen********\n");
-    print(_currentOther.name);
-    print("\n***************\n");
+    print("\n*******other screen********\n");
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -410,7 +417,10 @@ class _AddProuctScreen_OtherState extends State<AddProuctScreen_Other> {
                 borderRadius: BorderRadius.circular(8.0)
               ),
               onPressed: () {
+                _currentOther.name=name;
+                addToTagList(_currentOther.name);
                 _currentOther.condition = _condition;
+                _currentOther.tagList = tagList;
                 if (!_formkey.currentState.validate()) {
                   print("Errororororororo");
                 } else { // No Error upload all the details to the database!!

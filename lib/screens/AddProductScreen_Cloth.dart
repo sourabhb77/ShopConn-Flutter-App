@@ -35,6 +35,7 @@ class _AddProuctScreen_ClothState extends State<AddProuctScreen_Cloth> {
   String _condition="good";
   TextEditingController authorListController = new TextEditingController();
   List<File> imageList= List(); 
+  List<String> tagList = []; // to store tags for searching
 
   initClothes()
   {
@@ -80,6 +81,16 @@ class _AddProuctScreen_ClothState extends State<AddProuctScreen_Cloth> {
     }
 }
 
+  addToTagList(String tag){
+    tag= tag.toLowerCase();
+    for (var i = 0; i < tag.length; i++) {
+      for (var j = i; j < tag.length ; j++) {
+        tagList.add(tag.substring(i,j+1));
+      }
+    }
+    print(tagList);
+  }
+
 _AddProuctScreen_ClothState(this.name)
 {
   initClothes();
@@ -96,7 +107,6 @@ _AddProuctScreen_ClothState(this.name)
   }
   @override
   Widget build(BuildContext context) {
-    _currentClothes.name=name;
       return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -606,6 +616,11 @@ Container(
                 borderRadius: BorderRadius.circular(8.0)
               ),
               onPressed: () {
+                _currentClothes.type=_type;
+                tagList.add(_currentClothes.type.toLowerCase());
+                _currentClothes.name=name;
+                addToTagList(_currentClothes.name);
+                _currentClothes.tagList = tagList;
                        if(!_formKey.currentState.validate())
                       {
                          print("Errorrr");

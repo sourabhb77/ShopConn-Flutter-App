@@ -11,6 +11,7 @@ class Other {
   List<String> imgList;
   String condition;
   Timestamp postedAt;
+  List<String> tagList;
 
   Other();
 
@@ -25,6 +26,7 @@ class Other {
     imgList = List.from(data['imgList']);
     condition=data['condition'];
     postedAt=data['postedAt'];
+    tagList = List.from(data['tagList']);
   }
   
   Map<String,dynamic>toMap(){

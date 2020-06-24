@@ -15,6 +15,7 @@ class Note{
   String facultyName;
   String condition;
   Timestamp postedAt;
+  List<String> tagList;
    
   Note();
 
@@ -35,6 +36,7 @@ class Note{
     facultyName=data['facultyName'];
     condition=data['condition'];
     postedAt = data['postedAt'];
+    tagList = List.from(data['tagList']);
   }
 
   Map<String,dynamic>toMap(){
