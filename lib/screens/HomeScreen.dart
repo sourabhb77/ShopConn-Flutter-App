@@ -13,7 +13,7 @@ import 'package:shopconn/screens/msg-request.dart';
 import 'package:shopconn/widgets/Item.dart';
 // import 'package:shopconn/widgets/MessageWidgets/RequestMessageBox.dart';
 import 'package:shopconn/widgets/NavDrawer.dart';
-import 'package:shopconn/widgets/SearchProduct.dart';
+import 'package:shopconn/screens/SearchProductScreen.dart';
 // import 'package:shopconn/widgets/ProductDisplay.dart';
 
 class HomeScreen extends StatefulWidget {
