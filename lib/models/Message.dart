@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 
@@ -35,7 +37,7 @@ class MessageRequest
   String requestMessage;
   String requesterId, requestedId;
   String productId;
-  Timestamp timestamp;
+  Timestamp timeStamp;
 
   MessageRequest({this.requesterId, this.requestedId,this.productId, this.requestMessage:"Hi, I am Intereseted in Your Product"}); 
   
@@ -62,6 +64,62 @@ class MessageRequest
     productId = data['productId'];
     requesterId = data['requesterId'];
     requestedId = data['requestedId'];
-    timestamp = data['timeStamp'];
+    timeStamp = data['timeStamp'];
+  }
+}
+
+
+class ChatRoom
+{
+  ChatRoom();
+  String id;
+  List<String> members ;
+  Timestamp timeStamp;
+
+  ChatRoom.fromMap(Map<String, dynamic> data)
+  {
+    id = data["id"];
+    members = List.from(data["members"]);
+    timeStamp = data["timeStamp"];
+    
+  }
+
+  Map<String, dynamic> toMap()
+  {
+    return 
+    {
+      "id" : id,
+      "members" : members,
+      "timeStamp" : FieldValue.serverTimestamp(),
+    };
+  }
+
+}
+
+
+class ChatMessage
+{
+  ChatMessage();
+  String sender, receiver, message;
+  String id;
+  Timestamp timeStamp;
+
+  ChatMessage.fromMap(Map<String , dynamic> data)
+  {
+    id = data["id"];
+    sender = data["sender"];
+    receiver = data["receiver"];
+    message = data["message"];
+  }
+
+  Map<String, dynamic> toMap()
+  {
+    return{
+      "id" : id,
+      "message" : message ,
+      "sender" : sender,
+      "receiver" : receiver,
+      "timeStamp" : FieldValue.serverTimestamp(),
+    };
   }
 }

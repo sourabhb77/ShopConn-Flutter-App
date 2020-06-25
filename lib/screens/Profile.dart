@@ -94,8 +94,9 @@ class _ProfileState extends State<Profile> {
       // ratioY: 1.0,
       // maxWidth: 512,
       // maxHeight: 512,
-      toolbarColor: Colors.purple,
-      toolbarWidgetColor: Colors.white,
+      
+      // toolbarColor: Colors.purple,
+      // toolbarWidgetColor: Colors.white,
     );
     setState(() {
       image = Timage;

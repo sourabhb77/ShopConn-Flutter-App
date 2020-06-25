@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopconn/models/Message.dart';
+import 'package:shopconn/models/user.dart';
 import 'package:shopconn/notifier/ChatNotifier.dart';
 import 'package:shopconn/screens/chatbox.dart';
+import 'package:shopconn/api/MessageApi.dart';
+
 
 class RequestBox extends StatelessWidget {
-  final String name;
-  RequestBox({this.name});
+  final ChatUser user;
+  RequestBox({this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +35,7 @@ class RequestBox extends StatelessWidget {
             ),
             Expanded(
                 flex: 5,
-                child: Text(name,
+                child: Text(user.email,
                     textAlign: TextAlign.start,
                     style: new TextStyle(fontSize: 15.0, color: Colors.black))),
             Expanded(
@@ -42,7 +45,32 @@ class RequestBox extends StatelessWidget {
                 color: Colors.green,
                 size: 30.0,
               ),
-              onPressed: () {},
+              onPressed: () {
+                print("Accepted");
+                var t =makeRoom(user.userId);
+                t.then((value) {
+                  if(value== true)
+                  {
+                    print("Room created");
+                  }
+                  else
+                    print("Room creation failed");
+                });
+
+
+                
+                //Request is accepted
+
+                //1. remove the request
+                //2. Make a new room?
+                // add the both the participants.
+                // if follwoing nosql model then changes have to be made in both the document refernce
+                // add the room model reference in active listeners ? so that all the new messages are forwarded here
+                // basically we will be lisening to all the enteries in this room? 
+                
+
+                
+                },
             )),
             Expanded(
                 child: IconButton(
@@ -59,10 +87,22 @@ class RequestBox extends StatelessWidget {
   }
 }
 
-class Messagebox extends StatelessWidget {
-  final String email;
+class Messagebox extends StatefulWidget {
+   ChatMessage message;
 
-  Messagebox({this.email});
+   ChatUser user;
+
+  Messagebox({this.message})
+  {
+      //1. Get user profile
+      loadUser(this.user,message);
+  }
+
+  @override
+  _MessageboxState createState() => _MessageboxState();
+}
+
+class _MessageboxState extends State<Messagebox> {
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +114,7 @@ class Messagebox extends StatelessWidget {
         splashColor: Colors.blue.withAlpha(30),
         onTap: () {
 
-          chatNotifier.setChatUser = email;
+          chatNotifier.setChatUser = widget.user.email != null ? widget.user.email : null;
           
           Navigator.push(
             context,
@@ -102,7 +142,7 @@ class Messagebox extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     Text(
-                      email,
+                      widget.user != null ? widget.user.email : "Email",
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 14.0, color: Colors.black)
                     ),

@@ -24,8 +24,8 @@ class _ImageCaptureState extends State<ImageCapture> {
         // ratioY: 1.0,
         // maxWidth: 512,
         // maxHeight: 512,
-        toolbarColor: Colors.purple,
-        toolbarWidgetColor: Colors.white,
+        // toolbarColor: Colors.purple,
+        // toolbarWidgetColor: Colors.white,
       );
 
     setState(() {
