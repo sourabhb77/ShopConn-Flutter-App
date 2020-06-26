@@ -81,8 +81,9 @@ class ChatRoom
     id = data["id"];
     members = List.from(data["members"]);
     timeStamp = data["timeStamp"];
-    
   }
+
+  
 
   Map<String, dynamic> toMap()
   {
@@ -103,6 +104,16 @@ class ChatMessage
   String sender, receiver, message;
   String id;
   Timestamp timeStamp;
+  List<String> members ;
+
+  void addMembers()
+  {
+    this.members = List();
+    if(sender!=null && receiver!=null)
+    {
+      members.addAll([sender,receiver]);
+    }
+  }
 
   ChatMessage.fromMap(Map<String , dynamic> data)
   {
@@ -110,6 +121,7 @@ class ChatMessage
     sender = data["sender"];
     receiver = data["receiver"];
     message = data["message"];
+    members = List.from(data["members"]);
   }
 
   Map<String, dynamic> toMap()
@@ -119,6 +131,7 @@ class ChatMessage
       "message" : message ,
       "sender" : sender,
       "receiver" : receiver,
+      "members" : members,
       "timeStamp" : FieldValue.serverTimestamp(),
     };
   }

@@ -125,7 +125,7 @@ class _ChatBoxState extends State<ChatBox>
         body: TabBarView(
           children: [          
             MessageStream(),
-            RequestStream()              
+            RequestStream()       
           ],
         ),
       ),
@@ -170,29 +170,31 @@ class _MessageStreamState extends State<MessageStream> {
 
   @override
   Widget build(BuildContext context) {
+    AuthNotifier authNotifier = Provider.of<AuthNotifier>(context);
+
     return StreamBuilder(
-      stream: loadDetails(),
-      builder: (context,snapshot)
-      {
-        print("SnapShot Data Details: ${snapshot.data}");
-        if(snapshot.hasError)
-        {
-          return Text("ERROR");
-        }
+      stream :Firestore.instance.collectionGroup("rooms").where("members",arrayContainsAny: [authNotifier.userId]).orderBy("timeStamp",descending: true).snapshots(),
+      builder: (context,snapshot){
         if(!snapshot.hasData)
         {
-          return Text("LOADING");
+          return Text("Loading...");
         }
-        return ListView.builder(itemBuilder:(context,index)
-        {
-          // return Messagebox(message: ChatMessage.fromMap(snapshot.data.document[index].data),);
-          return Text("hello");
-        },
-        itemCount: 3,);
+        if(snapshot.hasError)
+          return Text("Error");
+        
+        //TODO adfadf
+        return ListView.builder(
+          itemBuilder: (context, index){
+            return Messagebox(room:ChatRoom.fromMap(snapshot.data.documents[index].data));
+          },
+          itemCount: snapshot.data.documents.length,
+        );
       },
-      
+  
     );
-  }
+
+  
+}
 }
 
 
@@ -216,6 +218,7 @@ class _RequestStream extends State<RequestStream> {
       builder: (context, snapshot) {
         print("*********************************");
         print(snapshot);
+        print("Snapshot request : ${snapshot.data}");
         if (snapshot.hasError) {
           return Text("Error has occured");
         }

@@ -1,3 +1,6 @@
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopconn/models/Message.dart';
@@ -5,6 +8,7 @@ import 'package:shopconn/models/user.dart';
 import 'package:shopconn/notifier/ChatNotifier.dart';
 import 'package:shopconn/screens/chatbox.dart';
 import 'package:shopconn/api/MessageApi.dart';
+import 'package:tuple/tuple.dart';
 
 
 class RequestBox extends StatelessWidget {
@@ -87,15 +91,11 @@ class RequestBox extends StatelessWidget {
   }
 }
 
+
 class Messagebox extends StatefulWidget {
-   ChatMessage message;
-
-   ChatUser user;
-
-  Messagebox({this.message})
+   ChatRoom room;
+  Messagebox({this.room})
   {
-      //1. Get user profile
-      loadUser(this.user,message);
   }
 
   @override
@@ -103,18 +103,86 @@ class Messagebox extends StatefulWidget {
 }
 
 class _MessageboxState extends State<Messagebox> {
+  ChatUser user;
+  ChatMessage _latestMessage;
+  String _chatUserId;
+
+  void loadRoomDetails() async
+  {
+    FirebaseUser user  = await FirebaseAuth.instance.currentUser();
+    String id = user.uid == widget.room.members[0] ? widget .room.members[1] : widget.room.members[0];
+
+    var ref = await Firestore.instance.collection("users").document("$id").get();
+    var ref2 = await Firestore.instance.collection("rooms/${widget.room.id}/chats").orderBy("timeStamp",descending: true).limit(1).getDocuments();
+
+
+    setState(() {
+      this._chatUserId = id;
+      this.user = ChatUser.fromMap(ref.data);
+      this._latestMessage = ChatMessage.fromMap(ref2.documents[0].data);
+    });
+  }
+
+  Future<Tuple2<ChatUser,String> > getLatest() async
+  {
+    FirebaseUser user  = await FirebaseAuth.instance.currentUser();
+
+    String id = user.uid == widget.room.members[0] ? widget .room.members[1] : widget.room.members[0];
+
+    var ref = await Firestore.instance.document("users/$id").get(); 
+    var ref2 = await Firestore.instance.collection("rooms/${widget.room.id}/chats").orderBy("timeStamp",descending: true).limit(1).getDocuments();
+
+    return Tuple2(ChatUser.fromMap(ref.data) ,ref2.documents[0].data["message"].toString());
+  }
 
   @override
   Widget build(BuildContext context) {
+    if(user == null)
+      // loadRoomDetails();
     ChatNotifier chatNotifier = Provider.of<ChatNotifier>(context, listen: false);
+    return FutureBuilder(
+      future: getLatest(),
+      builder: (context, snapshot)
+      {
+        if(snapshot.hasError)
+        {
+          return Text("Error Loading...");
+        }
+        if(!snapshot.hasData) 
+          return Text("Loading....");
+        return ChatCard(user:snapshot.data.item1, latestMessage: snapshot.data.item2 , room : widget.room);
+      },
+    );
 
-    return Card(
+
+  }
+ 
+
+}
+
+
+
+class ChatCard extends StatelessWidget {
+  final ChatUser user;
+  final String latestMessage;
+  final ChatRoom room;
+
+  ChatCard({this.user,this.latestMessage, this.room})
+  {
+
+  }
+  @override  
+  Widget build(BuildContext context) {
+    ChatNotifier chatNotifier = Provider.of<ChatNotifier>(context, listen: false);
+    return  Card(
       elevation: 0.0,
       child: InkWell(
         splashColor: Colors.blue.withAlpha(30),
         onTap: () {
 
-          chatNotifier.setChatUser = widget.user.email != null ? widget.user.email : null;
+          // chatNotifier.setChatUser = user != null ? user.email : null;
+          chatNotifier.setChatUserObject = user;
+          chatNotifier.setCurrentRoom = room;
           
           Navigator.push(
             context,
@@ -131,6 +199,7 @@ class _MessageboxState extends State<Messagebox> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(28),
                       child: Image.network(
+                        user != null? user.imageUrl.length != 0 ? user.imageUrl :'https://image.freepik.com/free-vector/doctor-character-background_1270-83.jpg':
                         'https://image.freepik.com/free-vector/doctor-character-background_1270-84.jpg',
                         fit: BoxFit.fill,
                       ),
@@ -142,11 +211,11 @@ class _MessageboxState extends State<Messagebox> {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     Text(
-                      widget.user != null ? widget.user.email : "Email",
+                      user != null ? user.email : "Email",
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 14.0, color: Colors.black)
                     ),
-                    Text('I love flutter',
+                    Text(latestMessage,
                         textAlign: TextAlign.center,
                         style: new TextStyle(
                             fontSize: 14.0, color: Colors.grey[400])),
@@ -175,5 +244,6 @@ class _MessageboxState extends State<Messagebox> {
         ),
       ),
     );
+
   }
 }

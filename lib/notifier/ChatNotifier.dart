@@ -2,14 +2,21 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
+import 'package:shopconn/models/Message.dart';
 import 'package:shopconn/models/user.dart';
 
 class ChatNotifier extends ChangeNotifier
 {
-  ChatUser _user = ChatUser();
+  ChatUser _user ;
+
+  ChatRoom _room ;
 
   ChatUser get currentUser => _user;
 
+  ChatRoom get currentRoom => _room;
+
+  set setCurrentRoom(ChatRoom room) => this._room =room;
+  
 
   set setChatUser(String id)
   {
@@ -21,6 +28,9 @@ class ChatNotifier extends ChangeNotifier
 
     });
   }
+  
+
+  set setChatUserObject(ChatUser user) => this._user = user ;
 
 
 }

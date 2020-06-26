@@ -6,6 +6,7 @@ import 'package:async/async.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shopconn/models/Message.dart';
@@ -117,33 +118,33 @@ loadUser(ChatUser user, ChatMessage msg) async {
   }
 }
 
-//Function that returns the string of groups that we need to listen to
-// Future< List< Tuple2<String, String> >>getRooms() async{
+// Function that returns the string of groups that we need to listen to
+Future< List< Tuple2<String, String> >>getRooms() async{
 
-//   FirebaseUser user = await FirebaseAuth.instance.currentUser();
-//   String userId = user.uid;
-//   Query ref = Firestore.instance.collection("rooms").where("members",arrayContains: userId);
-//   QuerySnapshot snaps = await ref.getDocuments();
+  FirebaseUser user = await FirebaseAuth.instance.currentUser();
+  String userId = user.uid;
+  Query ref = Firestore.instance.collection("rooms").where("members",arrayContains: userId);
+  QuerySnapshot snaps = await ref.getDocuments();
 
-//   List< Tuple2<String,String> > rooms = List();
+  List< Tuple2<String,String> > rooms = List();
 
-//   for(DocumentSnapshot snap  in snaps.documents)
-//   {
-//     List< String >  userList = List.from(snap.data["members"]);
+  for(DocumentSnapshot snap  in snaps.documents)
+  {
+    List< String >  userList = List.from(snap.data["members"]);
 
-//     userList.remove(userId); //removing the current user;
-//     Map<String, String> mp = HashMap();
-//     mp[snap.data["id"]] = userList[0];
+    userList.remove(userId); //removing the current user;
+    Map<String, String> mp = HashMap();
+    mp[snap.data["id"]] = userList[0];
 
-//     rooms.add(Tuple2(snap.data["id"], userList[0]));
+    rooms.add(Tuple2(snap.data["id"], userList[0]));
 
-//     print("ROOM ID: ${snap.documentID}");
+    print("ROOM ID: ${snap.documentID}");
 
-//   }
+  }
 
-//   print("Room Obtained from server: size: ${rooms.length}");
-//   return rooms;
-// }
+  print("Room Obtained from server: size: ${rooms.length}");
+  return rooms;
+}
 
 // // Future< List<ChatUser> >
 //  Future< List<Stream<QuerySnapshot> >> getChats() async
@@ -194,10 +195,62 @@ loadUser(ChatUser user, ChatMessage msg) async {
       FirebaseUser user = await FirebaseAuth.instance.currentUser();
       String userId = user.uid;
 
-      var q1 = Firestore.instance.collectionGroup("chats").where("sender", isEqualTo: userId).orderBy("timeStamp",descending: true).limit(1).snapshots();
+      var q1 = Firestore.instance.collectionGroup("chats").where("sender", isEqualTo: userId).orderBy("timeStamp",descending: true).snapshots();
       var q2 = Firestore.instance.collectionGroup("chats").where("receiver",isEqualTo: userId).orderBy("timeStamp",descending: true).snapshots();
+      var q = await Firestore.instance.collectionGroup("chats").where("sender", isEqualTo: userId).orderBy("timeStamp",descending: true).limit(1).getDocuments();
+      print("Query data: ${q.documents[0].data}");
+
       // q1.listen((event) {updateUI(event)});
       // q1.listen((event) {controller.sink.add(event.documents[0]);});
       // yield* StreamGroup.merge([q1,q2]).asBroadcastStream();
-      yield Rx.merge([q1,q2]);
+      // yield* Rx.zip2(q1, q2, (a, b) => a!=b );
+      StreamController<QuerySnapshot> controller = StreamController<QuerySnapshot>.broadcast();
+
+          // controller.addStream(q1);
+          // controller.addStream(q2);
+
+          
+
+          var newStream = Rx.combineLatest2(q1, q2, (a, b) => Stream.fromIterable([a,b]));
+          // controller.addStream(newStream);
+          
+
+
+
+      var t = Rx.merge([q1,q2]);
+      t.listen((events) {
+        for(var event in events.documents)
+        {
+          // print("Event Data : ${event.data}");
+          
+        }
+      });
+
+      // t.map((event) {
+      //   snaps.contains(event).then((value) {
+      //     if(value)
+      //     {
+      //       snaps.
+      //     }
+      //   });
+      // });
+   
+      var result = q1.merge(q2);
+      
+      // yield* result;
+      // yield* controller.stream;
+      yield* newStream;
+      
     }
+
+getChatsDetails() async*
+{
+  FirebaseUser user  = await FirebaseAuth.instance.currentUser();
+  String userId = user.uid;
+  
+  var ref = Firestore.instance.collectionGroup("rooms").where("members",arrayContainsAny: [userId]).orderBy("timeStamp").snapshots();
+  
+  var rooms = getRooms();
+
+
+}
