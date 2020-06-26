@@ -1,10 +1,13 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'package:shopconn/const/Theme.dart';
 import 'package:shopconn/models/Message.dart';
 import 'package:shopconn/models/user.dart';
 import 'package:shopconn/notifier/ChatNotifier.dart';
+import 'package:shopconn/notifier/authNotifier.dart';
 import 'package:shopconn/notifier/bookNotifier.dart';
 import 'package:shopconn/api/shopconnApi.dart';
 
@@ -21,14 +24,40 @@ class Chat extends State<ChatPage> with TickerProviderStateMixin {
   ChatRoom _currentRoom;
 
   final List<Msg> _messages = <Msg>[]; //list of messages
-
+  ChatNotifier chatNotifier;
+  AuthNotifier authNotifier;
   final TextEditingController _textController = new TextEditingController();
 
   bool _isWriting = false;
 
+  Future<void> sendMessage(String msg) async
+    {if(_currentRoom==null ||msg.length==0)
+      return ;
+      print("Message written : $msg");
+      DocumentReference ref = Firestore.instance.collection("rooms/${_currentRoom.id}/chats").document();
+      ChatMessage message = ChatMessage();
+      message.id= ref.documentID;
+      message.message = msg;
+      message.sender = authNotifier.userId;
+      message.receiver = authNotifier.userId == _currentRoom.members[0] ? _currentRoom.members[1] : _currentRoom.members[0];
+      
+      try
+      {
+        await ref.setData(message.toMap());
+        var roomRef = Firestore.instance.document("rooms/${_currentRoom.id}");
+        await roomRef.setData({"timeStamp": FieldValue.serverTimestamp()}, merge: true);
+
+      }
+      catch(err)
+      {
+        print("Error occured: $err");
+      }
+    }
+
   @override
   Widget build(BuildContext context) {
-    ChatNotifier chatNotifier = Provider.of<ChatNotifier>(context);
+    chatNotifier = Provider.of<ChatNotifier>(context);
+    authNotifier = Provider.of<AuthNotifier>(context);
 
     if (_user == null || _currentRoom == null) {
       setState(() {
@@ -37,6 +66,10 @@ class Chat extends State<ChatPage> with TickerProviderStateMixin {
         print("User: $_user");
       });
     }
+
+    //Function to send Message
+
+    
 
     return Scaffold(
       appBar: AppBar(
@@ -96,8 +129,10 @@ class Chat extends State<ChatPage> with TickerProviderStateMixin {
                       return Text(snapshot.data.documents[index]["message"]);
                     },
                     itemCount: snapshot.data.documents.length,
-                    reverse: true,
-                    padding: new EdgeInsets.all(6.0));
+                    reverse: false,
+                    padding:  EdgeInsets.all(6.0));
+
+
               },
             ),
           ),
@@ -143,9 +178,13 @@ class Chat extends State<ChatPage> with TickerProviderStateMixin {
                   child: IconButton(
                     icon: Icon(IconData(57699,
                         fontFamily: 'MaterialIcons', matchTextDirection: true)),
-                    onPressed: _isWriting
-                        ? () => _submitMsg(_textController.text)
-                        : null,
+                    onPressed: ()
+                    { 
+                      sendMessage(_textController.text);
+
+                      _isWriting ?  _submitMsg(_textController.text): null;
+                      
+                    }
                   ),
                 ),
               ],
