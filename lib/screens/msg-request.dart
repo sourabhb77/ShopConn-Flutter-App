@@ -1,13 +1,17 @@
 import 'dart:async';
 
+import 'package:async/async.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shopconn/api/MessageApi.dart';
 import 'package:shopconn/const/Theme.dart';
+import 'package:shopconn/models/Message.dart';
 import 'package:shopconn/models/user.dart';
 import 'package:shopconn/notifier/authNotifier.dart';
 import 'package:shopconn/widgets/MessageWidgets/RequestMessageBox.dart';
+// import 'package:stream_transform/stream_transform.dart';
 import './chatbox.dart';
 import '../services/auth.dart';
 
@@ -46,18 +50,16 @@ class ChatBox extends StatefulWidget {
   _ChatBoxState createState() => _ChatBoxState();
 }
 
-class _ChatBoxState extends State<ChatBox>
-    with AutomaticKeepAliveClientMixin<ChatBox> {
+class _ChatBoxState extends State<ChatBox> {
   // final AuthService _auth=AuthService();
-  @override
-  bool get wantKeepAlive => true;
 
-void getUser()
-{
-}
+  StreamController<List<QuerySnapshot>> streamController =
+      StreamController<List<QuerySnapshot>>();
 
-  final StreamController<ChatUser> controller =
-      StreamController<ChatUser>.broadcast();
+  AuthNotifier authNotifier;
+
+  List<Stream<QuerySnapshot>> streams;
+
   Stream s1;
 
   // final StreamController<List<ChatUser> > controller = StreamController <List<ChatUser > > .broadcast();
@@ -65,11 +67,14 @@ void getUser()
   @override
   void initState() {
     s1 = widget.getNewRequestsStream().asBroadcastStream();
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    authNotifier = Provider.of<AuthNotifier>(context);
+    // getStreams();
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -110,97 +115,75 @@ void getUser()
           elevation: 1.0,
         ),
         body: TabBarView(
-          children: [
-            Container(
-              child: StreamBuilder(
-                stream: Firestore.instance.collection("users").snapshots(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return Center(
-                      child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
-                      ),
-                    );
-                  } else {
-                    return ListView.builder(
-                      padding: EdgeInsets.all(5.0),
-                      itemBuilder: (BuildContext context, index) {
-                        // print("Data : ${snapshot.data.documents[index]["userId"]}");
-                        return Messagebox(
-                            email: snapshot.data.documents[index]["email"]);
-                      },
-                      itemCount: snapshot.data.documents.length,
-                    );
-                  }
-                },
-              ),
-            ),
-            Rabit(id:"userId"),
-
-            //  StreamBuilder(
-
-            //   // stream: Firestore.instance.collection("request").where("requesterId", isEqualTo:"12312" ).snapshots(),
-            //   stream: s1,
-
-            //   builder: (context,  snapshot)
-            //   {
-            //     print("*********************************");
-            //     print(snapshot);
-            //     if( snapshot.hasError)
-            //     {
-            //       return Text("Error has occured");
-            //     }
-            //     if(!snapshot.hasData)
-            //     {
-            //       return Center(child: CircularProgressIndicator(
-            //         valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
-            //       ),);
-            //     }
-            //     else
-            //     {
-            //       return ListView.builder(
-            //         itemBuilder: (context,index)  {
-            //          print("Index :  $index");
-            //           return RequestBox(name: "ad");
-            //         },
-            //         itemCount: snapshot.data.length,
-            //       );
-            //     }
-
-            //   },
-            // ),
-
-            // ListView(
-            //   children: <Widget>[
-            //     for(int i =1 ;i<6; i++)
-            //     RequestBox(name: "hello",)
-            //   ],
-            // ),
-          ],
+          children: [MessageStream(), RequestStream()],
         ),
       ),
     );
   }
+}
 
-  setStream() {}
+class MessageStream extends StatefulWidget {
+  @override
+  _MessageStreamState createState() => _MessageStreamState();
+}
+
+class _MessageStreamState extends State<MessageStream> {
+  // StreamController<List<QuerySnapshot>> _controller;
+
+  StreamController<DocumentSnapshot> controller =
+      StreamController<DocumentSnapshot>.broadcast();
+
+  void updateMyUI(DocumentSnapshot snap) => controller.sink.add(snap);
+
+  @override
+  void initState() {
+    super.initState();
+    // loadDetails(controller);
+  }
+
   @override
   void dispose() {
-    // widget.channel.sink.close();
-
     super.dispose();
+    controller.close();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    AuthNotifier authNotifier = Provider.of<AuthNotifier>(context);
+
+    return StreamBuilder(
+      stream: Firestore.instance
+          .collectionGroup("rooms")
+          .where("members", arrayContainsAny: [authNotifier.userId])
+          .orderBy("timeStamp", descending: true)
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Text("Loading...");
+        }
+        if (snapshot.hasError) return Text("Error");
+
+        //TODO adfadf
+        return ListView.builder(
+          itemBuilder: (context, index) {
+            return Messagebox(
+                room: ChatRoom.fromMap(snapshot.data.documents[index].data));
+          },
+          itemCount: snapshot.data.documents.length,
+        );
+      },
+    );
   }
 }
 
-class Rabit extends StatefulWidget {
-  final String id;
-
-  const Rabit({Key key, this.id}) : super(key: key);
+class RequestStream extends StatefulWidget {
+  const RequestStream({Key key}) : super(key: key);
 
   @override
-  _RabitState createState() => _RabitState();
+  _RequestStream createState() => _RequestStream();
 }
 
-class _RabitState extends State<Rabit> {
+class _RequestStream extends State<RequestStream> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -210,6 +193,7 @@ class _RabitState extends State<Rabit> {
       builder: (context, snapshot) {
         print("*********************************");
         print(snapshot);
+        print("Snapshot request : ${snapshot.data}");
         if (snapshot.hasError) {
           return Text("Error has occured");
         }
@@ -222,8 +206,9 @@ class _RabitState extends State<Rabit> {
         } else {
           return ListView.builder(
             itemBuilder: (context, index) {
-              print("Index :  $index");
-              return RequestBox(name: "ad");
+              print("Index :  ${snapshot.data[index].toString()}");
+              // return Text("hello");
+              return RequestBox(user: snapshot.data[index]);
             },
             itemCount: snapshot.data.length,
           );
@@ -231,8 +216,4 @@ class _RabitState extends State<Rabit> {
       },
     );
   }
-  
-  
- 
-
 }
