@@ -330,7 +330,7 @@ class FilterBox extends StatelessWidget {
         return Container(
           height: 300,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Colors.redAccent,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(20),
               topRight: Radius.circular(20),
@@ -353,7 +353,7 @@ class FilterBox extends StatelessWidget {
         children: [
           Icon(Icons.filter_list, color: sc_AppBarTextColor),
           SizedBox(
-            width: 10.0,
+            width: 20.0,
           ),
           Text(
             "FILTER",

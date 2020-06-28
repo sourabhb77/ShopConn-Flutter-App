@@ -10,12 +10,56 @@ import 'package:shopconn/api/MessageApi.dart';
 import 'package:tuple/tuple.dart';
 
 class RequestBox extends StatelessWidget {
-  final ChatUser user;
-  RequestBox({this.user});
+  // final ChatUser user;
+  final MessageRequest request;
+  RequestBox({this.request});
+
+
+  Future<ChatUser> getUserProfile() async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+
+    String id =  request.requesterId;
+
+    var ref = await Firestore.instance.document("users/$id").get();
+ 
+    return ChatUser.fromMap(ref.data);
+  }
+
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return 
+    FutureBuilder(
+      future: getUserProfile(),
+      builder: (context,snap)
+      {
+        if(snap.hasError)
+        {
+          return Text("Error Loading..");
+        }
+        if(!snap.hasData)
+        {
+          return Text("Loading...");
+        }
+        return RequestCard(user:snap.data);
+      },
+
+    );
+    
+    
+  }
+}
+
+
+class RequestCard extends StatelessWidget {
+  final ChatUser user;
+
+  RequestCard({this.user});
+
+  @override
+  Widget build(BuildContext context) {
+    return 
+     Card(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(0.0, 8.0, 0.0, 8.0),
         child: Row(
@@ -23,15 +67,31 @@ class RequestBox extends StatelessWidget {
             SizedBox(
               width: 5,
             ),
+            // Expanded(
+            //   child: CircleAvatar(
+            //     radius: 30.0,
+            //     backgroundColor: Colors.grey[400],
+            //     child: user.imageUrl != null? Image(
+            //       image:NetworkImage(user.imageUrl)): Image(
+            //       image: AssetImage('assets/images/Symbols.png'),
+            //     ),
+            //   ),
+            // ),
             Expanded(
-              child: CircleAvatar(
-                radius: 30.0,
-                backgroundColor: Colors.grey[400],
-                child: Image(
-                  image: AssetImage('assets/images/Symbols.png'),
-                ),
+                child: CircleAvatar(
+                    radius: 30.0,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(28),
+                      child: Image.network(
+                        user != null
+                            ? user.imageUrl.length != 0
+                                ? user.imageUrl
+                                : 'https://image.freepik.com/free-vector/doctor-character-background_1270-83.jpg'
+                            : 'https://image.freepik.com/free-vector/doctor-character-background_1270-84.jpg',
+                        fit: BoxFit.fill,
+                      ),
+                    )),
               ),
-            ),
             SizedBox(
               width: 5,
             ),
@@ -56,15 +116,6 @@ class RequestBox extends StatelessWidget {
                   } else
                     print("Room creation failed");
                 });
-
-                //Request is accepted
-
-                //1. remove the request
-                //2. Make a new room?
-                // add the both the participants.
-                // if follwoing nosql model then changes have to be made in both the document refernce
-                // add the room model reference in active listeners ? so that all the new messages are forwarded here
-                // basically we will be lisening to all the enteries in this room?
               },
             )),
             Expanded(
@@ -84,7 +135,7 @@ class RequestBox extends StatelessWidget {
 
 class Messagebox extends StatefulWidget {
   ChatRoom room;
-  Messagebox({this.room}) {}
+  Messagebox({this.room});
 
   @override
   _MessageboxState createState() => _MessageboxState();

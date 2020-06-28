@@ -186,9 +186,11 @@ class RequestStream extends StatefulWidget {
 class _RequestStream extends State<RequestStream> {
   @override
   Widget build(BuildContext context) {
+    AuthNotifier authNotifier = Provider.of<AuthNotifier>(context);
+
     return StreamBuilder(
       // stream: Firestore.instance.collection("request").where("requesterId", isEqualTo:"12312" ).snapshots(),
-      stream: getNewRequest().asStream().asBroadcastStream(),
+      stream: Firestore.instance.collection("request").where("requestedId", isEqualTo: authNotifier.userId).orderBy('timeStamp', descending: true).snapshots(),
 
       builder: (context, snapshot) {
         print("*********************************");
@@ -206,11 +208,10 @@ class _RequestStream extends State<RequestStream> {
         } else {
           return ListView.builder(
             itemBuilder: (context, index) {
-              print("Index :  ${snapshot.data[index].toString()}");
-              // return Text("hello");
-              return RequestBox(user: snapshot.data[index]);
+              print("Length : ${snapshot.data.documents.length}");
+              return RequestBox(request:MessageRequest.fromMap( snapshot.data.documents[index].data));
             },
-            itemCount: snapshot.data.length,
+            itemCount: snapshot.data.documents.length,
           );
         }
       },
