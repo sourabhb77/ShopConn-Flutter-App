@@ -158,12 +158,13 @@ class _MessageStreamState extends State<MessageStream> {
           .orderBy("timeStamp", descending: true)
           .snapshots(),
       builder: (context, snapshot) {
+        print("User Id: ${authNotifier.userId}");
         if (!snapshot.hasData) {
           return Text("Loading...");
         }
         if (snapshot.hasError) return Text("Error");
 
-        //TODO adfadf
+        
         return ListView.builder(
           itemBuilder: (context, index) {
             return Messagebox(
@@ -190,7 +191,11 @@ class _RequestStream extends State<RequestStream> {
 
     return StreamBuilder(
       // stream: Firestore.instance.collection("request").where("requesterId", isEqualTo:"12312" ).snapshots(),
-      stream: Firestore.instance.collection("request").where("requestedId", isEqualTo: authNotifier.userId).orderBy('timeStamp', descending: true).snapshots(),
+      stream: Firestore.instance
+          .collection("request")
+          .where("requestedId", isEqualTo: authNotifier.userId)
+          .orderBy('timeStamp', descending: true)
+          .snapshots(),
 
       builder: (context, snapshot) {
         print("*********************************");
@@ -209,7 +214,9 @@ class _RequestStream extends State<RequestStream> {
           return ListView.builder(
             itemBuilder: (context, index) {
               print("Length : ${snapshot.data.documents.length}");
-              return RequestBox(request:MessageRequest.fromMap( snapshot.data.documents[index].data));
+              return RequestBox(
+                  request: MessageRequest.fromMap(
+                      snapshot.data.documents[index].data));
             },
             itemCount: snapshot.data.documents.length,
           );
