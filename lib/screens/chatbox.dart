@@ -57,14 +57,16 @@ class Chat extends State<ChatPage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     chatNotifier = Provider.of<ChatNotifier>(context);
     authNotifier = Provider.of<AuthNotifier>(context);
+    _user = chatNotifier.currentUser;
+    _currentRoom = chatNotifier.currentRoom;
 
-    if (_user == null || _currentRoom == null) {
-      setState(() {
-        _user = chatNotifier.currentUser;
-        _currentRoom = chatNotifier.currentRoom;
-        print("User: $_user");
-      });
-    }
+    // if (_user == null || _currentRoom == null) {
+    //   setState(() {
+    //     _user = chatNotifier.currentUser;
+    //     _currentRoom = chatNotifier.currentRoom;
+    //     print("User: $_user");
+    //   });
+    // }
 
     //Function to send Message
 
@@ -103,8 +105,6 @@ class Chat extends State<ChatPage> with TickerProviderStateMixin {
 
           //     child: new ListView.builder(
           //         itemBuilder: (_, int index) {
-          //           print("Message Length : ${_messages.length}");
-
           //           return _messages[index];
 
           //         } ,
@@ -119,6 +119,7 @@ class Chat extends State<ChatPage> with TickerProviderStateMixin {
                   .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.hasError) return Text("Error");
+                if (!snapshot.hasData) return Text("Loading ....");
 
                 return ListView.builder(
                     itemBuilder: (_, int index) {
