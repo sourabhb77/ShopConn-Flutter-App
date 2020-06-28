@@ -46,10 +46,10 @@ Future<List<ChatUser>> getNewRequest() async {
 
     list.add(ChatUser.fromMap(user.data));
   }
-  print("***************************");
-  print("list size: ${list.length}");
-  print("userID : $userId ");
-  print("***************************");
+   print("***************************");
+    print("list size: ${list.length}");
+    print("userID : $userId ");
+    print("***************************");
 
   return list;
 }
