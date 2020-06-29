@@ -9,6 +9,7 @@ import 'package:shopconn/notifier/otherNotifier.dart';
 import 'package:shopconn/notifier/productNotifier.dart';
 import 'package:shopconn/notifier/sortNotifier.dart';
 import 'package:shopconn/screens/HomeScreen.dart';
+import 'package:shopconn/screens/boarding/boarding.dart';
 import 'package:shopconn/screens/login.dart';
 import 'notifier/clothesNotifier.dart';
 
@@ -61,6 +62,8 @@ class MyApp extends StatelessWidget {
       home: Consumer<AuthNotifier>(
         builder: (context, notifier, child) {
           return notifier.user != null ? HomeScreen() : Login();
+          // return notifier.user != null ? HomeScreen() : BoardingScreen();
+
         },
       ),
     );
