@@ -76,6 +76,7 @@ Future<bool> makeRoom(String userId) async {
   //Prodcut owner Id = User.uid;
   members.add(user.uid);
   members.add(userId);
+
   DocumentReference ref = Firestore.instance.collection("rooms").document();
   String id = ref.documentID;
 
@@ -238,27 +239,13 @@ Stream loadDetails() async* {
 
     }
   });
-
-  // t.map((event) {
-  //   snaps.contains(event).then((value) {
-  //     if(value)
-  //     {
-  //       snaps.
-  //     }
-  //   });
-  // });
-
-  // var result = q1.merge(q2);
-
-  // yield* result;
-  // yield* controller.stream;
   yield* newStream;
 }
 
 getChatsDetails() async* {
   FirebaseUser user = await FirebaseAuth.instance.currentUser();
-  String userId = user.uid;
 
+  String userId = user.uid;
   var ref = Firestore.instance
       .collectionGroup("rooms")
       .where("members", arrayContainsAny: [userId])

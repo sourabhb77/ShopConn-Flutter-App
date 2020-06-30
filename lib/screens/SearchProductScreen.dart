@@ -25,11 +25,22 @@ class SearchProduct extends SearchDelegate<dynamic> {
   Widget buildLeading(BuildContext context) {
     SortNotifier sortNotifier =
         Provider.of<SortNotifier>(context, listen: true);
+    FilterNotifier filterNotifier =
+        Provider.of<FilterNotifier>(context, listen: true);
     return IconButton(
       icon: Icon(Icons.arrow_back),
       onPressed: () {
         sortNotifier.currentSortParameter = 'name';
         sortNotifier.currentSortDesc = false;
+        filterNotifier.currentBookCategory = "";
+        filterNotifier.currentBranchBook = "";
+        filterNotifier.currentTypeOfCloth = "";
+        filterNotifier.currentBranchNote = "";
+        filterNotifier.currentYear = "";
+        filterNotifier.currentMaxPrice = 3000;
+        filterNotifier.currentMinPrice = 0;
+        filterNotifier.currentCondition = "";
+        filterNotifier.currentProductCategory = "";
         close(context, null);
       },
     );
@@ -42,96 +53,119 @@ class SearchProduct extends SearchDelegate<dynamic> {
     FilterNotifier filterNotifier =
         Provider.of<FilterNotifier>(context, listen: true);
 
-    // List productCategoryList = ["Book", "Clothes", "Note", "Other"];
-    // int minPrice, maxPrice;
-    // print(filterNotifier.currentMinPrice);
-    // print(filterNotifier.currentMinPrice);
-    // print("\n**************efhgej\n");
-    // if (filterNotifier.currentProductCategory == "") {
-    //   // productCategoryList = ["Book", "Clothes", "Note", "Other"];
-    //   print(productCategoryList);
-    // } else {
-    //   switch (filterNotifier.currentProductCategory) {
-    //     case "Book":
-    //       productCategoryList.clear();
-    //       productCategoryList.add("Book");
-    //       break;
-    //     case "Clothes":
-    //       productCategoryList.clear();
-    //       productCategoryList.add("Clothes");
-    //       break;
-    //     case "Note":
-    //       productCategoryList.clear();
-    //       productCategoryList.add("Note");
-    //       break;
-    //     case "Other":
-    //       productCategoryList.clear();
-    //       productCategoryList.add("Other");
-    //       break;
-    //     default:
-    //     // productCategoryList = ["Book", "Clothes", "Note", "Other"];
-    //   }
-    //   // productCategoryList.add(filterNotifier.currentProductCategory);
-    //   print(productCategoryList);
-    // }
-    int minPrice = 0, maxPrice = 3000;
+    // while filtering ,we can filter by all parameters indepedently but
+    // price range is depend on "orderBy" query and we cant use more than 1 "orderBy" query
+    // so if we sort by clicking on "SORT" option by price then only our "price" filter is working
+
     dynamic postRef;
-    if (filterNotifier.currentProductCategory != "") {
-      postRef = Firestore.instance
-          .collection("post")
-          .where("productCategory",
-              isEqualTo: filterNotifier.currentProductCategory)
-          .orderBy("price", descending: false)
-          .where("price", isLessThanOrEqualTo: filterNotifier.currentMaxPrice)
-          .where("price",
-              isGreaterThanOrEqualTo: filterNotifier.currentMinPrice);
-    } else {
-      postRef = Firestore.instance
-          .collection("post")
-          .orderBy("price", descending: false)
+    postRef = Firestore.instance.collection("post");
+    if (sortNotifier.currentSortParameter == 'name') {
+      postRef =
+          postRef.orderBy("name", descending: sortNotifier.currentSortDesc);
+    } else if (sortNotifier.currentSortParameter == 'price') {
+      postRef = postRef
+          .orderBy("price", descending: sortNotifier.currentSortDesc)
           .where("price", isLessThanOrEqualTo: filterNotifier.currentMaxPrice)
           .where("price",
               isGreaterThanOrEqualTo: filterNotifier.currentMinPrice);
     }
 
-    // if (filterNotifier.currentCondition != "") {
-    //   postRef = postRef.where("condition",
-    //       isEqualTo: filterNotifier.currentCondition);
-    // }
+    if (filterNotifier.currentProductCategory != "") {
+      switch (filterNotifier.currentProductCategory) {
+        case "Book":
+          postRef = postRef.where("productCategory",
+              isEqualTo: filterNotifier.currentProductCategory);
 
-    // postRef = postRef
-    //     .where("price", isLessThanOrEqualTo: filterNotifier.currentMaxPrice)
-    //     .where("price", isGreaterThanOrEqualTo: filterNotifier.currentMinPrice);
+          if (filterNotifier.currentBookCategory != "") {
+            postRef = postRef.where("bookCategory",
+                isEqualTo: filterNotifier.currentBookCategory);
+          }
+          if (filterNotifier.currentBranchBook != "") {
+            postRef = postRef.where("branch",
+                isEqualTo: filterNotifier.currentBranchBook);
+          }
+          break;
+
+        case "Clothes":
+          postRef = postRef.where("productCategory",
+              isEqualTo: filterNotifier.currentProductCategory);
+
+          if (filterNotifier.currentTypeOfCloth != "") {
+            postRef = postRef.where("type",
+                isEqualTo: filterNotifier.currentTypeOfCloth);
+          }
+          break;
+        case "Note":
+          postRef = postRef.where("productCategory",
+              isEqualTo: filterNotifier.currentProductCategory);
+
+          if (filterNotifier.currentBranchNote != "") {
+            postRef = postRef.where("branch",
+                isEqualTo: filterNotifier.currentBranchNote);
+          }
+          if (filterNotifier.currentYear != "") {
+            postRef =
+                postRef.where("year", isEqualTo: filterNotifier.currentYear);
+          }
+          break;
+        case "Other":
+          postRef = postRef.where("productCategory",
+              isEqualTo: filterNotifier.currentProductCategory);
+          break;
+        default:
+        // productCategoryList = ["Book", "Clothes", "Note", "Other"];
+      }
+    }
+
+    if (filterNotifier.currentCondition != "") {
+      postRef = postRef.where("condition",
+          isEqualTo: filterNotifier.currentCondition);
+    }
 
     List inputTagList = query.toLowerCase().split(" ");
-    Stream<QuerySnapshot> productStream = postRef
-        .orderBy(sortNotifier.currentSortParameter,
-            descending: sortNotifier.currentSortDesc)
-        .where('tagList', arrayContainsAny: inputTagList)
-        .snapshots();
-    return Scaffold(
-      appBar: CustomAppBar(),
-      body: StreamBuilder(
-        stream: productStream,
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return Center(
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
-              ),
-            );
-          } else {
-            return ListView.builder(
-              padding: EdgeInsets.all(5.0),
-              itemBuilder: (BuildContext context, index) {
-                return ProductItem(
-                  data: snapshot.data.documents[index],
-                );
-              },
-              itemCount: snapshot.data.documents.length,
-            );
-          }
-        },
+    Stream<QuerySnapshot> productStream =
+        postRef.where('tagList', arrayContainsAny: inputTagList).snapshots();
+
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pop(context);
+        sortNotifier.currentSortParameter = 'name';
+        sortNotifier.currentSortDesc = false;
+        filterNotifier.currentBookCategory = "";
+        filterNotifier.currentBranchBook = "";
+        filterNotifier.currentTypeOfCloth = "";
+        filterNotifier.currentBranchNote = "";
+        filterNotifier.currentYear = "";
+        filterNotifier.currentMaxPrice = 3000;
+        filterNotifier.currentMinPrice = 0;
+        filterNotifier.currentCondition = "";
+        filterNotifier.currentProductCategory = "";
+        return true;
+      },
+      child: Scaffold(
+        appBar: CustomAppBar(),
+        body: StreamBuilder(
+          stream: productStream,
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Center(
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
+                ),
+              );
+            } else {
+              return ListView.builder(
+                padding: EdgeInsets.all(5.0),
+                itemBuilder: (BuildContext context, index) {
+                  return ProductItem(
+                    data: snapshot.data.documents[index],
+                  );
+                },
+                itemCount: snapshot.data.documents.length,
+              );
+            }
+          },
+        ),
       ),
     );
   }
@@ -435,6 +469,8 @@ class FilterBox extends StatelessWidget {
                                 color: sc_ItemTitleColor,
                               ),
                             ),
+
+                            //TODO : here no need of  "apply now" button we can change to "clear filters"
                             RaisedButton(
                               elevation: 0,
                               color: sc_PrimaryColor,
@@ -587,7 +623,7 @@ class _PriceSliderState extends State<PriceSlider> {
               values = val;
             });
             filterNotifier.currentMinPrice = val.start.toInt();
-            filterNotifier.currentMinPrice = val.end.toInt();
+            filterNotifier.currentMaxPrice = val.end.toInt();
           },
         ),
       ],
@@ -1635,6 +1671,9 @@ class _ProductCategoryState extends State<ProductCategory> {
                     _productCat = "Book";
                   });
                   filterNotifier.currentProductCategory = "Book";
+                  filterNotifier.currentTypeOfCloth = "";
+                  filterNotifier.currentBranchNote = "";
+                  filterNotifier.currentYear = "";
                 },
                 child: Container(
                   decoration: BoxDecoration(
@@ -1658,6 +1697,10 @@ class _ProductCategoryState extends State<ProductCategory> {
                     _productCat = "Cloth";
                   });
                   filterNotifier.currentProductCategory = "Clothes";
+                  filterNotifier.currentBookCategory = "";
+                  filterNotifier.currentBranchBook = "";
+                  filterNotifier.currentYear = "";
+                  filterNotifier.currentBranchNote = "";
                 },
                 child: Container(
                   decoration: BoxDecoration(
@@ -1681,6 +1724,9 @@ class _ProductCategoryState extends State<ProductCategory> {
                     _productCat = "Note";
                   });
                   filterNotifier.currentProductCategory = "Note";
+                  filterNotifier.currentBookCategory = "";
+                  filterNotifier.currentBranchBook = "";
+                  filterNotifier.currentTypeOfCloth = "";
                 },
                 child: Container(
                   decoration: BoxDecoration(
@@ -1704,6 +1750,11 @@ class _ProductCategoryState extends State<ProductCategory> {
                     _productCat = "Other";
                   });
                   filterNotifier.currentProductCategory = "Other";
+                  filterNotifier.currentBookCategory = "";
+                  filterNotifier.currentBranchBook = "";
+                  filterNotifier.currentTypeOfCloth = "";
+                  filterNotifier.currentBranchNote = "";
+                  filterNotifier.currentYear = "";
                 },
                 child: Container(
                   decoration: BoxDecoration(
