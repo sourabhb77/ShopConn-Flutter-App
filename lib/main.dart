@@ -4,6 +4,7 @@ import 'package:shopconn/const/Theme.dart';
 import 'package:shopconn/notifier/ChatNotifier.dart';
 import 'package:shopconn/notifier/authNotifier.dart';
 import 'package:shopconn/notifier/bookNotifier.dart';
+import 'package:shopconn/notifier/filterNotifier.dart';
 import 'package:shopconn/notifier/noteNotifier.dart';
 import 'package:shopconn/notifier/otherNotifier.dart';
 import 'package:shopconn/notifier/productNotifier.dart';
@@ -39,6 +40,9 @@ void main() {
       ChangeNotifierProvider(
         create: (context) => SortNotifier(),
       ),
+      ChangeNotifierProvider(
+        create: (context) => FilterNotifier(),
+      )
     ],
     child: MyApp(),
   ));
