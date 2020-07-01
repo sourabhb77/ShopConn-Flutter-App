@@ -17,7 +17,7 @@ class AddProuctScreen extends StatefulWidget {
 }
 
 class _AddProuctScreenState extends State<AddProuctScreen> {
-  String category= "Book";
+  String category = "Book";
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 
   // Book _currentBook;
@@ -37,7 +37,6 @@ class _AddProuctScreenState extends State<AddProuctScreen> {
   //   // _imageUrl = _currentFood.image;
   // }
 
-
   Widget _buildProductNameField() {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
@@ -52,7 +51,9 @@ class _AddProuctScreenState extends State<AddProuctScreen> {
               fontWeight: FontWeight.w600,
             ),
           ),
-          SizedBox(height: 5.0,),
+          SizedBox(
+            height: 5.0,
+          ),
           TextFormField(
             decoration: InputDecoration(
               fillColor: sc_InputBackgroundColor,
@@ -64,10 +65,10 @@ class _AddProuctScreenState extends State<AddProuctScreen> {
                 color: sc_InputHintTextColor,
                 fontSize: 16.0,
               ),
-              enabledBorder: OutlineInputBorder(      
+              enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                borderSide: BorderSide(color: sc_InputBackgroundColor),   
-              ),  
+                borderSide: BorderSide(color: sc_InputBackgroundColor),
+              ),
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: sc_InputBackgroundColor),
                 borderRadius: BorderRadius.all(Radius.circular(8.0)),
@@ -79,7 +80,7 @@ class _AddProuctScreenState extends State<AddProuctScreen> {
             ),
             keyboardType: TextInputType.text,
             textCapitalization: TextCapitalization.words,
-            autofocus: true,
+            // autofocus: true,
             validator: (String value) {
               if (value.isEmpty) {
                 return 'Product Name is required';
@@ -93,7 +94,7 @@ class _AddProuctScreenState extends State<AddProuctScreen> {
             },
             onChanged: (String value) {
               setState(() {
-                name=value;
+                name = value;
               });
               print("\n****************\n");
               print(name);
@@ -105,12 +106,9 @@ class _AddProuctScreenState extends State<AddProuctScreen> {
     );
   }
 
-
-
-
   @override
   Widget build(BuildContext context) {
-  // BookNotifier bookNotifier = Provider.of<BookNotifier>(context);
+    // BookNotifier bookNotifier = Provider.of<BookNotifier>(context);
     // print(category);
     return Scaffold(
       appBar: AppBar(
@@ -130,14 +128,14 @@ class _AddProuctScreenState extends State<AddProuctScreen> {
             OutlineButton(
               padding: EdgeInsets.all(13.0),
               color: sc_InputBackgroundColor,
-              child: Text('Cancel',
+              child: Text(
+                'Cancel',
                 style: TextStyle(
                   fontSize: 18.0,
                 ),
               ),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0)
-              ),
+                  borderRadius: BorderRadius.circular(8.0)),
               onPressed: () {
                 Navigator.pop(context);
               },
@@ -150,44 +148,46 @@ class _AddProuctScreenState extends State<AddProuctScreen> {
                 style: TextStyle(
                   color: sc_AppBarTextColor,
                   fontSize: 18.0,
-                ),                      
+                ),
               ),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0)
-              ),
+                  borderRadius: BorderRadius.circular(8.0)),
               onPressed: () {
-                if(name!=null){
-                  if (category== "Book") {
+                if (name != null) {
+                  if (category == "Book") {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => AddProuctScreen_Book(name:name)),
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              AddProuctScreen_Book(name: name)),
+                    );
+                  } else if (category == "Cloth") {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              AddProuctScreen_Cloth(name: name)),
+                    );
+                  } else if (category == "Note") {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              AddProuctScreen_Note(name: name)),
+                    );
+                  } else if (category == "Other") {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              AddProuctScreen_Other(name: name)),
                     );
                   }
-                  else if (category == "Cloth"){
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => AddProuctScreen_Cloth(name:name)),
-                    );
-                  }
-                  else if (category == "Note"){
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => AddProuctScreen_Note(name:name)),
-                    );
-                  }else if (category == "Other"){
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => AddProuctScreen_Other(name:name)),
-                    );
-                  }
-                }
-                else{
+                } else {
                   print("no name given");
                 }
-                
               },
             ),
-            
           ],
         ),
       ),
@@ -199,7 +199,8 @@ class _AddProuctScreenState extends State<AddProuctScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 20.0, vertical: 20.0),
                 child: Text(
                   "Whats Your Product Details ?\nfill here",
                   style: TextStyle(
@@ -239,22 +240,30 @@ class _AddProuctScreenState extends State<AddProuctScreen> {
                     onTap: () => setState(() => category = "Book"),
                     child: Container(
                       decoration: BoxDecoration(
-                        border: category == "Book" ? Border.all(color: sc_PrimaryColor ,width: 5.0,) : null,
-                        borderRadius: BorderRadius.all(
-                            Radius.circular(13.0) 
-                        ),
+                        border: category == "Book"
+                            ? Border.all(
+                                color: sc_PrimaryColor,
+                                width: 5.0,
+                              )
+                            : null,
+                        borderRadius: BorderRadius.all(Radius.circular(13.0)),
                       ),
-                      child: Image.asset('assets/images/CatBooks.png',),
+                      child: Image.asset(
+                        'assets/images/CatBooks.png',
+                      ),
                     ),
                   ),
                   GestureDetector(
                     onTap: () => setState(() => category = "Cloth"),
                     child: Container(
                       decoration: BoxDecoration(
-                        border: category == "Cloth" ? Border.all(color: sc_PrimaryColor ,width: 5.0,) : null,
-                        borderRadius: BorderRadius.all(
-                            Radius.circular(13.0) 
-                        ),
+                        border: category == "Cloth"
+                            ? Border.all(
+                                color: sc_PrimaryColor,
+                                width: 5.0,
+                              )
+                            : null,
+                        borderRadius: BorderRadius.all(Radius.circular(13.0)),
                       ),
                       child: Image.asset('assets/images/CatClothes.png'),
                     ),
@@ -268,13 +277,16 @@ class _AddProuctScreenState extends State<AddProuctScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   GestureDetector(
-                    onTap: () => setState(() => category="Note"),
+                    onTap: () => setState(() => category = "Note"),
                     child: Container(
                       decoration: BoxDecoration(
-                        border: category == "Note" ? Border.all(color: sc_PrimaryColor ,width: 5.0,) : null,
-                        borderRadius: BorderRadius.all(
-                            Radius.circular(13.0) 
-                        ),
+                        border: category == "Note"
+                            ? Border.all(
+                                color: sc_PrimaryColor,
+                                width: 5.0,
+                              )
+                            : null,
+                        borderRadius: BorderRadius.all(Radius.circular(13.0)),
                       ),
                       child: Image.asset('assets/images/CatNotes.png'),
                     ),
@@ -283,10 +295,13 @@ class _AddProuctScreenState extends State<AddProuctScreen> {
                     onTap: () => setState(() => category = "Other"),
                     child: Container(
                       decoration: BoxDecoration(
-                        border: category == "Other" ? Border.all(color: sc_PrimaryColor ,width: 5.0,) : null,
-                        borderRadius: BorderRadius.all(
-                            Radius.circular(13.0) 
-                        ),
+                        border: category == "Other"
+                            ? Border.all(
+                                color: sc_PrimaryColor,
+                                width: 5.0,
+                              )
+                            : null,
+                        borderRadius: BorderRadius.all(Radius.circular(13.0)),
                       ),
                       child: Image.asset('assets/images/CatOther.png'),
                     ),

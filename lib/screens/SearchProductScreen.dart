@@ -247,7 +247,7 @@ class SearchProduct extends SearchDelegate<dynamic> {
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
-    print("here custon app bar");
+    print("building result");
     return Container(
       color: sc_PrimaryColor,
       child: Column(
@@ -469,55 +469,32 @@ class FilterBox extends StatelessWidget {
                                 color: sc_ItemTitleColor,
                               ),
                             ),
-
-                            //TODO : here no need of  "apply now" button we can change to "clear filters"
-                            RaisedButton(
-                              elevation: 0,
+                            OutlineButton(
+                              // elevation: 0,
                               color: sc_PrimaryColor,
                               padding:
                                   EdgeInsets.fromLTRB(13.0, 10.0, 13.0, 10.0),
                               child: Text(
-                                'Apply Now',
+                                'Clear All',
                                 style: TextStyle(
-                                  color: sc_AppBarTextColor,
-                                  fontSize: 18.0,
+                                  color: Colors.black54,
+                                  fontSize: 16.0,
                                 ),
                               ),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8.0)),
                               onPressed: () {
-                                print(
-                                    "\n****informing to filter notifier******\n");
-                                if (filterNotifier.currentProductCategory ==
-                                    "Book") {
-                                  filterNotifier.currentTypeOfCloth = "";
-                                  filterNotifier.currentYear = "";
-                                  filterNotifier.currentBranchNote = "";
-                                } else if (filterNotifier
-                                        .currentProductCategory ==
-                                    "Cloth") {
-                                  filterNotifier.currentBookCategory = "";
-                                  filterNotifier.currentBranchBook = "";
-                                  filterNotifier.currentYear = "";
-                                  filterNotifier.currentBranchNote = "";
-                                } else if (filterNotifier
-                                        .currentProductCategory ==
-                                    "Note") {
-                                  filterNotifier.currentBookCategory = "";
-                                  filterNotifier.currentBranchBook = "";
-                                  filterNotifier.currentTypeOfCloth = "";
-                                } else if (filterNotifier
-                                        .currentProductCategory ==
-                                    "Other") {
-                                  filterNotifier.currentBookCategory = "";
-                                  filterNotifier.currentBranchBook = "";
-                                  filterNotifier.currentTypeOfCloth = "";
-                                  filterNotifier.currentBranchNote = "";
-                                  filterNotifier.currentYear = "";
-                                }
+                                filterNotifier.currentBookCategory = "";
+                                filterNotifier.currentBranchBook = "";
+                                filterNotifier.currentTypeOfCloth = "";
+                                filterNotifier.currentBranchNote = "";
+                                filterNotifier.currentYear = "";
+                                filterNotifier.currentMinPrice = 0;
+                                filterNotifier.currentMaxPrice = 3000;
+                                filterNotifier.currentCondition = "";
+                                filterNotifier.currentProductCategory = "";
                                 Navigator.pop(context);
-                                print(
-                                    "\n****done informing to filter notifier******\n");
+                                print("****cleared******\n");
                               },
                             ),
                           ],
@@ -595,6 +572,8 @@ class _PriceSliderState extends State<PriceSlider> {
 
   @override
   Widget build(BuildContext context) {
+    SortNotifier sortNotifier =
+        Provider.of<SortNotifier>(context, listen: true);
     FilterNotifier filterNotifier =
         Provider.of<FilterNotifier>(context, listen: true);
     return Column(
@@ -622,6 +601,8 @@ class _PriceSliderState extends State<PriceSlider> {
             setState(() {
               values = val;
             });
+            sortNotifier.currentSortParameter = "price";
+            sortNotifier.currentSortDesc = false;
             filterNotifier.currentMinPrice = val.start.toInt();
             filterNotifier.currentMaxPrice = val.end.toInt();
           },
@@ -667,16 +648,21 @@ class _EstheticConditionState extends State<EstheticCondition> {
                   flex: 2,
                   child: GestureDetector(
                     onTap: () {
-                      setState(() => _condition = "Very Good");
-                      filterNotifier.currentCondition = "Very Good";
+                      if (filterNotifier.currentCondition != "Very Good") {
+                        // setState(() => _condition = "Very Good");
+                        filterNotifier.currentCondition = "Very Good";
+                      } else {
+                        // setState(() => _condition = "");
+                        filterNotifier.currentCondition = "";
+                      }
                     },
                     child: Container(
                       decoration: BoxDecoration(
-                        color: _condition == "Very Good"
+                        color: filterNotifier.currentCondition == "Very Good"
                             ? sc_InputBackgroundColor
                             : sc_AppBarTextColor,
                         border: Border.all(
-                          color: _condition == "Very Good"
+                          color: filterNotifier.currentCondition == "Very Good"
                               ? sc_PrimaryColor
                               : sc_InputBackgroundColor,
                           width: 1.0,
@@ -692,9 +678,10 @@ class _EstheticConditionState extends State<EstheticCondition> {
                             style: TextStyle(
                               fontSize: 16.0,
                               color: sc_ItemTitleColor,
-                              fontWeight: _condition == "Very Good"
-                                  ? FontWeight.w500
-                                  : FontWeight.normal,
+                              fontWeight:
+                                  filterNotifier.currentCondition == "Very Good"
+                                      ? FontWeight.w500
+                                      : FontWeight.normal,
                             ),
                           ),
                         ],
@@ -706,17 +693,22 @@ class _EstheticConditionState extends State<EstheticCondition> {
                   flex: 2,
                   child: GestureDetector(
                     onTap: () {
-                      setState(() => _condition = "Good");
-                      filterNotifier.currentCondition = "Good";
+                      if (filterNotifier.currentCondition != "Good") {
+                        // setState(() => _condition = "Good");
+                        filterNotifier.currentCondition = "Good";
+                      } else {
+                        // setState(() => _condition = "");
+                        filterNotifier.currentCondition = "";
+                      }
                     },
                     child: Container(
                       // margin: EdgeInsets.symmetric(horizontal: 2.0),
                       decoration: BoxDecoration(
-                        color: _condition == "Good"
+                        color: filterNotifier.currentCondition == "Good"
                             ? sc_InputBackgroundColor
                             : sc_AppBarTextColor,
                         border: Border.all(
-                          color: _condition == "Good"
+                          color: filterNotifier.currentCondition == "Good"
                               ? sc_PrimaryColor
                               : sc_InputBackgroundColor,
                           width: 1.0,
@@ -732,9 +724,10 @@ class _EstheticConditionState extends State<EstheticCondition> {
                             style: TextStyle(
                               fontSize: 16.0,
                               color: sc_ItemTitleColor,
-                              fontWeight: _condition == "Good"
-                                  ? FontWeight.w500
-                                  : FontWeight.normal,
+                              fontWeight:
+                                  filterNotifier.currentCondition == "Good"
+                                      ? FontWeight.w500
+                                      : FontWeight.normal,
                             ),
                           ),
                         ],
@@ -746,16 +739,21 @@ class _EstheticConditionState extends State<EstheticCondition> {
                   flex: 2,
                   child: GestureDetector(
                     onTap: () {
-                      setState(() => _condition = "Bad");
-                      filterNotifier.currentCondition = "Bad";
+                      if (filterNotifier.currentCondition != "Not Bad") {
+                        // setState(() => _condition = "Bad");
+                        filterNotifier.currentCondition = "Not Bad";
+                      } else {
+                        // setState(() => _condition = "");
+                        filterNotifier.currentCondition = "";
+                      }
                     },
                     child: Container(
                       decoration: BoxDecoration(
-                        color: _condition == "Bad"
+                        color: filterNotifier.currentCondition == "Not Bad"
                             ? sc_InputBackgroundColor
                             : sc_AppBarTextColor,
                         border: Border.all(
-                          color: _condition == "Bad"
+                          color: filterNotifier.currentCondition == "Not Bad"
                               ? sc_PrimaryColor
                               : sc_InputBackgroundColor,
                           width: 1.0,
@@ -767,13 +765,14 @@ class _EstheticConditionState extends State<EstheticCondition> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "Bad",
+                            "Not Bad",
                             style: TextStyle(
                               fontSize: 16.0,
                               color: sc_ItemTitleColor,
-                              fontWeight: _condition == "Bad"
-                                  ? FontWeight.w500
-                                  : FontWeight.normal,
+                              fontWeight:
+                                  filterNotifier.currentCondition == "Not Bad"
+                                      ? FontWeight.w500
+                                      : FontWeight.normal,
                             ),
                           ),
                         ],
@@ -832,18 +831,23 @@ class _ProductCategoryState extends State<ProductCategory> {
                 flex: 3,
                 child: GestureDetector(
                   onTap: () {
-                    setState(() => _bookCat = "Educational");
-                    filterNotifier.currentBookCategory = "Educational";
+                    if (filterNotifier.currentBookCategory != "Educational") {
+                      filterNotifier.currentBookCategory = "Educational";
+                    } else {
+                      filterNotifier.currentBookCategory = "";
+                    }
+                    // setState(() => _bookCat = "Educational");
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                      color: _bookCat == "Educational"
+                      color: filterNotifier.currentBookCategory == "Educational"
                           ? sc_InputBackgroundColor
                           : sc_AppBarTextColor,
                       border: Border.all(
-                        color: _bookCat == "Educational"
-                            ? sc_PrimaryColor
-                            : sc_InputBackgroundColor,
+                        color:
+                            filterNotifier.currentBookCategory == "Educational"
+                                ? sc_PrimaryColor
+                                : sc_InputBackgroundColor,
                         width: 1.0,
                       ),
                       borderRadius: BorderRadius.circular(8.0),
@@ -857,7 +861,8 @@ class _ProductCategoryState extends State<ProductCategory> {
                           style: TextStyle(
                             fontSize: 16.0,
                             color: sc_ItemTitleColor,
-                            fontWeight: _bookCat == "Educational"
+                            fontWeight: filterNotifier.currentBookCategory ==
+                                    "Educational"
                                 ? FontWeight.w500
                                 : FontWeight.normal,
                           ),
@@ -871,16 +876,24 @@ class _ProductCategoryState extends State<ProductCategory> {
                 flex: 3,
                 child: GestureDetector(
                   onTap: () {
-                    setState(() => _bookCat = "NonEducational");
-                    filterNotifier.currentBookCategory = "NonEducational";
+                    if (filterNotifier.currentBookCategory !=
+                        "NonEducational") {
+                      filterNotifier.currentBookCategory = "NonEducational";
+                    } else {
+                      filterNotifier.currentBookCategory = "";
+                    }
+                    // setState(() => _bookCat = "NonEducational");
+                    // filterNotifier.currentBookCategory = "NonEducational";
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                      color: _bookCat == "NonEducational"
-                          ? sc_InputBackgroundColor
-                          : sc_AppBarTextColor,
+                      color:
+                          filterNotifier.currentBookCategory == "NonEducational"
+                              ? sc_InputBackgroundColor
+                              : sc_AppBarTextColor,
                       border: Border.all(
-                        color: _bookCat == "NonEducational"
+                        color: filterNotifier.currentBookCategory ==
+                                "NonEducational"
                             ? sc_PrimaryColor
                             : sc_InputBackgroundColor,
                         width: 1.0,
@@ -896,7 +909,8 @@ class _ProductCategoryState extends State<ProductCategory> {
                           style: TextStyle(
                             fontSize: 16.0,
                             color: sc_ItemTitleColor,
-                            fontWeight: _bookCat == "NonEducational"
+                            fontWeight: filterNotifier.currentBookCategory ==
+                                    "NonEducational"
                                 ? FontWeight.w500
                                 : FontWeight.normal,
                           ),
@@ -931,16 +945,21 @@ class _ProductCategoryState extends State<ProductCategory> {
                         flex: 1,
                         child: GestureDetector(
                           onTap: () {
-                            setState(() => _branchBook = "IT");
-                            filterNotifier.currentBranchBook = "IT";
+                            if (filterNotifier.currentBranchBook != "IT") {
+                              filterNotifier.currentBranchBook = "IT";
+                            } else {
+                              filterNotifier.currentBranchBook = "";
+                            }
+                            // setState(() => _branchBook = "IT");
+                            // filterNotifier.currentBranchBook = "IT";
                           },
                           child: Container(
                             decoration: BoxDecoration(
-                              color: _branchBook == "IT"
+                              color: filterNotifier.currentBranchBook == "IT"
                                   ? sc_InputBackgroundColor
                                   : sc_AppBarTextColor,
                               border: Border.all(
-                                color: _branchBook == "IT"
+                                color: filterNotifier.currentBranchBook == "IT"
                                     ? sc_PrimaryColor
                                     : sc_InputBackgroundColor,
                                 width: 1.0,
@@ -956,9 +975,10 @@ class _ProductCategoryState extends State<ProductCategory> {
                                   style: TextStyle(
                                     fontSize: 16.0,
                                     color: sc_ItemTitleColor,
-                                    fontWeight: _branchBook == "IT"
-                                        ? FontWeight.w500
-                                        : FontWeight.normal,
+                                    fontWeight:
+                                        filterNotifier.currentBranchBook == "IT"
+                                            ? FontWeight.w500
+                                            : FontWeight.normal,
                                   ),
                                 ),
                               ],
@@ -970,17 +990,22 @@ class _ProductCategoryState extends State<ProductCategory> {
                         flex: 1,
                         child: GestureDetector(
                           onTap: () {
-                            setState(() => _branchBook = "CS");
-                            filterNotifier.currentBranchBook = "CS";
+                            if (filterNotifier.currentBranchBook != "CS") {
+                              filterNotifier.currentBranchBook = "CS";
+                            } else {
+                              filterNotifier.currentBranchBook = "";
+                            }
+                            // setState(() => _branchBook = "CS");
+                            // filterNotifier.currentBranchBook = "CS";
                           },
                           child: Container(
                             // margin: EdgeInsets.symmetric(horizontal: 2.0),
                             decoration: BoxDecoration(
-                              color: _branchBook == "CS"
+                              color: filterNotifier.currentBranchBook == "CS"
                                   ? sc_InputBackgroundColor
                                   : sc_AppBarTextColor,
                               border: Border.all(
-                                color: _branchBook == "CS"
+                                color: filterNotifier.currentBranchBook == "CS"
                                     ? sc_PrimaryColor
                                     : sc_InputBackgroundColor,
                                 width: 1.0,
@@ -996,9 +1021,10 @@ class _ProductCategoryState extends State<ProductCategory> {
                                   style: TextStyle(
                                     fontSize: 16.0,
                                     color: sc_ItemTitleColor,
-                                    fontWeight: _branchBook == "CS"
-                                        ? FontWeight.w500
-                                        : FontWeight.normal,
+                                    fontWeight:
+                                        filterNotifier.currentBranchBook == "CS"
+                                            ? FontWeight.w500
+                                            : FontWeight.normal,
                                   ),
                                 ),
                               ],
@@ -1010,18 +1036,24 @@ class _ProductCategoryState extends State<ProductCategory> {
                         flex: 1,
                         child: GestureDetector(
                           onTap: () {
-                            setState(() => _branchBook = "MECH");
-                            filterNotifier.currentBranchBook = "MECH";
+                            if (filterNotifier.currentBranchBook != "MECH") {
+                              filterNotifier.currentBranchBook = "MECH";
+                            } else {
+                              filterNotifier.currentBranchBook = "";
+                            }
+                            // setState(() => _branchBook = "MECH");
+                            // filterNotifier.currentBranchBook = "MECH";
                           },
                           child: Container(
                             decoration: BoxDecoration(
-                              color: _branchBook == "MECH"
+                              color: filterNotifier.currentBranchBook == "MECH"
                                   ? sc_InputBackgroundColor
                                   : sc_AppBarTextColor,
                               border: Border.all(
-                                color: _branchBook == "MECH"
-                                    ? sc_PrimaryColor
-                                    : sc_InputBackgroundColor,
+                                color:
+                                    filterNotifier.currentBranchBook == "MECH"
+                                        ? sc_PrimaryColor
+                                        : sc_InputBackgroundColor,
                                 width: 1.0,
                               ),
                               borderRadius: BorderRadius.circular(8.0),
@@ -1035,9 +1067,11 @@ class _ProductCategoryState extends State<ProductCategory> {
                                   style: TextStyle(
                                     fontSize: 16.0,
                                     color: sc_ItemTitleColor,
-                                    fontWeight: _branchBook == "MECH"
-                                        ? FontWeight.w500
-                                        : FontWeight.normal,
+                                    fontWeight:
+                                        filterNotifier.currentBranchBook ==
+                                                "MECH"
+                                            ? FontWeight.w500
+                                            : FontWeight.normal,
                                   ),
                                 ),
                               ],
@@ -1049,18 +1083,24 @@ class _ProductCategoryState extends State<ProductCategory> {
                         flex: 1,
                         child: GestureDetector(
                           onTap: () {
-                            setState(() => _branchBook = "ETRX");
-                            filterNotifier.currentBranchBook = "ETRX";
+                            if (filterNotifier.currentBranchBook != "ETRX") {
+                              filterNotifier.currentBranchBook = "ETRX";
+                            } else {
+                              filterNotifier.currentBranchBook = "";
+                            }
+                            // setState(() => _branchBook = "ETRX");
+                            // filterNotifier.currentBranchBook = "ETRX";
                           },
                           child: Container(
                             decoration: BoxDecoration(
-                              color: _branchBook == "ETRX"
+                              color: filterNotifier.currentBranchBook == "ETRX"
                                   ? sc_InputBackgroundColor
                                   : sc_AppBarTextColor,
                               border: Border.all(
-                                color: _branchBook == "ETRX"
-                                    ? sc_PrimaryColor
-                                    : sc_InputBackgroundColor,
+                                color:
+                                    filterNotifier.currentBranchBook == "ETRX"
+                                        ? sc_PrimaryColor
+                                        : sc_InputBackgroundColor,
                                 width: 1.0,
                               ),
                               borderRadius: BorderRadius.circular(8.0),
@@ -1074,9 +1114,11 @@ class _ProductCategoryState extends State<ProductCategory> {
                                   style: TextStyle(
                                     fontSize: 16.0,
                                     color: sc_ItemTitleColor,
-                                    fontWeight: _branchBook == "ETRX"
-                                        ? FontWeight.w500
-                                        : FontWeight.normal,
+                                    fontWeight:
+                                        filterNotifier.currentBranchBook ==
+                                                "ETRX"
+                                            ? FontWeight.w500
+                                            : FontWeight.normal,
                                   ),
                                 ),
                               ],
@@ -1088,18 +1130,24 @@ class _ProductCategoryState extends State<ProductCategory> {
                         flex: 1,
                         child: GestureDetector(
                           onTap: () {
-                            setState(() => _branchBook = "EXTC");
-                            filterNotifier.currentBranchBook = "EXTC";
+                            if (filterNotifier.currentBranchBook != "EXTC") {
+                              filterNotifier.currentBranchBook = "EXTC";
+                            } else {
+                              filterNotifier.currentBranchBook = "";
+                            }
+                            // setState(() => _branchBook = "EXTC");
+                            // filterNotifier.currentBranchBook = "EXTC";
                           },
                           child: Container(
                             decoration: BoxDecoration(
-                              color: _branchBook == "EXTC"
+                              color: filterNotifier.currentBranchBook == "EXTC"
                                   ? sc_InputBackgroundColor
                                   : sc_AppBarTextColor,
                               border: Border.all(
-                                color: _branchBook == "EXTC"
-                                    ? sc_PrimaryColor
-                                    : sc_InputBackgroundColor,
+                                color:
+                                    filterNotifier.currentBranchBook == "EXTC"
+                                        ? sc_PrimaryColor
+                                        : sc_InputBackgroundColor,
                                 width: 1.0,
                               ),
                               borderRadius: BorderRadius.circular(8.0),
@@ -1113,9 +1161,11 @@ class _ProductCategoryState extends State<ProductCategory> {
                                   style: TextStyle(
                                     fontSize: 16.0,
                                     color: sc_ItemTitleColor,
-                                    fontWeight: _branchBook == "EXTC"
-                                        ? FontWeight.w500
-                                        : FontWeight.normal,
+                                    fontWeight:
+                                        filterNotifier.currentBranchBook ==
+                                                "EXTC"
+                                            ? FontWeight.w500
+                                            : FontWeight.normal,
                                   ),
                                 ),
                               ],
@@ -1158,18 +1208,23 @@ class _ProductCategoryState extends State<ProductCategory> {
                 flex: 3,
                 child: GestureDetector(
                   onTap: () {
-                    setState(() => _typeOfCloth = "Boiler Suit");
-                    filterNotifier.currentTypeOfCloth = "Boiler Suit";
+                    if (filterNotifier.currentTypeOfCloth != "Boiler Suit") {
+                      filterNotifier.currentTypeOfCloth = "Boiler Suit";
+                    } else {
+                      filterNotifier.currentTypeOfCloth = "";
+                    }
+                    // setState(() => _typeOfCloth = "Boiler Suit");
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                      color: _typeOfCloth == "Boiler Suit"
+                      color: filterNotifier.currentTypeOfCloth == "Boiler Suit"
                           ? sc_InputBackgroundColor
                           : sc_AppBarTextColor,
                       border: Border.all(
-                        color: _typeOfCloth == "Boiler Suit"
-                            ? sc_PrimaryColor
-                            : sc_InputBackgroundColor,
+                        color:
+                            filterNotifier.currentTypeOfCloth == "Boiler Suit"
+                                ? sc_PrimaryColor
+                                : sc_InputBackgroundColor,
                         width: 1.0,
                       ),
                       borderRadius: BorderRadius.circular(8.0),
@@ -1183,7 +1238,8 @@ class _ProductCategoryState extends State<ProductCategory> {
                           style: TextStyle(
                             fontSize: 16.0,
                             color: sc_ItemTitleColor,
-                            fontWeight: _typeOfCloth == "Boiler Suit"
+                            fontWeight: filterNotifier.currentTypeOfCloth ==
+                                    "Boiler Suit"
                                 ? FontWeight.w500
                                 : FontWeight.normal,
                           ),
@@ -1197,16 +1253,19 @@ class _ProductCategoryState extends State<ProductCategory> {
                 flex: 3,
                 child: GestureDetector(
                   onTap: () {
-                    setState(() => _typeOfCloth = "Labcoat");
-                    filterNotifier.currentTypeOfCloth = "Labcoat";
+                    if (filterNotifier.currentTypeOfCloth != "Labcoat") {
+                      filterNotifier.currentTypeOfCloth = "Labcoat";
+                    } else {
+                      filterNotifier.currentTypeOfCloth = "";
+                    }
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                      color: _typeOfCloth == "Labcoat"
+                      color: filterNotifier.currentTypeOfCloth == "Labcoat"
                           ? sc_InputBackgroundColor
                           : sc_AppBarTextColor,
                       border: Border.all(
-                        color: _typeOfCloth == "Labcoat"
+                        color: filterNotifier.currentTypeOfCloth == "Labcoat"
                             ? sc_PrimaryColor
                             : sc_InputBackgroundColor,
                         width: 1.0,
@@ -1222,9 +1281,10 @@ class _ProductCategoryState extends State<ProductCategory> {
                           style: TextStyle(
                             fontSize: 16.0,
                             color: sc_ItemTitleColor,
-                            fontWeight: _typeOfCloth == "Labcoat"
-                                ? FontWeight.w500
-                                : FontWeight.normal,
+                            fontWeight:
+                                filterNotifier.currentTypeOfCloth == "Labcoat"
+                                    ? FontWeight.w500
+                                    : FontWeight.normal,
                           ),
                         ),
                       ],
@@ -1263,16 +1323,20 @@ class _ProductCategoryState extends State<ProductCategory> {
                 flex: 1,
                 child: GestureDetector(
                   onTap: () {
-                    setState(() => _year = "FY");
-                    filterNotifier.currentYear = "FY";
+                    if (filterNotifier.currentYear != "FY") {
+                      filterNotifier.currentYear = "FY";
+                    } else {
+                      filterNotifier.currentYear = "";
+                    }
+                    // setState(() => _year = "FY");
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                      color: _year == "FY"
+                      color: filterNotifier.currentYear == "FY"
                           ? sc_InputBackgroundColor
                           : sc_AppBarTextColor,
                       border: Border.all(
-                        color: _year == "FY"
+                        color: filterNotifier.currentYear == "FY"
                             ? sc_PrimaryColor
                             : sc_InputBackgroundColor,
                         width: 1.0,
@@ -1288,7 +1352,7 @@ class _ProductCategoryState extends State<ProductCategory> {
                           style: TextStyle(
                             fontSize: 16.0,
                             color: sc_ItemTitleColor,
-                            fontWeight: _year == "FY"
+                            fontWeight: filterNotifier.currentYear == "FY"
                                 ? FontWeight.w500
                                 : FontWeight.normal,
                           ),
@@ -1302,16 +1366,19 @@ class _ProductCategoryState extends State<ProductCategory> {
                 flex: 2,
                 child: GestureDetector(
                   onTap: () {
-                    setState(() => _year = "SY");
-                    filterNotifier.currentYear = "SY";
+                    if (filterNotifier.currentYear != "SY") {
+                      filterNotifier.currentYear = "SY";
+                    } else {
+                      filterNotifier.currentYear = "";
+                    }
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                      color: _year == "SY"
+                      color: filterNotifier.currentYear == "SY"
                           ? sc_InputBackgroundColor
                           : sc_AppBarTextColor,
                       border: Border.all(
-                        color: _year == "SY"
+                        color: filterNotifier.currentYear == "SY"
                             ? sc_PrimaryColor
                             : sc_InputBackgroundColor,
                         width: 1.0,
@@ -1327,7 +1394,7 @@ class _ProductCategoryState extends State<ProductCategory> {
                           style: TextStyle(
                             fontSize: 16.0,
                             color: sc_ItemTitleColor,
-                            fontWeight: _year == "SY"
+                            fontWeight: filterNotifier.currentYear == "SY"
                                 ? FontWeight.w500
                                 : FontWeight.normal,
                           ),
@@ -1341,16 +1408,19 @@ class _ProductCategoryState extends State<ProductCategory> {
                 flex: 2,
                 child: GestureDetector(
                   onTap: () {
-                    setState(() => _year = "TY");
-                    filterNotifier.currentYear = "TY";
+                    if (filterNotifier.currentYear != "TY") {
+                      filterNotifier.currentYear = "TY";
+                    } else {
+                      filterNotifier.currentYear = "";
+                    }
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                      color: _year == "TY"
+                      color: filterNotifier.currentYear == "TY"
                           ? sc_InputBackgroundColor
                           : sc_AppBarTextColor,
                       border: Border.all(
-                        color: _year == "TY"
+                        color: filterNotifier.currentYear == "TY"
                             ? sc_PrimaryColor
                             : sc_InputBackgroundColor,
                         width: 1.0,
@@ -1366,7 +1436,7 @@ class _ProductCategoryState extends State<ProductCategory> {
                           style: TextStyle(
                             fontSize: 16.0,
                             color: sc_ItemTitleColor,
-                            fontWeight: _year == "TY"
+                            fontWeight: filterNotifier.currentYear == "TY"
                                 ? FontWeight.w500
                                 : FontWeight.normal,
                           ),
@@ -1380,16 +1450,19 @@ class _ProductCategoryState extends State<ProductCategory> {
                 flex: 1,
                 child: GestureDetector(
                   onTap: () {
-                    setState(() => _year = "LY");
-                    filterNotifier.currentYear = "LY";
+                    if (filterNotifier.currentYear != "LY") {
+                      filterNotifier.currentYear = "LY";
+                    } else {
+                      filterNotifier.currentYear = "";
+                    }
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                      color: _year == "LY"
+                      color: filterNotifier.currentYear == "LY"
                           ? sc_InputBackgroundColor
                           : sc_AppBarTextColor,
                       border: Border.all(
-                        color: _year == "LY"
+                        color: filterNotifier.currentYear == "LY"
                             ? sc_PrimaryColor
                             : sc_InputBackgroundColor,
                         width: 1.0,
@@ -1405,7 +1478,7 @@ class _ProductCategoryState extends State<ProductCategory> {
                           style: TextStyle(
                             fontSize: 16.0,
                             color: sc_ItemTitleColor,
-                            fontWeight: _year == "LY"
+                            fontWeight: filterNotifier.currentYear == "LY"
                                 ? FontWeight.w500
                                 : FontWeight.normal,
                           ),
@@ -1440,16 +1513,19 @@ class _ProductCategoryState extends State<ProductCategory> {
                         flex: 1,
                         child: GestureDetector(
                           onTap: () {
-                            setState(() => _branchNote = "IT");
-                            filterNotifier.currentBranchNote = "IT";
+                            if (filterNotifier.currentBranchNote != "IT") {
+                              filterNotifier.currentBranchNote = "IT";
+                            } else {
+                              filterNotifier.currentBranchNote = "";
+                            }
                           },
                           child: Container(
                             decoration: BoxDecoration(
-                              color: _branchNote == "IT"
+                              color: filterNotifier.currentBranchNote == "IT"
                                   ? sc_InputBackgroundColor
                                   : sc_AppBarTextColor,
                               border: Border.all(
-                                color: _branchNote == "IT"
+                                color: filterNotifier.currentBranchNote == "IT"
                                     ? sc_PrimaryColor
                                     : sc_InputBackgroundColor,
                                 width: 1.0,
@@ -1465,9 +1541,10 @@ class _ProductCategoryState extends State<ProductCategory> {
                                   style: TextStyle(
                                     fontSize: 16.0,
                                     color: sc_ItemTitleColor,
-                                    fontWeight: _branchNote == "IT"
-                                        ? FontWeight.w500
-                                        : FontWeight.normal,
+                                    fontWeight:
+                                        filterNotifier.currentBranchNote == "IT"
+                                            ? FontWeight.w500
+                                            : FontWeight.normal,
                                   ),
                                 ),
                               ],
@@ -1479,17 +1556,20 @@ class _ProductCategoryState extends State<ProductCategory> {
                         flex: 1,
                         child: GestureDetector(
                           onTap: () {
-                            setState(() => _branchNote = "CS");
-                            filterNotifier.currentBranchNote = "CS";
+                            if (filterNotifier.currentBranchNote != "CS") {
+                              filterNotifier.currentBranchNote = "CS";
+                            } else {
+                              filterNotifier.currentBranchNote = "";
+                            }
                           },
                           child: Container(
                             // margin: EdgeInsets.symmetric(horizontal: 2.0),
                             decoration: BoxDecoration(
-                              color: _branchNote == "CS"
+                              color: filterNotifier.currentBranchNote == "CS"
                                   ? sc_InputBackgroundColor
                                   : sc_AppBarTextColor,
                               border: Border.all(
-                                color: _branchNote == "CS"
+                                color: filterNotifier.currentBranchNote == "CS"
                                     ? sc_PrimaryColor
                                     : sc_InputBackgroundColor,
                                 width: 1.0,
@@ -1505,9 +1585,10 @@ class _ProductCategoryState extends State<ProductCategory> {
                                   style: TextStyle(
                                     fontSize: 16.0,
                                     color: sc_ItemTitleColor,
-                                    fontWeight: _branchNote == "CS"
-                                        ? FontWeight.w500
-                                        : FontWeight.normal,
+                                    fontWeight:
+                                        filterNotifier.currentBranchNote == "CS"
+                                            ? FontWeight.w500
+                                            : FontWeight.normal,
                                   ),
                                 ),
                               ],
@@ -1519,18 +1600,22 @@ class _ProductCategoryState extends State<ProductCategory> {
                         flex: 1,
                         child: GestureDetector(
                           onTap: () {
-                            setState(() => _branchNote = "MECH");
-                            filterNotifier.currentBranchNote = "MECH";
+                            if (filterNotifier.currentBranchNote != "MECH") {
+                              filterNotifier.currentBranchNote = "MECH";
+                            } else {
+                              filterNotifier.currentBranchNote = "";
+                            }
                           },
                           child: Container(
                             decoration: BoxDecoration(
-                              color: _branchNote == "MECH"
+                              color: filterNotifier.currentBranchNote == "MECH"
                                   ? sc_InputBackgroundColor
                                   : sc_AppBarTextColor,
                               border: Border.all(
-                                color: _branchNote == "MECH"
-                                    ? sc_PrimaryColor
-                                    : sc_InputBackgroundColor,
+                                color:
+                                    filterNotifier.currentBranchNote == "MECH"
+                                        ? sc_PrimaryColor
+                                        : sc_InputBackgroundColor,
                                 width: 1.0,
                               ),
                               borderRadius: BorderRadius.circular(8.0),
@@ -1544,9 +1629,11 @@ class _ProductCategoryState extends State<ProductCategory> {
                                   style: TextStyle(
                                     fontSize: 16.0,
                                     color: sc_ItemTitleColor,
-                                    fontWeight: _branchNote == "MECH"
-                                        ? FontWeight.w500
-                                        : FontWeight.normal,
+                                    fontWeight:
+                                        filterNotifier.currentBranchNote ==
+                                                "MECH"
+                                            ? FontWeight.w500
+                                            : FontWeight.normal,
                                   ),
                                 ),
                               ],
@@ -1558,18 +1645,22 @@ class _ProductCategoryState extends State<ProductCategory> {
                         flex: 1,
                         child: GestureDetector(
                           onTap: () {
-                            setState(() => _branchNote = "ETRX");
-                            filterNotifier.currentBranchNote = "ETRX";
+                            if (filterNotifier.currentBranchNote != "ETRX") {
+                              filterNotifier.currentBranchNote = "ETRX";
+                            } else {
+                              filterNotifier.currentBranchNote = "";
+                            }
                           },
                           child: Container(
                             decoration: BoxDecoration(
-                              color: _branchNote == "ETRX"
+                              color: filterNotifier.currentBranchNote == "ETRX"
                                   ? sc_InputBackgroundColor
                                   : sc_AppBarTextColor,
                               border: Border.all(
-                                color: _branchNote == "ETRX"
-                                    ? sc_PrimaryColor
-                                    : sc_InputBackgroundColor,
+                                color:
+                                    filterNotifier.currentBranchNote == "ETRX"
+                                        ? sc_PrimaryColor
+                                        : sc_InputBackgroundColor,
                                 width: 1.0,
                               ),
                               borderRadius: BorderRadius.circular(8.0),
@@ -1583,9 +1674,11 @@ class _ProductCategoryState extends State<ProductCategory> {
                                   style: TextStyle(
                                     fontSize: 16.0,
                                     color: sc_ItemTitleColor,
-                                    fontWeight: _branchNote == "ETRX"
-                                        ? FontWeight.w500
-                                        : FontWeight.normal,
+                                    fontWeight:
+                                        filterNotifier.currentBranchNote ==
+                                                "ETRX"
+                                            ? FontWeight.w500
+                                            : FontWeight.normal,
                                   ),
                                 ),
                               ],
@@ -1597,18 +1690,22 @@ class _ProductCategoryState extends State<ProductCategory> {
                         flex: 1,
                         child: GestureDetector(
                           onTap: () {
-                            setState(() => _branchNote = "EXTC");
-                            filterNotifier.currentBranchNote = "EXTC";
+                            if (filterNotifier.currentBranchNote != "EXTC") {
+                              filterNotifier.currentBranchNote = "EXTC";
+                            } else {
+                              filterNotifier.currentBranchNote = "";
+                            }
                           },
                           child: Container(
                             decoration: BoxDecoration(
-                              color: _branchNote == "EXTC"
+                              color: filterNotifier.currentBranchNote == "EXTC"
                                   ? sc_InputBackgroundColor
                                   : sc_AppBarTextColor,
                               border: Border.all(
-                                color: _branchNote == "EXTC"
-                                    ? sc_PrimaryColor
-                                    : sc_InputBackgroundColor,
+                                color:
+                                    filterNotifier.currentBranchNote == "EXTC"
+                                        ? sc_PrimaryColor
+                                        : sc_InputBackgroundColor,
                                 width: 1.0,
                               ),
                               borderRadius: BorderRadius.circular(8.0),
@@ -1622,9 +1719,11 @@ class _ProductCategoryState extends State<ProductCategory> {
                                   style: TextStyle(
                                     fontSize: 16.0,
                                     color: sc_ItemTitleColor,
-                                    fontWeight: _branchNote == "EXTC"
-                                        ? FontWeight.w500
-                                        : FontWeight.normal,
+                                    fontWeight:
+                                        filterNotifier.currentBranchNote ==
+                                                "EXTC"
+                                            ? FontWeight.w500
+                                            : FontWeight.normal,
                                   ),
                                 ),
                               ],
@@ -1667,17 +1766,18 @@ class _ProductCategoryState extends State<ProductCategory> {
             children: <Widget>[
               GestureDetector(
                 onTap: () {
-                  setState(() {
-                    _productCat = "Book";
-                  });
-                  filterNotifier.currentProductCategory = "Book";
+                  if (filterNotifier.currentProductCategory != "Book") {
+                    filterNotifier.currentProductCategory = "Book";
+                  } else {
+                    filterNotifier.currentProductCategory = "";
+                  }
                   filterNotifier.currentTypeOfCloth = "";
                   filterNotifier.currentBranchNote = "";
                   filterNotifier.currentYear = "";
                 },
                 child: Container(
                   decoration: BoxDecoration(
-                    border: _productCat == "Book"
+                    border: filterNotifier.currentProductCategory == "Book"
                         ? Border.all(
                             color: sc_PrimaryColor,
                             width: 5.0,
@@ -1693,10 +1793,11 @@ class _ProductCategoryState extends State<ProductCategory> {
               ),
               GestureDetector(
                 onTap: () {
-                  setState(() {
-                    _productCat = "Cloth";
-                  });
-                  filterNotifier.currentProductCategory = "Clothes";
+                  if (filterNotifier.currentProductCategory != "Clothes") {
+                    filterNotifier.currentProductCategory = "Clothes";
+                  } else {
+                    filterNotifier.currentProductCategory = "";
+                  }
                   filterNotifier.currentBookCategory = "";
                   filterNotifier.currentBranchBook = "";
                   filterNotifier.currentYear = "";
@@ -1704,7 +1805,7 @@ class _ProductCategoryState extends State<ProductCategory> {
                 },
                 child: Container(
                   decoration: BoxDecoration(
-                    border: _productCat == "Cloth"
+                    border: filterNotifier.currentProductCategory == "Clothes"
                         ? Border.all(
                             color: sc_PrimaryColor,
                             width: 5.0,
@@ -1720,17 +1821,18 @@ class _ProductCategoryState extends State<ProductCategory> {
               ),
               GestureDetector(
                 onTap: () {
-                  setState(() {
-                    _productCat = "Note";
-                  });
-                  filterNotifier.currentProductCategory = "Note";
+                  if (filterNotifier.currentProductCategory != "Note") {
+                    filterNotifier.currentProductCategory = "Note";
+                  } else {
+                    filterNotifier.currentProductCategory = "";
+                  }
                   filterNotifier.currentBookCategory = "";
                   filterNotifier.currentBranchBook = "";
                   filterNotifier.currentTypeOfCloth = "";
                 },
                 child: Container(
                   decoration: BoxDecoration(
-                    border: _productCat == "Note"
+                    border: filterNotifier.currentProductCategory == "Note"
                         ? Border.all(
                             color: sc_PrimaryColor,
                             width: 5.0,
@@ -1746,10 +1848,11 @@ class _ProductCategoryState extends State<ProductCategory> {
               ),
               GestureDetector(
                 onTap: () {
-                  setState(() {
-                    _productCat = "Other";
-                  });
-                  filterNotifier.currentProductCategory = "Other";
+                  if (filterNotifier.currentProductCategory != "Other") {
+                    filterNotifier.currentProductCategory = "Other";
+                  } else {
+                    filterNotifier.currentProductCategory = "";
+                  }
                   filterNotifier.currentBookCategory = "";
                   filterNotifier.currentBranchBook = "";
                   filterNotifier.currentTypeOfCloth = "";
@@ -1758,7 +1861,7 @@ class _ProductCategoryState extends State<ProductCategory> {
                 },
                 child: Container(
                   decoration: BoxDecoration(
-                    border: _productCat == "Other"
+                    border: filterNotifier.currentProductCategory == "Other"
                         ? Border.all(
                             color: sc_PrimaryColor,
                             width: 5.0,
@@ -1777,9 +1880,15 @@ class _ProductCategoryState extends State<ProductCategory> {
 
           // different options by diff category
 
-          _productCat == "Book" ? _buildBookOptions(context) : Container(),
-          _productCat == "Cloth" ? _buildClothOptions(context) : Container(),
-          _productCat == "Note" ? _buildNoteOptions(context) : Container(),
+          filterNotifier.currentProductCategory == "Book"
+              ? _buildBookOptions(context)
+              : Container(),
+          filterNotifier.currentProductCategory == "Clothes"
+              ? _buildClothOptions(context)
+              : Container(),
+          filterNotifier.currentProductCategory == "Note"
+              ? _buildNoteOptions(context)
+              : Container(),
         ],
       ),
     );

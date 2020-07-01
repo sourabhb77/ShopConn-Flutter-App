@@ -30,7 +30,7 @@ class _AddProuctScreen_ClothState extends State<AddProuctScreen_Cloth> {
   int _price = 750;
   List<String> _typeslist = ['Boiler Suit', 'Labcoat'];
   String _type;
-  String _condition = "good";
+  String _condition = "Good";
   TextEditingController authorListController = new TextEditingController();
   List<File> imageList = List();
   List<String> tagList = []; // to store tags for searching
@@ -89,10 +89,6 @@ class _AddProuctScreen_ClothState extends State<AddProuctScreen_Cloth> {
     ClothesNotifier clothesNotifier =
         Provider.of<ClothesNotifier>(context, listen: false);
     _currentClothes = Clothes();
-    _currentClothes.size = _size;
-    _currentClothes.description = _description;
-    _currentClothes.price = _price;
-    _currentClothes.condition = _condition;
   }
 
   @override
@@ -643,9 +639,10 @@ class _AddProuctScreen_ClothState extends State<AddProuctScreen_Cloth> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0)),
               onPressed: () {
+                _currentClothes.name = name;
+                _currentClothes.condition = _condition;
                 _currentClothes.type = _type;
                 tagList.add(_currentClothes.type.toLowerCase());
-                _currentClothes.name = name;
                 addToTagList(_currentClothes.name);
                 _currentClothes.tagList = tagList;
                 if (!_formKey.currentState.validate()) {
