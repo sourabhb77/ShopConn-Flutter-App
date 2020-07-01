@@ -2,7 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shopconn/models/BoardingSlider.dart';
+import 'package:shopconn/notifier/authNotifier.dart';
+import 'package:shopconn/screens/login.dart';
 
 class BoardingScreen extends StatefulWidget {
   @override
@@ -11,14 +14,14 @@ class BoardingScreen extends StatefulWidget {
 
 class _BoardingScreenState extends State<BoardingScreen> {
   List<BoardingSlider> sliderList = List<BoardingSlider>();
-  PageController pageController =PageController(initialPage: 0);
+  PageController pageController = PageController(initialPage: 0);
   int currIndex = 0; //current Index for the Boarding screen Tile
 
   Widget pageIndicator(bool isCurrentPage) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 2.0),
-      height: isCurrentPage ? 12 : 6,
-      width: isCurrentPage ? 12 : 6,
+      height: isCurrentPage ? 10 : 6,
+      width: isCurrentPage ? 10 : 6,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         color: isCurrentPage ? Colors.grey : Colors.grey[300],
@@ -34,6 +37,8 @@ class _BoardingScreenState extends State<BoardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // AuthNotifier authNotifier = Provider.of<AuthNotifier>(context);
+    
     return Scaffold(
       body: PageView.builder(
         controller: pageController,
@@ -51,54 +56,92 @@ class _BoardingScreenState extends State<BoardingScreen> {
       ),
       bottomSheet: currIndex != sliderList.length - 1
           ? Container(
-            height: Platform.isIOS? 70: 60,
-            padding: EdgeInsets.symmetric(horizontal:20),
+              // height: Platform.isIOS? 70: 60,
+              // padding: EdgeInsets.symmetric(horizontal:20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
                   InkWell(
                     onTap: () {
-                      pageController.animateToPage(sliderList.length-1,duration: Duration(milliseconds: 1000),curve: Curves.linear);
+                      pageController.animateToPage(sliderList.length - 1,
+                          duration: Duration(milliseconds: 500),
+                          curve: Curves.linear);
                     },
-                    child: Text("Skip"),
+                    child: Container(
+                      child: Text("Skip"),
+                      height: Platform.isIOS ? 70 : 60,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                    ),
                   ),
                   Row(
                     children: <Widget>[
                       for (int i = 0; i < sliderList.length; ++i)
-                        pageIndicator(currIndex == i),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
+                          child: pageIndicator(currIndex == i),
+                        ),
                     ],
                   ),
                   InkWell(
-                    onTap: () 
-                    {
-                      pageController.animateToPage(currIndex+1, duration: Duration(milliseconds: 1000), curve: Curves.linear);
+                    onTap: () {
+                      pageController.animateToPage(currIndex + 1,
+                          duration: Duration(milliseconds: 500),
+                          curve: Curves.linear);
                     },
-                    child: Text("Next"),
+                    child: Container(
+                        height: Platform.isIOS ? 70 : 60,
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                        child: Text("Next")),
                   ),
                 ],
               ),
             )
           : Container(
+              // height: Platform.isIOS? 70: 60,
+              // padding: EdgeInsets.symmetric(horizontal:20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
                   InkWell(
                     onTap: () => {
-                      setState((){
-                        currIndex++;
+                      setState(() {
+                        // Pop this page to home page login
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Login()),
+                        );
                       })
                     },
-                    child: Text("SignUP"),
+                    child: Container(
+                      child: Text("SignUP"),
+                      height: Platform.isIOS ? 70 : 60,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                    ),
                   ),
                   Row(
                     children: <Widget>[
                       for (int i = 0; i < sliderList.length; ++i)
-                        pageIndicator(currIndex == i),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
+                          child: pageIndicator(currIndex == i),
+                        ),
                     ],
                   ),
                   InkWell(
-                    onTap: () => {},
-                    child: Text("LogIN"),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Login()),
+                      );
+                    },
+                    child: Container(
+                        height: Platform.isIOS ? 70 : 60,
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                        child: Text("LogIN")),
                   ),
                 ],
               ),
@@ -108,7 +151,7 @@ class _BoardingScreenState extends State<BoardingScreen> {
 }
 
 class SliderTile extends StatelessWidget {
-  String imagePath, title, description;
+  final String imagePath, title, description;
   SliderTile({this.imagePath, this.title, this.description});
   @override
   Widget build(BuildContext context) {
