@@ -8,6 +8,7 @@ import 'package:shopconn/notifier/authNotifier.dart';
 import 'package:shopconn/screens/AddProductScreen.dart';
 import 'package:shopconn/screens/OnlyCategoryProductScreen.dart';
 import 'package:shopconn/screens/SavedProductScreen.dart';
+import 'package:shopconn/screens/login.dart';
 // import 'package:shopconn/screens/chatbox.dart';
 import 'package:shopconn/screens/msg-request.dart';
 import 'package:shopconn/widgets/Item.dart';
@@ -32,17 +33,14 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Text(
           "ShopConn",
           style: TextStyle(
-            fontSize: 20.0,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 2
-          ),
+              fontSize: 20.0, fontWeight: FontWeight.bold, letterSpacing: 2),
         ),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.message),
             tooltip: 'Notification',
             onPressed: () {
-               Navigator.push(
+              Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => ChatBox()),
               );
@@ -62,30 +60,26 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: CustomScrollView(
         slivers: <Widget>[
-
-        
           SliverToBoxAdapter(
-            
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Container(
-                  padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 20.0),
-                  color: sc_PrimaryColor,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-
-                    children:  <Widget>[
-                      RichText(
-                        text: TextSpan(
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 16,
-                              letterSpacing: 1.0,
-                            ),
-                            children: <TextSpan>[
+                    padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 20.0),
+                    color: sc_PrimaryColor,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        RichText(
+                            text: TextSpan(
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                  letterSpacing: 1.0,
+                                ),
+                                children: <TextSpan>[
                               TextSpan(text: "Find Your\n"),
                               TextSpan(
                                   text: "Product",
@@ -95,58 +89,59 @@ class _HomeScreenState extends State<HomeScreen> {
                                     fontSize: 24.0,
                                   )),
                               TextSpan(text: "  Here"),
-                            ]
-                        )
-                      ),
-                      SizedBox(height: 15.0,),
-                      GestureDetector(
-                        onTap: (){ 
-                          print("going to search screen");
-                          showSearch(context: context, delegate: SearchProduct());
-                        },
-                        child: Container(
-                          height: 45.0,
-                          decoration: BoxDecoration(
-                            color: sc_AppBarTextColor,
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          child: Row(
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                                child: Icon(
-                                  Icons.search,
-                                  size: 30.0,
-                                ),
-                              ),
-                              Text(
-                                "Search Here .....",
-                                style: TextStyle(
-                                  fontSize: 16.0,
-                                  
-                                ),
-                              )
-                            ],
-                          ),
+                            ])),
+                        SizedBox(
+                          height: 15.0,
                         ),
-                      )
-                    ],
-                  )
-                ),
+                        GestureDetector(
+                          onTap: () {
+                            print("going to search screen");
+                            showSearch(
+                                context: context, delegate: SearchProduct());
+                          },
+                          child: Container(
+                            height: 45.0,
+                            decoration: BoxDecoration(
+                              color: sc_AppBarTextColor,
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            child: Row(
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10.0),
+                                  child: Icon(
+                                    Icons.search,
+                                    size: 30.0,
+                                  ),
+                                ),
+                                Text(
+                                  "Search Here .....",
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
+                    )),
 
                 //for testing purpose
                 GestureDetector(
-                  onTap: () => signout(authNotifier),
+                  onTap: () {
+                    signout(authNotifier);
+                    Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(builder: (context) => Login()));
+                  },
                   child: Text(
                     "Sign Out",
-                    style: TextStyle(
-                      fontSize: 30.0
-                    ),
+                    style: TextStyle(fontSize: 30.0),
                   ),
                 ),
 
                 //end testing purpose
-
 
                 Padding(
                   padding: EdgeInsets.fromLTRB(15.0, 15, 15.0, 7.0),
@@ -169,7 +164,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => OnlyCategoryProductScreen(category: "Book")),
+                            MaterialPageRoute(
+                                builder: (context) => OnlyCategoryProductScreen(
+                                    category: "Book")),
                           );
                         },
                         child: Image.asset(
@@ -181,7 +178,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => OnlyCategoryProductScreen(category: "Clothes")),
+                            MaterialPageRoute(
+                                builder: (context) => OnlyCategoryProductScreen(
+                                    category: "Clothes")),
                           );
                         },
                         child: Image.asset(
@@ -193,7 +192,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => OnlyCategoryProductScreen(category: "Note")),
+                            MaterialPageRoute(
+                                builder: (context) => OnlyCategoryProductScreen(
+                                    category: "Note")),
                           );
                         },
                         child: Image.asset(
@@ -205,7 +206,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => OnlyCategoryProductScreen(category: "Other")),
+                            MaterialPageRoute(
+                                builder: (context) => OnlyCategoryProductScreen(
+                                    category: "Other")),
                           );
                         },
                         child: Image.asset(
@@ -220,7 +223,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 10.0),
                   child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text(
                         "Newly Added",
@@ -245,60 +248,50 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ],
             ),
-            
           ),
-          
-              StreamBuilder(
-                  stream: Firestore.instance.collection("post").orderBy('postedAt', descending: true)
-                          .limit(5)
-                          .snapshots(),
-                   builder: (context, snapshot){
-                      if(!snapshot.hasData)
-                      {
-                        print("NO DATA***********************");
-                        return SliverToBoxAdapter( child: 
-                        Center(child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.red),)
-                        ));
-                        // ));
-                      }
-                      else
-                      {
+          StreamBuilder(
+              stream: Firestore.instance
+                  .collection("post")
+                  .orderBy('postedAt', descending: true)
+                  .limit(5)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  print("NO DATA***********************");
+                  return SliverToBoxAdapter(
+                      child: Center(
+                          child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
+                  )));
+                  // ));
+                } else {
+                  return SliverList(
+                    delegate: SliverChildBuilderDelegate((context, index) {
+                      print(
+                          "Posted At: ${snapshot.data.documents[index]["postedAt"]}");
 
-                        return SliverList(
-                          delegate: SliverChildBuilderDelegate((context,index)
-                          
-                          {
-                            print("Posted At: ${snapshot.data.documents[index]["postedAt"]}");
-
-                            return Padding(
-                              padding: const EdgeInsets.all(5.0),
-                              child: ProductItem(data: snapshot.data.documents[index],),
-                            );
-                          },
-
-                          childCount: snapshot.data.documents.length),
-                        );
-
-                      
-                    }}
-             )
+                      return Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: ProductItem(
+                          data: snapshot.data.documents[index],
+                        ),
+                      );
+                    }, childCount: snapshot.data.documents.length),
+                  );
+                }
+              })
         ],
-                  
-                 
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => AddProuctScreen()),
-          );
-          print("go to add product screen");
-        },
-        child: Icon(Icons.add),
-        backgroundColor: sc_PrimaryColor
-      ),
-
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AddProuctScreen()),
+            );
+            print("go to add product screen");
+          },
+          child: Icon(Icons.add),
+          backgroundColor: sc_PrimaryColor),
       drawer: NavDrawer(),
     );
   }

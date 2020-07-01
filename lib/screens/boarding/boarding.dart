@@ -38,7 +38,7 @@ class _BoardingScreenState extends State<BoardingScreen> {
   @override
   Widget build(BuildContext context) {
     // AuthNotifier authNotifier = Provider.of<AuthNotifier>(context);
-    
+
     return Scaffold(
       body: PageView.builder(
         controller: pageController,
@@ -108,7 +108,7 @@ class _BoardingScreenState extends State<BoardingScreen> {
                     onTap: () => {
                       setState(() {
                         // Pop this page to home page login
-                        Navigator.push(
+                        Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (context) => Login()),
                         );
@@ -132,7 +132,7 @@ class _BoardingScreenState extends State<BoardingScreen> {
                   ),
                   InkWell(
                     onTap: () {
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(builder: (context) => Login()),
                       );

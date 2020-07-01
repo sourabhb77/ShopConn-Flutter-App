@@ -2,6 +2,7 @@ import 'dart:io';
 
 // import 'package:shopconn/model/book.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shopconn/models/SavedProductData.dart';
 import 'package:shopconn/models/clothes.dart';
 import 'package:shopconn/models/note.dart';
@@ -34,7 +35,8 @@ login(User user, AuthNotifier authNotifier) async {
 
 signup(User user, AuthNotifier authNotifier) async {
   AuthResult authResult = await FirebaseAuth.instance
-      .createUserWithEmailAndPassword(email: user.email, password: user.password)
+      .createUserWithEmailAndPassword(
+          email: user.email, password: user.password)
       .catchError((error) => print(error.code));
 
   if (authResult != null) {
@@ -56,23 +58,23 @@ signup(User user, AuthNotifier authNotifier) async {
   }
 }
 
-
 getCurrentUser(AuthNotifier authNotifier) async {
-    final FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    final uid = user.uid;
-    return uid;
+  final FirebaseUser user = await FirebaseAuth.instance.currentUser();
+  final uid = user.uid;
+  return uid;
 }
 
-
-Future<FirebaseUser> getCurrendFirebaseUser() async
-{
+Future<FirebaseUser> getCurrendFirebaseUser() async {
   return await FirebaseAuth.instance.currentUser();
 }
 
 signout(AuthNotifier authNotifier) async {
-  await FirebaseAuth.instance.signOut().catchError((error) => print(error.code));
-
+  await FirebaseAuth.instance
+      .signOut()
+      .catchError((error) => print(error.code));
   authNotifier.setUser(null);
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setBool('logined', false);
 }
 
 initializeCurrentUser(AuthNotifier authNotifier) async {
@@ -84,13 +86,11 @@ initializeCurrentUser(AuthNotifier authNotifier) async {
   }
 }
 
-getProfile(String id) async{
+getProfile(String id) async {
   DocumentReference ref = Firestore.instance.document("users/$id");
-  DocumentSnapshot snapshot= await ref.get();
+  DocumentSnapshot snapshot = await ref.get();
   return snapshot;
-  
 }
-
 
 // getBooks(BookNotifier bookNotifier) async {
 //   QuerySnapshot snapshot = await Firestore.instance.collection('post').getDocuments();
@@ -104,31 +104,25 @@ getProfile(String id) async{
 //   print("Got your products");
 // }
 
-
-
-
-
 // to get all types of products
 Future<void> getProducts(ProductNotifier productNotifier) async {
-  QuerySnapshot snapshot = await Firestore.instance.collection('post').getDocuments();
+  QuerySnapshot snapshot =
+      await Firestore.instance.collection('post').getDocuments();
 
   List _productList = [];
   snapshot.documents.forEach((document) {
     print(document.data["productCategory"]);
 
-    if(document.data["productCategory"]=="Book"){
+    if (document.data["productCategory"] == "Book") {
       Book book = Book.fromMap(document.data);
       _productList.add(book);
-    }
-    else if(document.data["productCategory"]=="Clothes"){
+    } else if (document.data["productCategory"] == "Clothes") {
       Clothes cloth = Clothes.fromMap(document.data);
       _productList.add(cloth);
-    }
-    else if(document.data["productCategory"]=="Note"){
+    } else if (document.data["productCategory"] == "Note") {
       Note note = Note.fromMap(document.data);
       _productList.add(note);
-    }
-    else if(document.data["productCategory"]=="Other"){
+    } else if (document.data["productCategory"] == "Other") {
       Other other = Other.fromMap(document.data);
       _productList.add(other);
     }
@@ -137,29 +131,27 @@ Future<void> getProducts(ProductNotifier productNotifier) async {
   print("Got your products");
 }
 
-
 //API To Upload User Profile to Database
 
-Future<String> UploadProfileImage(String user,File image) async {
-    StorageReference storageReference =        FirebaseStorage.instance.ref().child("users/$user");
-    StorageUploadTask task = storageReference.putFile(image);
-    final StorageTaskSnapshot downloadUrl = (await task.onComplete);
-    final String url = (await downloadUrl.ref.getDownloadURL());
-    print("URL: $url");
-    return url;
-  }
+Future<String> UploadProfileImage(String user, File image) async {
+  StorageReference storageReference =
+      FirebaseStorage.instance.ref().child("users/$user");
+  StorageUploadTask task = storageReference.putFile(image);
+  final StorageTaskSnapshot downloadUrl = (await task.onComplete);
+  final String url = (await downloadUrl.ref.getDownloadURL());
+  print("URL: $url");
+  return url;
+}
 
+void UpdateProfile(String name, String mobile, File image) async {
+  FirebaseUser user = await FirebaseAuth.instance.currentUser();
+  String url = await UploadProfileImage(user.uid, image);
+  DocumentReference ref = Firestore.instance.document("users/${user.uid}");
 
- void UpdateProfile(String name,String mobile,File image) async
- {
-   FirebaseUser user = await FirebaseAuth.instance.currentUser();
-   String url= await UploadProfileImage(user.uid, image);
-    DocumentReference ref = Firestore.instance.document("users/${user.uid}");
-
-      ref
-          .setData({"name": name, "mobile": mobile, "imageUrl": url,"newUser":false},
-              merge: true)
-          .then((value) => print("Success"))
-          .catchError((error) => {print(error)});
-    }
-
+  ref
+      .setData(
+          {"name": name, "mobile": mobile, "imageUrl": url, "newUser": false},
+          merge: true)
+      .then((value) => print("Success"))
+      .catchError((error) => {print(error)});
+}
