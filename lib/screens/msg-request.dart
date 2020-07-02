@@ -115,7 +115,10 @@ class _ChatBoxState extends State<ChatBox> {
           elevation: 1.0,
         ),
         body: TabBarView(
-          children: [MessageStream(), RequestStream()],
+          children: [
+            MessageStream(),
+            RequestStream(),
+          ],
         ),
       ),
     );
@@ -164,7 +167,6 @@ class _MessageStreamState extends State<MessageStream> {
         }
         if (snapshot.hasError) return Text("Error");
 
-        
         return ListView.builder(
           itemBuilder: (context, index) {
             return Messagebox(

@@ -153,7 +153,7 @@ class _AddProuctScreenState extends State<AddProuctScreen> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0)),
               onPressed: () {
-                if (name != null) {
+                if (_formkey.currentState.validate()) {
                   if (category == "Book") {
                     Navigator.push(
                       context,
