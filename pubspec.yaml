@@ -42,11 +42,18 @@ dependencies:
   # stream_transform: ^1.2.0
   # async: ^2.4.1
   rxdart: ^0.24.1
+
   
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_native_splash: ^0.1.9
+  
+
+flutter_native_splash:
+  image: assets/images/error.png
+  color: "42a5f5"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
