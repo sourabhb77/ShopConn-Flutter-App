@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shopconn/api/shopconnApi.dart';
 import 'package:shopconn/const/Theme.dart';
 import 'package:shopconn/notifier/authNotifier.dart';
@@ -20,6 +21,11 @@ import 'package:shopconn/screens/SearchProductScreen.dart';
 class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
+}
+
+_clearUser() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setBool('logined', false);
 }
 
 class _HomeScreenState extends State<HomeScreen> {
@@ -134,6 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     signout(authNotifier);
                     Navigator.of(context).pushReplacement(
                         MaterialPageRoute(builder: (context) => Login()));
+                    _clearUser();
                   },
                   child: Text(
                     "Sign Out",

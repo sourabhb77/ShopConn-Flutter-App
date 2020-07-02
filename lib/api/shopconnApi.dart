@@ -1,22 +1,15 @@
 import 'dart:io';
 
-// import 'package:shopconn/model/book.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shopconn/models/SavedProductData.dart';
 import 'package:shopconn/models/clothes.dart';
 import 'package:shopconn/models/note.dart';
 import 'package:shopconn/models/other.dart';
 import 'package:shopconn/models/user.dart';
 import 'package:shopconn/notifier/authNotifier.dart';
-// import 'package:shopconn/notifier/book_notifier.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:firebase_storage/firebase_storage.dart';
-import 'package:path/path.dart' as path;
-import 'package:shopconn/notifier/bookNotifier.dart';
 import 'package:shopconn/notifier/productNotifier.dart';
-// import 'package:uuid/uuid.dart';
 
 login(User user, AuthNotifier authNotifier) async {
   AuthResult authResult = await FirebaseAuth.instance
@@ -73,8 +66,6 @@ signout(AuthNotifier authNotifier) async {
       .signOut()
       .catchError((error) => print(error.code));
   authNotifier.setUser(null);
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.setBool('logined', false);
 }
 
 initializeCurrentUser(AuthNotifier authNotifier) async {

@@ -150,6 +150,7 @@ class _LoginState extends State<Login> {
         onSaved: (String value) {
           _user.email = value.trim();
         },
+        autofocus: true,
       ),
     );
   }

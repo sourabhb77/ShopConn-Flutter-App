@@ -62,7 +62,6 @@ class MyApp extends StatelessWidget {
           textTheme: TextTheme(
             bodyText2: TextStyle(color: sc_BodyTextColor),
           )),
-      //home: ChatBox(),
       home: SplashScreen(),
       // home: Consumer<AuthNotifier>(
       //   builder: (context, notifier, child) {
