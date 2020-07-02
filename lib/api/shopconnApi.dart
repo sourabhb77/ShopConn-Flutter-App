@@ -187,6 +187,7 @@ Future<List<DocumentSnapshot>> getBookmarks() async {
         .where("id", whereIn: documentList)
         .orderBy("postedAt");
     var querySnapshot = await ref2.getDocuments();
+
     return querySnapshot.documents;
   } catch (err) {
     print("Error fetching booksmarks : $err");
@@ -208,6 +209,25 @@ Future<bool> addToBookmarks(String postId) async {
     return true;
   } catch (err) {
     print("Error adding to booksmarks : $err");
+    return false;
+  }
+}
+
+Future<bool> deleteBookMark(dataId) async {
+  FirebaseUser user = await FirebaseAuth.instance.currentUser();
+  try {
+    String id = user.uid;
+    QuerySnapshot ref = await Firestore.instance
+        .collection("users/$id/bookmarks")
+        .where("id", isEqualTo: dataId)
+        .getDocuments();
+        
+    for (var document in ref.documents) {
+      document.reference.delete();
+    }
+    return true;
+  } catch (err) {
+    print("Error removing from bookmarks: $err");
     return false;
   }
 }
