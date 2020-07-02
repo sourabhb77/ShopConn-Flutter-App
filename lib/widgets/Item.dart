@@ -94,20 +94,24 @@ class _ItemState extends State<Item> {
   }
 }
 
-class ProductItem extends StatelessWidget {
-  dynamic data;
-  ProductItem({this.data});
+class DeleteableProductItem extends StatelessWidget {
+  final dynamic data;
+  DeleteableProductItem({this.data});
+
+
   @override
   Widget build(BuildContext context) {
     BookNotifier bookNotifier = Provider.of<BookNotifier>(context);
     ClothesNotifier clothNotifier = Provider.of<ClothesNotifier>(context);
     NoteNotifier noteNotifier = Provider.of<NoteNotifier>(context);
     OtherNotifier otherNotifier = Provider.of<OtherNotifier>(context);
+
     return Dismissible(
       direction: DismissDirection.endToStart,
       background: Container(color: Colors.red,
-      child: Icon(Icons.ac_unit),
-      alignment: Alignment.bottomLeft,),
+      child: Icon(Icons.delete_forever),
+      alignment: Alignment.bottomRight,),
+      
       key: Key(data["id"]),
       onDismissed: (direction) {
         if (direction == DismissDirection.endToStart) {
@@ -237,6 +241,138 @@ class ProductItem extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+
+class ProductItem extends StatelessWidget {
+  final dynamic data;
+  ProductItem({this.data});
+  @override
+  Widget build(BuildContext context) {
+    BookNotifier bookNotifier = Provider.of<BookNotifier>(context);
+    ClothesNotifier clothNotifier = Provider.of<ClothesNotifier>(context);
+    NoteNotifier noteNotifier = Provider.of<NoteNotifier>(context);
+    OtherNotifier otherNotifier = Provider.of<OtherNotifier>(context);
+    return  Container(
+        child: Column(
+          children: [
+            Card(
+              margin: EdgeInsets.all(0.0),
+              elevation: 0.0,
+              child: InkWell(
+                splashColor: Colors.red,
+                onTap: () {
+                  switch (data["productCategory"]) {
+                    case "Book":
+                      Book book = Book.fromMap(data.data);
+                      bookNotifier.currentBook = book;
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ProductDetailScreen_Book()),
+                      );
+                      break;
+                    case "Clothes":
+                      Clothes cloth = Clothes.fromMap(data.data);
+                      clothNotifier.currentClothes = cloth;
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ProductDetailScreen_Cloth()),
+                      );
+                      break;
+                    case "Note":
+                      Note note = Note.fromMap(data.data);
+                      noteNotifier.currentNote = note;
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ProductDetailScreen_Note()),
+                      );
+                      break;
+                    case "Other":
+                      Other other = Other.fromMap(data.data);
+                      otherNotifier.currentOther = other;
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ProductDetailScreen_Other()),
+                      );
+                      break;
+                    default:
+                  }
+                },
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      flex: 2,
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 15.0),
+                        color: Colors.blueGrey,
+                        child: Image.network(
+                          data["imgList"] != null
+                              ? data["imgList"][0]
+                              : 'https://www.testingxperts.com/wp-content/uploads/2019/02/placeholder-img.jpg',
+                          // width: 120,
+                          // fit: BoxFit.fitWidth,
+                          height: 130,
+                          fit: BoxFit.fitHeight,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 4,
+                      child: Container(
+                          padding: EdgeInsets.fromLTRB(0, 10, 15, 10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: <Widget>[
+                              Text(
+                                data["name"] == null
+                                    ? "NULL NAME"
+                                    : data["name"],
+                                style: TextStyle(
+                                  color: sc_ItemTitleColor,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 18.0,
+                                  letterSpacing: 1.0,
+                                ),
+                              ),
+                              Text(
+                                data["description"],
+                                style: TextStyle(
+                                  fontSize: 16.0,
+                                  color: sc_ItemInfoColor,
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 15.0),
+                                child: Text(
+                                  data["price"] != null
+                                      ? "Rs ${data["price"]}"
+                                      : "NULL PRICE",
+                                  style: TextStyle(
+                                    fontSize: 20.0,
+                                    color: sc_PrimaryColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Divider(
+              height: 10.0,
+              color: Colors.white,
+            )
+          ],
+        ),
     );
   }
 }

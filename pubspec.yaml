@@ -54,6 +54,8 @@ dev_dependencies:
 flutter_native_splash:
   image: assets/images/error.png
   color: "42a5f5"
+  fill : false
+  android_disable_fullscreen: true
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

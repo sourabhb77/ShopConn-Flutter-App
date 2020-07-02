@@ -30,7 +30,7 @@ class BookMarksState extends State<BookMarks> {
                 // return Text("data");
                   return Padding(
                               padding: const EdgeInsets.all(5.0),
-                              child: ProductItem(data: snapshot.data[index].data,),
+                              child: DeleteableProductItem(data: snapshot.data[index].data,),
                             );
               },
               itemCount: snapshot.data.length);

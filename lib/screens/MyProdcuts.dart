@@ -38,7 +38,7 @@ class _MyProductsState extends State<MyProducts> {
                 // return Text("data");
                   return Padding(
                               padding: const EdgeInsets.all(5.0),
-                              child: ProductItem(data: snapshot.data.documents[index],),
+                              child: DeleteableProductItem(data: snapshot.data.documents[index],),
                             );
               },
               itemCount: snapshot.data.documents.length);
