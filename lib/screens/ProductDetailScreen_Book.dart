@@ -14,36 +14,32 @@ class ProductDetailScreen_Book extends StatefulWidget {
   const ProductDetailScreen_Book({Key key}) : super(key: key);
 
   @override
-  _ProductDetailScreen_BookState createState() => _ProductDetailScreen_BookState();
+  _ProductDetailScreen_BookState createState() =>
+      _ProductDetailScreen_BookState();
 }
 
 class _ProductDetailScreen_BookState extends State<ProductDetailScreen_Book> {
-
   dynamic _receiver;
   AuthNotifier authNotifier;
-  BookNotifier bookNotifier ;
-  ChatNotifier chatNotifier ;
-  String ownerName ="";
+  BookNotifier bookNotifier;
+  ChatNotifier chatNotifier;
+  String ownerName = "";
 
-  sendRequest() async
-  {
-      await sendNewRequest( 
-        authNotifier.userId,
-        bookNotifier.currentBook.ownerId,
-        bookNotifier.currentBook.id
-      );
+  sendRequest() async {
+    await sendNewRequest(authNotifier.userId, bookNotifier.currentBook.ownerId,
+        bookNotifier.currentBook.id);
   }
 
   @override
-  void initState() { 
+  void initState() {
     Future<FirebaseUser> user = getCurrendFirebaseUser();
     user.then((value) => {
-      print(value.displayName),
-    });
+          print(value.displayName),
+        });
     print("\n**************************\n");
     super.initState();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     bookNotifier = Provider.of<BookNotifier>(context);
@@ -57,82 +53,86 @@ class _ProductDetailScreen_BookState extends State<ProductDetailScreen_Book> {
     // }
     // loadUserDetails();
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: sc_AppBarBackgroundColor,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.search),
-            tooltip: 'Search',
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: Icon(Icons.bookmark),
-            tooltip: 'Saved Product',
-            onPressed: () {},
-          ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-          child: Column(
-            // mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget> [
-              Text(
-                bookNotifier.currentBook.name,
-                style: TextStyle(
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.w500,
-                  color: sc_ItemTitleColor,
+        appBar: AppBar(
+          backgroundColor: sc_AppBarBackgroundColor,
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.search),
+              tooltip: 'Search',
+              onPressed: () {},
+            ),
+            IconButton(
+              icon: Icon(Icons.bookmark),
+              tooltip: 'Saved Product',
+              onPressed: () {},
+            ),
+          ],
+        ),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+            child: Column(
+              // mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  bookNotifier.currentBook.name,
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w500,
+                    color: sc_ItemTitleColor,
+                  ),
                 ),
-              ),
-              SizedBox(height: 15.0,),
-              // Container(
+                SizedBox(
+                  height: 15.0,
+                ),
+                // Container(
 
-              // ),
-              Carousel(),
-              // SizedBox(
-              //   height: 30.0,
-              // ),
-              Text(
-                'Rs ${bookNotifier.currentBook.price}',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold,
-                  color: sc_PrimaryColor,
+                // ),
+                Carousel(),
+                // SizedBox(
+                //   height: 30.0,
+                // ),
+                Text(
+                  'Rs ${bookNotifier.currentBook.price}',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    color: sc_PrimaryColor,
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: 15.0,
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Column(
-                    children: <Widget>[
-                      Text(
-                        'Category',
-                        style: TextStyle(
-                          fontSize: 16.0,
-                          color: sc_ItemTitleColor,
-                          fontWeight: FontWeight.bold,
+                SizedBox(
+                  height: 15.0,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Column(
+                      children: <Widget>[
+                        Text(
+                          'Category',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            color: sc_ItemTitleColor,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 10.0,),
-                      Container(
-                        decoration: new BoxDecoration(
+                        SizedBox(
+                          height: 10.0,
+                        ),
+                        Container(
+                          decoration: new BoxDecoration(
                             color: sc_skyblue,
                             borderRadius: BorderRadius.circular(7),
                           ),
-                        height: 70.0,
-                        width: 70.0,
-                        child: Image.asset('assets/images/CatBooks.png'),
-                      ),
-                    ],
-                  ),
-                  Column(
+                          height: 70.0,
+                          width: 70.0,
+                          child: Image.asset('assets/images/CatBooks.png'),
+                        ),
+                      ],
+                    ),
+                    Column(
                       children: <Widget>[
                         Text(
                           'Author\'s Name',
@@ -142,7 +142,9 @@ class _ProductDetailScreen_BookState extends State<ProductDetailScreen_Book> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(height: 10.0,),
+                        SizedBox(
+                          height: 10.0,
+                        ),
                         Container(
                           decoration: new BoxDecoration(
                             color: sc_skyblue,
@@ -150,7 +152,8 @@ class _ProductDetailScreen_BookState extends State<ProductDetailScreen_Book> {
                           ),
                           padding: EdgeInsets.all(10.0),
                           child: Column(
-                            children: bookNotifier.currentBook.authorList.map((name){
+                            children:
+                                bookNotifier.currentBook.authorList.map((name) {
                               return Text(
                                 '$name',
                                 style: TextStyle(
@@ -162,8 +165,8 @@ class _ProductDetailScreen_BookState extends State<ProductDetailScreen_Book> {
                           ),
                         ),
                       ],
-                  ),
-                  Column(
+                    ),
+                    Column(
                       children: <Widget>[
                         Text(
                           'Edition',
@@ -173,7 +176,9 @@ class _ProductDetailScreen_BookState extends State<ProductDetailScreen_Book> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(height: 10.0,),
+                        SizedBox(
+                          height: 10.0,
+                        ),
                         Container(
                           decoration: new BoxDecoration(
                             color: sc_skyblue,
@@ -191,120 +196,129 @@ class _ProductDetailScreen_BookState extends State<ProductDetailScreen_Book> {
                               ),
                             ),
                           ),
-                        ),                           
+                        ),
                       ],
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 15.0,
-              ),
-              Text(
-                'Description',
-                style: TextStyle(
-                  fontSize: 16.0,
-                  color: sc_ItemTitleColor,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 10.0,),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Container(
-                    padding: EdgeInsets.all(10.0),
-                    color: sc_grey,
-                    child: Text(
-                      bookNotifier.currentBook.description,
-                      style: TextStyle(
-                        color: sc_ItemTitleColor,
-                        fontSize: 16.0,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-
-              SizedBox(
-                height: 15.0,
-              ),
-              Text(
-                'Owner',
-                style: TextStyle(
-                  fontSize: 16.0,
-                  color: sc_ItemTitleColor,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 10.0,),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Container(
-                    padding: EdgeInsets.all(10.0),
-                    color: sc_grey,
-                    child: Text(
-                      bookNotifier.currentBook.ownerId,
-                      style: TextStyle(
-                        color: sc_ItemTitleColor,
-                        fontSize: 16.0,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 15.0,),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    RaisedButton(
-                      color: sc_PrimaryColor,
-                      child: Text(
-                        'Chat Now',
-                        style: TextStyle(
-                        fontSize: 16.0,
-                        ),
-                      ),
-                      onPressed: () {
-                        chatNotifier.setChatUser = bookNotifier.currentBook.ownerId;
-                        print(bookNotifier.currentBook.ownerId);
-                        print("Sending Chat Request NOW ****************");
-
-                        sendRequest();
-                        print("REQUEST SENT ************************");
-
-                      
-                        // Navigator.push(
-                        //   context,
-                        //   // MaterialPageRoute(builder: (context) => ChatPage(receiver: bookNotifier.currentBook.ownerId)),
-                        //   MaterialPageRoute(builder: (context) => ChatPage()),
-                        // );
-                      },
-                    ),
-                    OutlineButton(
-                      color: sc_PrimaryColor,
-                      child: Text(
-                        'Add to WishList',
-                        style: TextStyle(
-                        fontSize: 16.0,
-                        ),
-                      ),
-                      onPressed: () {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(builder: (context) =>AddProuctScreen_Book()),
-                        // );
-                      },
                     ),
                   ],
                 ),
-              ),
-            ],
-      ),
-        ),
-    )
-  );
+                SizedBox(
+                  height: 15.0,
+                ),
+                Text(
+                  'Description',
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    color: sc_ItemTitleColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(
+                  height: 10.0,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(10.0),
+                      color: sc_grey,
+                      child: Text(
+                        bookNotifier.currentBook.description,
+                        style: TextStyle(
+                          color: sc_ItemTitleColor,
+                          fontSize: 16.0,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                SizedBox(
+                  height: 15.0,
+                ),
+                Text(
+                  'Owner',
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    color: sc_ItemTitleColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(
+                  height: 10.0,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(10.0),
+                      color: sc_grey,
+                      child: Text(
+                        bookNotifier.currentBook.ownerId,
+                        style: TextStyle(
+                          color: sc_ItemTitleColor,
+                          fontSize: 16.0,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 15.0,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      RaisedButton(
+                        color: sc_PrimaryColor,
+                        child: Text(
+                          'Chat Now',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                          ),
+                        ),
+                        onPressed: () {
+                          chatNotifier.setChatUser =
+                              bookNotifier.currentBook.ownerId;
+                          print(bookNotifier.currentBook.ownerId);
+                          print("Sending Chat Request NOW ****************");
+
+                          sendRequest();
+                          print("REQUEST SENT ************************");
+
+                          // Navigator.push(
+                          //   context,
+                          //   // MaterialPageRoute(builder: (context) => ChatPage(receiver: bookNotifier.currentBook.ownerId)),
+                          //   MaterialPageRoute(builder: (context) => ChatPage()),
+                          // );
+                        },
+                      ),
+                      OutlineButton(
+                        color: sc_PrimaryColor,
+                        child: Text(
+                          'Add to WishList',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                          ),
+                        ),
+                        onPressed: () {
+                          print("adding book mark");
+                          Future<bool> result =
+                              addToBookmarks(bookNotifier.currentBook.id);
+                          result.then((value) => print("Result: $value"));
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(builder: (context) =>AddProuctScreen_Book()),
+                          // );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ));
   }
 }

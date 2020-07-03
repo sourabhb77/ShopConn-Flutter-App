@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:shopconn/models/SavedProductData.dart';
@@ -10,6 +11,9 @@ import 'package:shopconn/notifier/authNotifier.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shopconn/notifier/productNotifier.dart';
+
+import 'package:shopconn/screens/Bookmarks.dart';
+
 
 login(User user, AuthNotifier authNotifier) async {
   AuthResult authResult = await FirebaseAuth.instance
@@ -74,6 +78,12 @@ initializeCurrentUser(AuthNotifier authNotifier) async {
   if (firebaseUser != null) {
     print(firebaseUser);
     authNotifier.setUser(firebaseUser);
+    var ref =
+        await Firestore.instance.document("users/${firebaseUser.uid}").get();
+
+    authNotifier.name = ref.data["name"];
+    authNotifier.imageUrl = ref.data["imageUrl"];
+    authNotifier.eamil = ref.data["email"];
   }
 }
 
@@ -134,6 +144,7 @@ Future<String> UploadProfileImage(String user, File image) async {
   return url;
 }
 
+
 void UpdateProfile(String name, String mobile, File image) async {
   FirebaseUser user = await FirebaseAuth.instance.currentUser();
   String url = await UploadProfileImage(user.uid, image);
@@ -145,4 +156,74 @@ void UpdateProfile(String name, String mobile, File image) async {
           merge: true)
       .then((value) => print("Success"))
       .catchError((error) => {print(error)});
+}
+
+/**
+ * Api TO get the User bookmarsk
+ */
+
+Future<List<DocumentSnapshot>> getBookmarks() async {
+  FirebaseUser user = await FirebaseAuth.instance.currentUser();
+
+  try {
+    String id = user.uid;
+
+    CollectionReference ref =
+        Firestore.instance.collection("users/$id/bookmarks");
+    var snapshots = await ref.getDocuments();
+
+    List<String> documentList = List();
+
+    for (var data in snapshots.documents) {
+      documentList.add(data.data["id"]);
+    }
+
+    var ref2 = Firestore.instance
+        .collection("post")
+        .where("id", whereIn: documentList)
+        .orderBy("postedAt");
+    var querySnapshot = await ref2.getDocuments();
+
+    return querySnapshot.documents;
+  } catch (err) {
+    print("Error fetching booksmarks : $err");
+    return null;
+  }
+}
+/**
+ * Function to add Product to Bookmarks
+ */
+
+Future<bool> addToBookmarks(String postId) async {
+  FirebaseUser user = await FirebaseAuth.instance.currentUser();
+
+  try {
+    String id = user.uid;
+    CollectionReference ref =
+        Firestore.instance.collection("users/$id/bookmarks");
+    await ref.add({"timeStamp": FieldValue.serverTimestamp(), "id": postId});
+    return true;
+  } catch (err) {
+    print("Error adding to booksmarks : $err");
+    return false;
+  }
+}
+
+Future<bool> deleteBookMark(dataId) async {
+  FirebaseUser user = await FirebaseAuth.instance.currentUser();
+  try {
+    String id = user.uid;
+    QuerySnapshot ref = await Firestore.instance
+        .collection("users/$id/bookmarks")
+        .where("id", isEqualTo: dataId)
+        .getDocuments();
+        
+    for (var document in ref.documents) {
+      document.reference.delete();
+    }
+    return true;
+  } catch (err) {
+    print("Error removing from bookmarks: $err");
+    return false;
+  }
 }
