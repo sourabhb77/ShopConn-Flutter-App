@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:ui';
 
-// import 'package:shopconn/model/book.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:shopconn/models/SavedProductData.dart';
 import 'package:shopconn/models/clothes.dart';
@@ -9,15 +8,12 @@ import 'package:shopconn/models/note.dart';
 import 'package:shopconn/models/other.dart';
 import 'package:shopconn/models/user.dart';
 import 'package:shopconn/notifier/authNotifier.dart';
-// import 'package:shopconn/notifier/book_notifier.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:firebase_storage/firebase_storage.dart';
-import 'package:path/path.dart' as path;
-import 'package:shopconn/notifier/bookNotifier.dart';
 import 'package:shopconn/notifier/productNotifier.dart';
+
 import 'package:shopconn/screens/Bookmarks.dart';
-// import 'package:uuid/uuid.dart';
+
 
 login(User user, AuthNotifier authNotifier) async {
   AuthResult authResult = await FirebaseAuth.instance
@@ -73,7 +69,6 @@ signout(AuthNotifier authNotifier) async {
   await FirebaseAuth.instance
       .signOut()
       .catchError((error) => print(error.code));
-
   authNotifier.setUser(null);
 }
 
@@ -148,6 +143,7 @@ Future<String> UploadProfileImage(String user, File image) async {
   print("URL: $url");
   return url;
 }
+
 
 void UpdateProfile(String name, String mobile, File image) async {
   FirebaseUser user = await FirebaseAuth.instance.currentUser();

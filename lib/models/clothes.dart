@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Clothes{
+class Clothes {
   String id;
   String name;
   String ownerId;
-  String type;//type-boliersuit or labcoat
+  String type; //type-boliersuit or labcoat
   int price;
   // String price;
   int size;
@@ -19,39 +19,38 @@ class Clothes{
 
   Clothes();
 
-  Clothes.fromMap(Map<String,dynamic>data){
-    id=data['id'];
-    name=data['name'];
-    ownerId=data['ownerId'];
-    type=data['type'];
-    price=data['price'];
-    size=data['size'];
-    description=data['description'];
+  Clothes.fromMap(Map<String, dynamic> data) {
+    id = data['id'];
+    name = data['name'];
+    ownerId = data['ownerId'];
+    type = data['type'];
+    price = data['price'];
+    size = data['size'];
+    description = data['description'];
     // imgList=data['imgList'];
     imgList = List.from(data['imgList']);
-    productCategory=data['productCategory'];
-    onSell=data['onSell'];
-    postedAt=data['postedAt'];
-    condition=data['condition'];
+    productCategory = data['productCategory'];
+    onSell = data['onSell'];
+    postedAt = data['postedAt'];
+    condition = data['condition'];
     tagList = List.from(data['tagList']);
   }
 
-  Map<String,dynamic>toMap(){
-    return{
+  Map<String, dynamic> toMap() {
+    return {
       'id': id,
-      'name':name,
+      'name': name,
       'ownerId': ownerId,
-      'type':type,
+      'type': type,
       'price': price,
-      'size':size,
+      'size': size,
       'description': description,
       'imgList': imgList,
       'productCategory': productCategory,
       'onSell': onSell,
       'postedAt': postedAt,
-      'condition':condition,
+      'condition': condition,
+      'tagList': tagList,
     };
-
   }
-
 }

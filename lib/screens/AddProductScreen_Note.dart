@@ -8,7 +8,6 @@ import 'package:shopconn/models/note.dart';
 import '../const/Theme.dart';
 import 'package:image_picker/image_picker.dart';
 
-
 class AddProuctScreen_Note extends StatefulWidget {
   String name;
   AddProuctScreen_Note({Key key, @required this.name}) : super(key: key);
@@ -22,75 +21,66 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
   Note _currentNote;
   String name;
   String _branch = 'IT';
-  String _year = "FY"; 
-  String _condition ="Very Good"; //[very good, good , not bad]
-  List<File> imageList= List(); //To store Path of each Images
+  String _year = "FY";
+  String _condition = "Very Good"; //[very good, good , not bad]
+  List<File> imageList = List(); //To store Path of each Images
   List<String> tagList = []; // to store tags for searching
-  
-  initNote()
-  {
+
+  initNote() {
     print("Initial Constructor");
     Future<FirebaseUser> user = getCurrendFirebaseUser();
     user.then((value) => {
-      _currentNote.ownerId= value.uid,
-      _currentNote.postedAt=Timestamp.now(),
-      _currentNote.productCategory ="Note",
-
-    });
+          _currentNote.ownerId = value.uid,
+          _currentNote.postedAt = Timestamp.now(),
+          _currentNote.productCategory = "Note",
+        });
     print("After firebase user call");
   }
 
-  void _SelectImage() async  //Function to keep track of all the image files that are needed to be uploaded
+  void
+      _SelectImage() async //Function to keep track of all the image files that are needed to be uploaded
   {
-    File image =await ImagePicker.pickImage(
-      source: ImageSource.gallery
-      );
-      setState(() {
-        imageList.add(image);
-      });
-    
+    File image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      imageList.add(image);
+    });
   }
 
-  uploadData() async
-  {
+  uploadData() async {
     print("Upload starting");
-    bool ans =await  uploadProduct(_currentNote, imageList);
+    bool ans = await uploadProduct(_currentNote, imageList);
 
     print("Upload Finisehd");
-    if(ans==true)
-    {
-        print("\n*******Upload Status********\n");
-    print("Success");
-    print("\n***************\n");
-
+    if (ans == true) {
+      print("\n*******Upload Status********\n");
+      print("Success");
+      print("\n***************\n");
+    } else {
+      print("\n*******book screen********\n");
+      print("FAILURE");
+      print("\n***************\n");
     }
-    else
-    {
-        print("\n*******book screen********\n");
-        print("FAILURE");
-    print("\n***************\n");
-    }
-
   }
 
-  addToTagList(String tag){
-    tag= tag.toLowerCase();
+  addToTagList(String tag) {
+    tag = tag.toLowerCase();
     for (var i = 0; i < tag.length; i++) {
-      for (var j = i; j < tag.length ; j++) {
-        tagList.add(tag.substring(i,j+1));
+      for (var j = i; j < tag.length; j++) {
+        tagList.add(tag.substring(i, j + 1));
       }
     }
     print(tagList);
   }
 
-  _AddProuctScreen_NoteState(this.name){
+  _AddProuctScreen_NoteState(this.name) {
     initNote();
   }
   @override
   void initState() {
     super.initState();
     _currentNote = Note();
-    _currentNote.branch = _branch;    
+    _currentNote.branch = _branch;
+    _currentNote.year = _year;
   }
 
   Widget _buildDescriptionField() {
@@ -112,14 +102,13 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
               ),
               Text(
                 "optional",
-                style: TextStyle(
-                  fontSize: 15.0,
-                  color: sc_ItemTitleColor
-                ),
+                style: TextStyle(fontSize: 15.0, color: sc_ItemTitleColor),
               ),
             ],
           ),
-          SizedBox(height: 5.0,),
+          SizedBox(
+            height: 5.0,
+          ),
           TextFormField(
             maxLines: 5,
             decoration: InputDecoration(
@@ -132,10 +121,10 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
                 color: sc_InputHintTextColor,
                 fontSize: 16.0,
               ),
-              enabledBorder: OutlineInputBorder(      
+              enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                borderSide: BorderSide(color: sc_InputBackgroundColor),   
-              ),  
+                borderSide: BorderSide(color: sc_InputBackgroundColor),
+              ),
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: sc_InputBackgroundColor),
                 borderRadius: BorderRadius.all(Radius.circular(8.0)),
@@ -151,14 +140,14 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
                 return 'Description is required';
               }
 
-              if (value.length <5  || value.length > 200) {
+              if (value.length < 5 || value.length > 200) {
                 return 'Description must be betweem 4 and 200 characters';
               }
 
               return null;
             },
             onSaved: (String value) {
-              _currentNote.description =value;
+              _currentNote.description = value;
               print(value);
             },
           ),
@@ -182,7 +171,9 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
               fontWeight: FontWeight.w600,
             ),
           ),
-          SizedBox(height: 5.0,),
+          SizedBox(
+            height: 5.0,
+          ),
           TextFormField(
             decoration: InputDecoration(
               fillColor: sc_InputBackgroundColor,
@@ -205,10 +196,10 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
                 color: sc_InputHintTextColor,
                 fontSize: 16.0,
               ),
-              enabledBorder: OutlineInputBorder(      
+              enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                borderSide: BorderSide(color: sc_InputBackgroundColor),   
-              ),  
+                borderSide: BorderSide(color: sc_InputBackgroundColor),
+              ),
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: sc_InputBackgroundColor),
                 borderRadius: BorderRadius.all(Radius.circular(8.0)),
@@ -225,7 +216,7 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
               }
               try {
                 var pr = int.tryParse(value);
-                if (pr <0  || pr > 30000) {
+                if (pr < 0 || pr > 30000) {
                   return 'Price must be greater equal to 0';
                 }
               } catch (err) {
@@ -235,7 +226,7 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
             },
             onSaved: (String value) {
               var pr = int.tryParse(value);
-              _currentNote.price =pr;
+              _currentNote.price = pr;
               print(pr);
             },
           ),
@@ -243,7 +234,6 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
       ),
     );
   }
-
 
   Widget _buildCondition() {
     return Container(
@@ -259,7 +249,9 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
               fontWeight: FontWeight.w600,
             ),
           ),
-          SizedBox(height: 5.0,),
+          SizedBox(
+            height: 5.0,
+          ),
           Row(
             children: <Widget>[
               Expanded(
@@ -268,13 +260,16 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
                   onTap: () => setState(() => _condition = "Very Good"),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: _condition == "Very Good" ? sc_InputBackgroundColor : sc_AppBarTextColor,
+                      color: _condition == "Very Good"
+                          ? sc_InputBackgroundColor
+                          : sc_AppBarTextColor,
                       border: Border.all(
-                        color: _condition == "Very Good" ? sc_PrimaryColor : sc_InputBackgroundColor,
+                        color: _condition == "Very Good"
+                            ? sc_PrimaryColor
+                            : sc_InputBackgroundColor,
                         width: 1.0,
                       ),
                       borderRadius: BorderRadius.circular(8.0),
-
                     ),
                     padding: EdgeInsets.symmetric(vertical: 13.0),
                     child: Column(
@@ -285,7 +280,9 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
                           style: TextStyle(
                             fontSize: 16.0,
                             color: sc_ItemTitleColor,
-                            fontWeight: _condition == "Very Good" ? FontWeight.w500 : FontWeight.normal,
+                            fontWeight: _condition == "Very Good"
+                                ? FontWeight.w500
+                                : FontWeight.normal,
                           ),
                         ),
                       ],
@@ -300,13 +297,16 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
                   child: Container(
                     // margin: EdgeInsets.symmetric(horizontal: 2.0),
                     decoration: BoxDecoration(
-                      color: _condition == "Good" ? sc_InputBackgroundColor : sc_AppBarTextColor,
+                      color: _condition == "Good"
+                          ? sc_InputBackgroundColor
+                          : sc_AppBarTextColor,
                       border: Border.all(
-                        color: _condition == "Good" ? sc_PrimaryColor : sc_InputBackgroundColor,
+                        color: _condition == "Good"
+                            ? sc_PrimaryColor
+                            : sc_InputBackgroundColor,
                         width: 1.0,
                       ),
                       borderRadius: BorderRadius.circular(8.0),
-
                     ),
                     padding: EdgeInsets.symmetric(vertical: 13.0),
                     child: Column(
@@ -317,7 +317,9 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
                           style: TextStyle(
                             fontSize: 16.0,
                             color: sc_ItemTitleColor,
-                            fontWeight: _condition == "Good" ? FontWeight.w500 : FontWeight.normal,
+                            fontWeight: _condition == "Good"
+                                ? FontWeight.w500
+                                : FontWeight.normal,
                           ),
                         ),
                       ],
@@ -331,13 +333,16 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
                   onTap: () => setState(() => _condition = "Not Bad"),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: _condition == "Not Bad" ? sc_InputBackgroundColor : sc_AppBarTextColor,
+                      color: _condition == "Not Bad"
+                          ? sc_InputBackgroundColor
+                          : sc_AppBarTextColor,
                       border: Border.all(
-                        color: _condition == "Not Bad" ? sc_PrimaryColor : sc_InputBackgroundColor,
+                        color: _condition == "Not Bad"
+                            ? sc_PrimaryColor
+                            : sc_InputBackgroundColor,
                         width: 1.0,
                       ),
                       borderRadius: BorderRadius.circular(8.0),
-
                     ),
                     padding: EdgeInsets.symmetric(vertical: 13.0),
                     child: Column(
@@ -348,7 +353,9 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
                           style: TextStyle(
                             fontSize: 16.0,
                             color: sc_ItemTitleColor,
-                            fontWeight: _condition == "Not Bad" ? FontWeight.w500 : FontWeight.normal,
+                            fontWeight: _condition == "Not Bad"
+                                ? FontWeight.w500
+                                : FontWeight.normal,
                           ),
                         ),
                       ],
@@ -377,7 +384,9 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
               fontWeight: FontWeight.w600,
             ),
           ),
-          SizedBox(height: 5.0,),
+          SizedBox(
+            height: 5.0,
+          ),
           TextFormField(
             decoration: InputDecoration(
               fillColor: sc_InputBackgroundColor,
@@ -389,10 +398,10 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
                 color: sc_InputHintTextColor,
                 fontSize: 16.0,
               ),
-              enabledBorder: OutlineInputBorder(      
+              enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                borderSide: BorderSide(color: sc_InputBackgroundColor),   
-              ),  
+                borderSide: BorderSide(color: sc_InputBackgroundColor),
+              ),
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: sc_InputBackgroundColor),
                 borderRadius: BorderRadius.all(Radius.circular(8.0)),
@@ -408,14 +417,14 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
                 return 'Subject is required';
               }
 
-              if (value.length <2  || value.length > 100) {
+              if (value.length < 2 || value.length > 100) {
                 return 'Subject must be betweem 2 and 100 characters';
               }
 
               return null;
             },
             onSaved: (String value) {
-              _currentNote.subject =value;
+              _currentNote.subject = value;
               addToTagList(_currentNote.subject);
               print(value);
             },
@@ -439,7 +448,9 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
               fontWeight: FontWeight.w600,
             ),
           ),
-          SizedBox(height: 5.0,),
+          SizedBox(
+            height: 5.0,
+          ),
           TextFormField(
             decoration: InputDecoration(
               fillColor: sc_InputBackgroundColor,
@@ -451,10 +462,10 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
                 color: sc_InputHintTextColor,
                 fontSize: 16.0,
               ),
-              enabledBorder: OutlineInputBorder(      
+              enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                borderSide: BorderSide(color: sc_InputBackgroundColor),   
-              ),  
+                borderSide: BorderSide(color: sc_InputBackgroundColor),
+              ),
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: sc_InputBackgroundColor),
                 borderRadius: BorderRadius.all(Radius.circular(8.0)),
@@ -470,14 +481,14 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
                 return 'Faculty Name is required';
               }
 
-              if (value.length <2  || value.length > 100) {
+              if (value.length < 2 || value.length > 100) {
                 return 'Faculty Name must be betweem 2 and 100 characters';
               }
 
               return null;
             },
             onSaved: (String value) {
-              _currentNote.facultyName =value;
+              _currentNote.facultyName = value;
               print(value);
             },
           ),
@@ -499,7 +510,9 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
               fontWeight: FontWeight.w600,
             ),
           ),
-          SizedBox(height: 5.0,),
+          SizedBox(
+            height: 5.0,
+          ),
           Container(
             decoration: BoxDecoration(
               color: sc_InputBackgroundColor,
@@ -508,17 +521,17 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
             padding: EdgeInsets.symmetric(horizontal: 10.0),
             child: DropdownButton<String>(
               value: _branch,
-              // icon: Icon(Icons.arrow_downward),    
+              // icon: Icon(Icons.arrow_downward),
               iconSize: 30,
               // elevation: 16,
               style: TextStyle(color: sc_ItemTitleColor),
               onChanged: (String newValue) {
                 setState(() {
                   _branch = newValue;
-                  _currentNote.branch= _branch;
+                  _currentNote.branch = _branch;
                 });
               },
-              items: <String>['IT', 'CS', 'ETRX', 'EXTC','MECH']
+              items: <String>['IT', 'CS', 'ETRX', 'EXTC', 'MECH']
                   .map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
@@ -532,8 +545,7 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
     );
   }
 
-
-   Widget _buildYearField() {
+  Widget _buildYearField() {
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -546,7 +558,9 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
               fontWeight: FontWeight.w600,
             ),
           ),
-          SizedBox(height: 5.0,),
+          SizedBox(
+            height: 5.0,
+          ),
           Container(
             decoration: BoxDecoration(
               color: sc_InputBackgroundColor,
@@ -555,17 +569,17 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
             padding: EdgeInsets.symmetric(horizontal: 10.0),
             child: DropdownButton<String>(
               value: _year,
-              // icon: Icon(Icons.arrow_downward),    
+              // icon: Icon(Icons.arrow_downward),
               iconSize: 30,
               // elevation: 16,
               style: TextStyle(color: sc_ItemTitleColor),
               onChanged: (String newValue) {
                 setState(() {
                   _year = newValue;
-                  _currentNote.year= newValue;
+                  _currentNote.year = newValue;
                 });
               },
-              items: <String>["FY","SY","TY","LY"]
+              items: <String>["FY", "SY", "TY", "LY"]
                   .map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
@@ -578,8 +592,6 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
       ),
     );
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -602,14 +614,14 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
             OutlineButton(
               padding: EdgeInsets.all(13.0),
               color: sc_InputBackgroundColor,
-              child: Text('Cancel',
+              child: Text(
+                'Cancel',
                 style: TextStyle(
                   fontSize: 18.0,
                 ),
               ),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0)
-              ),
+                  borderRadius: BorderRadius.circular(8.0)),
               onPressed: () {
                 Navigator.pop(context);
               },
@@ -622,13 +634,12 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
                 style: TextStyle(
                   color: sc_AppBarTextColor,
                   fontSize: 18.0,
-                ),                      
+                ),
               ),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0)
-              ),
+                  borderRadius: BorderRadius.circular(8.0)),
               onPressed: () {
-                _currentNote.name=name;
+                _currentNote.name = name;
                 addToTagList(_currentNote.name);
                 tagList.add(_currentNote.year.toLowerCase());
                 tagList.add(_currentNote.branch.toLowerCase());
@@ -636,7 +647,8 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
                 _currentNote.tagList = tagList;
                 if (!_formkey.currentState.validate()) {
                   print("Errororororororo");
-                } else { // No Error upload all the details to the database!!
+                } else {
+                  // No Error upload all the details to the database!!
                   _formkey.currentState.save();
                   uploadData();
                   print(_currentNote.toMap());
@@ -647,17 +659,14 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
                 // );
               },
             ),
-            
           ],
         ),
       ),
-
-
       body: SingleChildScrollView(
         child: Form(
           key: _formkey,
           autovalidate: true,
-            child: Column(
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               // Padding(
@@ -672,11 +681,13 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
               //   ),
               // ),
 
-              SizedBox(height: 15.0,),
+              SizedBox(
+                height: 15.0,
+              ),
 
               _buildSubject(),
               _buildFacultyName(),
-              
+
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
                 child: Row(
@@ -699,7 +710,7 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
 
               GestureDetector(
                 onTap: () {
-                    _SelectImage();
+                  _SelectImage();
                 },
                 child: Container(
                   height: 80.0,
@@ -711,7 +722,8 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
                     ),
                     borderRadius: BorderRadius.circular(8.0),
                   ),
-                  margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                  margin:
+                      EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -732,19 +744,18 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
                 height: 30.0,
               ),
               GridView.count(
-                shrinkWrap: true,
-                scrollDirection: Axis.vertical,
-                padding: EdgeInsets.fromLTRB(15,0,15,0),
-                crossAxisCount: 2,
-                crossAxisSpacing: 10,
-                // mainAxisSpacing: 2,
-                
-                children: List.generate(imageList.length, (index) {
-                  return Container(
-                    child: Image(image:FileImage(imageList[index]))
-                    ,);
-                })
-              ),
+                  shrinkWrap: true,
+                  scrollDirection: Axis.vertical,
+                  padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 10,
+                  // mainAxisSpacing: 2,
+
+                  children: List.generate(imageList.length, (index) {
+                    return Container(
+                      child: Image(image: FileImage(imageList[index])),
+                    );
+                  })),
             ],
           ),
         ),

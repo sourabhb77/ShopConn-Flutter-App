@@ -5,11 +5,13 @@ import 'package:shopconn/const/Theme.dart';
 import 'package:shopconn/notifier/ChatNotifier.dart';
 import 'package:shopconn/notifier/authNotifier.dart';
 import 'package:shopconn/notifier/bookNotifier.dart';
+import 'package:shopconn/notifier/filterNotifier.dart';
 import 'package:shopconn/notifier/noteNotifier.dart';
 import 'package:shopconn/notifier/otherNotifier.dart';
 import 'package:shopconn/notifier/productNotifier.dart';
 import 'package:shopconn/notifier/sortNotifier.dart';
 import 'package:shopconn/screens/HomeScreen.dart';
+import 'package:shopconn/screens/boarding/SplashScreen.dart';
 import 'package:shopconn/screens/boarding/boarding.dart';
 import 'package:shopconn/screens/login.dart';
 import 'notifier/clothesNotifier.dart';
@@ -41,6 +43,9 @@ void main() {
       ChangeNotifierProvider(
         create: (context) => SortNotifier(),
       ),
+      ChangeNotifierProvider(
+        create: (context) => FilterNotifier(),
+      )
     ],
     child: MyApp(),
   ));
@@ -59,18 +64,13 @@ class MyApp extends StatelessWidget {
           textTheme: TextTheme(
             bodyText2: TextStyle(color: sc_BodyTextColor),
           )),
-      //home: ChatBox(),
-      // home: AddProuctScreen(),
-      home: Consumer<AuthNotifier>(
-
-        builder: (context, notifier, child) {
-          // initializeCurrentUser(notifier);
-
-          print("Home ${notifier.user}");
-          return notifier.user != null ? HomeScreen() : Login();
-          // return notifier.user != null ? HomeScreen() : BoardingScreen();
-        },
-      ),
+      home: SplashScreen(),
+      // home: Consumer<AuthNotifier>(
+      //   builder: (context, notifier, child) {
+      //     // return Splash();
+      //     return notifier.user != null ? HomeScreen() : Login();
+      //   },
+      // ),
     );
   }
 }

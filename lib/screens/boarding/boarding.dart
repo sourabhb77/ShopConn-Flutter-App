@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shopconn/const/Theme.dart';
 import 'package:shopconn/models/BoardingSlider.dart';
 import 'package:shopconn/notifier/authNotifier.dart';
 import 'package:shopconn/screens/login.dart';
@@ -24,7 +25,7 @@ class _BoardingScreenState extends State<BoardingScreen> {
       width: isCurrentPage ? 10 : 6,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: isCurrentPage ? Colors.grey : Colors.grey[300],
+        color: isCurrentPage ? Colors.grey[700] : Colors.grey[400],
       ),
     );
   }
@@ -37,8 +38,6 @@ class _BoardingScreenState extends State<BoardingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // AuthNotifier authNotifier = Provider.of<AuthNotifier>(context);
-    
     return Scaffold(
       body: PageView.builder(
         controller: pageController,
@@ -56,8 +55,7 @@ class _BoardingScreenState extends State<BoardingScreen> {
       ),
       bottomSheet: currIndex != sliderList.length - 1
           ? Container(
-              // height: Platform.isIOS? 70: 60,
-              // padding: EdgeInsets.symmetric(horizontal:20),
+              height: 60,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
@@ -68,8 +66,15 @@ class _BoardingScreenState extends State<BoardingScreen> {
                           curve: Curves.linear);
                     },
                     child: Container(
-                      child: Text("Skip"),
-                      height: Platform.isIOS ? 70 : 60,
+                      child: Text(
+                        "SKIP",
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 1.0,
+                        ),
+                      ),
+                      height: 60,
                       padding:
                           EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                     ),
@@ -90,60 +95,52 @@ class _BoardingScreenState extends State<BoardingScreen> {
                           curve: Curves.linear);
                     },
                     child: Container(
-                        height: Platform.isIOS ? 70 : 60,
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                        child: Text("Next")),
+                      // color: sc_PrimaryColor,
+                      height: 60,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                      child: Text(
+                        "NEXT",
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 1.0,
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),
             )
-          : Container(
-              // height: Platform.isIOS? 70: 60,
-              // padding: EdgeInsets.symmetric(horizontal:20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  InkWell(
-                    onTap: () => {
-                      setState(() {
-                        // Pop this page to home page login
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Login()),
-                        );
-                      })
-                    },
-                    child: Container(
-                      child: Text("SignUP"),
-                      height: Platform.isIOS ? 70 : 60,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          : InkWell(
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => Login()),
+                );
+              },
+              child: Container(
+                height: 50,
+                margin: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8.0),
+                  color: sc_PrimaryColor,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      "GET STARTED",
+                      style: TextStyle(
+                        color: sc_AppBarTextColor,
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 1.0,
+                      ),
                     ),
-                  ),
-                  Row(
-                    children: <Widget>[
-                      for (int i = 0; i < sliderList.length; ++i)
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
-                          child: pageIndicator(currIndex == i),
-                        ),
-                    ],
-                  ),
-                  InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Login()),
-                      );
-                    },
-                    child: Container(
-                        height: Platform.isIOS ? 70 : 60,
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                        child: Text("LogIN")),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
     );
@@ -157,17 +154,38 @@ class SliderTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Image.asset(imagePath),
           SizedBox(
-            height: 28,
+            height: 100.0,
           ),
-          Text(description),
+          Container(
+            margin: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 10.0),
+            height: 300.0,
+            child: Image.asset(
+              imagePath,
+              fit: BoxFit.fitHeight,
+            ),
+          ),
+          Text(
+            title,
+            style: TextStyle(
+              color: sc_ItemTitleColor,
+              fontSize: 16.0,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
           SizedBox(
-            height: 12,
+            height: 10.0,
           ),
-          Text(title)
+          Container(
+            margin: EdgeInsets.fromLTRB(60.0, 0.0, 60.0, 0.0),
+            child: Text(
+              description,
+              style: TextStyle(
+                fontSize: 15.0,
+              ),
+            ),
+          ),
         ],
       ),
     );

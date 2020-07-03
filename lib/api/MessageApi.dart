@@ -46,10 +46,10 @@ Future<List<ChatUser>> getNewRequest() async {
 
     list.add(ChatUser.fromMap(user.data));
   }
-   print("***************************");
-    print("list size: ${list.length}");
-    print("userID : $userId ");
-    print("***************************");
+  print("***************************");
+  print("list size: ${list.length}");
+  print("userID : $userId ");
+  print("***************************");
 
   return list;
 }
@@ -76,7 +76,7 @@ Future<bool> makeRoom(String userId) async {
   //Prodcut owner Id = User.uid;
   members.add(user.uid);
   members.add(userId);
-  
+
   DocumentReference ref = Firestore.instance.collection("rooms").document();
   String id = ref.documentID;
 
@@ -120,18 +120,18 @@ loadUser(ChatUser user, ChatMessage msg) async {
 }
 
 // Function that returns the string of groups that we need to listen to
-Future< List< Tuple2<String, String> >>getRooms() async{
-
+Future<List<Tuple2<String, String>>> getRooms() async {
   FirebaseUser user = await FirebaseAuth.instance.currentUser();
   String userId = user.uid;
-  Query ref = Firestore.instance.collection("rooms").where("members",arrayContains: userId);
+  Query ref = Firestore.instance
+      .collection("rooms")
+      .where("members", arrayContains: userId);
   QuerySnapshot snaps = await ref.getDocuments();
 
-  List< Tuple2<String,String> > rooms = List();
+  List<Tuple2<String, String>> rooms = List();
 
-  for(DocumentSnapshot snap  in snaps.documents)
-  {
-    List< String >  userList = List.from(snap.data["members"]);
+  for (DocumentSnapshot snap in snaps.documents) {
+    List<String> userList = List.from(snap.data["members"]);
 
     userList.remove(userId); //removing the current user;
     Map<String, String> mp = HashMap();
@@ -140,7 +140,6 @@ Future< List< Tuple2<String, String> >>getRooms() async{
     rooms.add(Tuple2(snap.data["id"], userList[0]));
 
     print("ROOM ID: ${snap.documentID}");
-
   }
 
   print("Room Obtained from server: size: ${rooms.length}");
@@ -176,66 +175,82 @@ Future< List< Tuple2<String, String> >>getRooms() async{
 
 // }
 
+Stream st(String userId) {
+  print("UserID: Stream $userId");
 
- Stream st(String userId)
-  {
-    print("UserID: Stream $userId");
+  var q1 = Firestore.instance
+      .collectionGroup("chats")
+      .where("receiver", isEqualTo: userId)
+      .orderBy("timeStamp")
+      .limit(1)
+      .snapshots();
+  Stream<QuerySnapshot> q2 = Firestore.instance
+      .collectionGroup("chats")
+      .where("sender", isEqualTo: userId)
+      .orderBy("timeStamp")
+      .limit(1)
+      .snapshots();
 
-    var q1 = Firestore.instance.collectionGroup("chats").where("receiver", isEqualTo: userId).orderBy("timeStamp").limit(1).snapshots();
-  Stream<QuerySnapshot> q2 = Firestore.instance.collectionGroup("chats").where("sender",isEqualTo: userId).orderBy("timeStamp").limit(1).snapshots();
-  
-    // return StreamZip([q1, q1]);
-    return StreamGroup.merge([q1,q2]).asBroadcastStream();
-    // return q2;
+  // return StreamZip([q1, q1]);
+  return StreamGroup.merge([q1, q2]).asBroadcastStream();
+  // return q2;
+}
 
-  }
+Stream loadDetails() async* {
+  FirebaseUser user = await FirebaseAuth.instance.currentUser();
+  String userId = user.uid;
 
+  var q1 = Firestore.instance
+      .collectionGroup("chats")
+      .where("sender", isEqualTo: userId)
+      .orderBy("timeStamp", descending: true)
+      .snapshots();
+  var q2 = Firestore.instance
+      .collectionGroup("chats")
+      .where("receiver", isEqualTo: userId)
+      .orderBy("timeStamp", descending: true)
+      .snapshots();
+  var q = await Firestore.instance
+      .collectionGroup("chats")
+      .where("sender", isEqualTo: userId)
+      .orderBy("timeStamp", descending: true)
+      .limit(1)
+      .getDocuments();
+  print("Query data: ${q.documents[0].data}");
 
-    Stream loadDetails() async*
-    {
-      FirebaseUser user = await FirebaseAuth.instance.currentUser();
-      String userId = user.uid;
+  // q1.listen((event) {updateUI(event)});
+  // q1.listen((event) {controller.sink.add(event.documents[0]);});
+  // yield* StreamGroup.merge([q1,q2]).asBroadcastStream();
+  // yield* Rx.zip2(q1, q2, (a, b) => a!=b );
+  StreamController<QuerySnapshot> controller =
+      StreamController<QuerySnapshot>.broadcast();
 
-      var q1 = Firestore.instance.collectionGroup("chats").where("sender", isEqualTo: userId).orderBy("timeStamp",descending: true).snapshots();
-      var q2 = Firestore.instance.collectionGroup("chats").where("receiver",isEqualTo: userId).orderBy("timeStamp",descending: true).snapshots();
-      var q = await Firestore.instance.collectionGroup("chats").where("sender", isEqualTo: userId).orderBy("timeStamp",descending: true).limit(1).getDocuments();
-      print("Query data: ${q.documents[0].data}");
+  // controller.addStream(q1);
+  // controller.addStream(q2);
 
-      // q1.listen((event) {updateUI(event)});
-      // q1.listen((event) {controller.sink.add(event.documents[0]);});
-      // yield* StreamGroup.merge([q1,q2]).asBroadcastStream();
-      // yield* Rx.zip2(q1, q2, (a, b) => a!=b );
-      StreamController<QuerySnapshot> controller = StreamController<QuerySnapshot>.broadcast();
+  var newStream =
+      Rx.combineLatest2(q1, q2, (a, b) => Stream.fromIterable([a, b]));
+  // controller.addStream(newStream);
 
-          // controller.addStream(q1);
-          // controller.addStream(q2);
+  var t = Rx.merge([q1, q2]);
+  t.listen((events) {
+    for (var event in events.documents) {
+      // print("Event Data : ${event.data}");
 
-          
-
-          var newStream = Rx.combineLatest2(q1, q2, (a, b) => Stream.fromIterable([a,b]));
-          // controller.addStream(newStream);
-          
-
-
-
-      var t = Rx.merge([q1,q2]);
-      t.listen((events) {
-        for(var event in events.documents)
-        {
-          // print("Event Data : ${event.data}");
-          
-        }
-      });
-      yield* newStream; 
     }
+  });
+  yield* newStream;
+}
 
-getChatsDetails() async*
-{
-  
-  FirebaseUser user  = await FirebaseAuth.instance.currentUser();
+getChatsDetails() async* {
+  FirebaseUser user = await FirebaseAuth.instance.currentUser();
 
   String userId = user.uid;
-  var ref = Firestore.instance.collectionGroup("rooms").where("members",arrayContainsAny: [userId]).orderBy("timeStamp").snapshots();
-  
+  var ref = Firestore.instance
+      .collectionGroup("rooms")
+      .where("members", arrayContainsAny: [userId])
+      .orderBy("timeStamp")
+      .snapshots();
+
   var rooms = getRooms();
 }

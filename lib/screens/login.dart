@@ -1,11 +1,12 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shopconn/api/shopconnApi.dart';
 import 'package:shopconn/const/Theme.dart';
 import 'package:shopconn/models/user.dart';
 import 'package:shopconn/notifier/authNotifier.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shopconn/screens/HomeScreen.dart';
 
 enum AuthMode { Signup, Login }
 
@@ -25,38 +26,36 @@ class _LoginState extends State<Login> {
 
   @override
   void initState() {
-    AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
+    AuthNotifier authNotifier =
+        Provider.of<AuthNotifier>(context, listen: false);
     initializeCurrentUser(authNotifier);
     Future<FirebaseUser> user = FirebaseAuth.instance.currentUser();
-    user.then((FirebaseUser _user){
-      if(_user==null)
-      {
+    user.then((FirebaseUser _user) {
+      if (_user == null) {
         print("User is null");
-        
-      }
-      else
-      {
+      } else {
         print("User is not null , uid: ${_user.uid} email: ${_user.email}");
       }
-
-
     });
-
 
     super.initState();
   }
 
-  void _submitForm() {
+  void _submitForm() async {
     if (!_formKey.currentState.validate()) {
       return;
     }
 
     _formKey.currentState.save();
 
-    AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
-
+    AuthNotifier authNotifier =
+        Provider.of<AuthNotifier>(context, listen: false);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     if (_authMode == AuthMode.Login) {
       login(_user, authNotifier);
+      Navigator.of(context).pushReplacement(
+          new MaterialPageRoute(builder: (context) => HomeScreen()));
+      await prefs.setBool('logined', true);
     } else {
       signup(_user, authNotifier);
     }
@@ -78,9 +77,9 @@ class _LoginState extends State<Login> {
             color: sc_InputHintTextColor,
             fontSize: 16.0,
           ),
-          enabledBorder: UnderlineInputBorder(      
-            borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),   
-          ),  
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
+          ),
           focusedBorder: UnderlineInputBorder(
             borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
           ),
@@ -101,11 +100,9 @@ class _LoginState extends State<Login> {
           return null;
         },
         onSaved: (String value) {
-          
           _user.displayName = value.trim();
           print(value);
         },
-
       ),
     );
   }
@@ -126,9 +123,9 @@ class _LoginState extends State<Login> {
             color: sc_InputHintTextColor,
             fontSize: 16.0,
           ),
-          enabledBorder: UnderlineInputBorder(      
-            borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),   
-          ),  
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
+          ),
           focusedBorder: UnderlineInputBorder(
             borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
           ),
@@ -153,7 +150,7 @@ class _LoginState extends State<Login> {
         onSaved: (String value) {
           _user.email = value.trim();
         },
-
+        autofocus: true,
       ),
     );
   }
@@ -174,9 +171,9 @@ class _LoginState extends State<Login> {
             color: sc_InputHintTextColor,
             fontSize: 16.0,
           ),
-          enabledBorder: UnderlineInputBorder(      
-            borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),   
-          ),  
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
+          ),
           focusedBorder: UnderlineInputBorder(
             borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
           ),
@@ -220,9 +217,9 @@ class _LoginState extends State<Login> {
             color: sc_InputHintTextColor,
             fontSize: 16.0,
           ),
-          enabledBorder: UnderlineInputBorder(      
-            borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),   
-          ),  
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
+          ),
           focusedBorder: UnderlineInputBorder(
             borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
           ),
@@ -248,14 +245,15 @@ class _LoginState extends State<Login> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white, 
-        title: Text(
-          _authMode == AuthMode.Login ? 'Login' : 'Register',
-          style: TextStyle(
-            color:Colors.black
-          )
+        backgroundColor: Colors.white,
+        title: Text(_authMode == AuthMode.Login ? 'Login' : 'Register',
+            style: TextStyle(color: Colors.black)),
+        leading: Icon(
+          IconData(58135,
+              fontFamily: 'MaterialIcons', matchTextDirection: true),
+          color: Colors.black,
+          size: 30.0,
         ),
-        leading: Icon(IconData(58135, fontFamily: 'MaterialIcons', matchTextDirection: true),color:Colors.black,size:30.0,),
         elevation: 0.5,
       ),
       body: Container(
@@ -263,7 +261,7 @@ class _LoginState extends State<Login> {
         //   height: MediaQuery.of(context).size.height,
         // ),
         padding: EdgeInsets.symmetric(horizontal: 20.0),
-        decoration: BoxDecoration(color: sc_AppBarTextColor ),
+        decoration: BoxDecoration(color: sc_AppBarTextColor),
         child: Form(
           autovalidate: true,
           key: _formKey,
@@ -271,27 +269,30 @@ class _LoginState extends State<Login> {
             child: Column(
               children: <Widget>[
                 SizedBox(height: 30),
-                _authMode == AuthMode.Signup ? _buildDisplayNameField() : Container(),
+                _authMode == AuthMode.Signup
+                    ? _buildDisplayNameField()
+                    : Container(),
                 _buildEmailField(),
                 _buildPasswordField(),
-                _authMode == AuthMode.Signup ? _buildConfirmPasswordField() : Container(),
+                _authMode == AuthMode.Signup
+                    ? _buildConfirmPasswordField()
+                    : Container(),
                 SizedBox(height: 20),
                 ButtonTheme(
                   minWidth: 260,
-                
                   child: RaisedButton(
                     color: sc_PrimaryColor,
                     padding: EdgeInsets.all(10.0),
-                    onPressed: () => 
-                    
-                    _submitForm(),
+                    onPressed: () => _submitForm(),
                     child: Text(
                       _authMode == AuthMode.Login ? 'Login' : 'Signup',
                       style: TextStyle(fontSize: 20, color: sc_AppBarTextColor),
                     ),
                   ),
                 ),
-                SizedBox(height: 15.0,),
+                SizedBox(
+                  height: 15.0,
+                ),
                 Text(
                   'or',
                   style: TextStyle(
@@ -299,7 +300,9 @@ class _LoginState extends State<Login> {
                     fontSize: 18.0,
                   ),
                 ),
-                SizedBox(height: 15.0,),
+                SizedBox(
+                  height: 15.0,
+                ),
                 ButtonTheme(
                   minWidth: 260,
                   child: RaisedButton(
@@ -307,35 +310,39 @@ class _LoginState extends State<Login> {
                     padding: EdgeInsets.all(10.0),
                     onPressed: () {},
                     child: Text(
-                      _authMode == AuthMode.Login ? 'Login with Google' : 'Signup with Google',
+                      _authMode == AuthMode.Login
+                          ? 'Login with Google'
+                          : 'Signup with Google',
                       style: TextStyle(fontSize: 18, color: sc_ItemTitleColor),
                     ),
                   ),
                 ),
-
-                
-                SizedBox(height: 40.0,),
+                SizedBox(
+                  height: 40.0,
+                ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(15, 0, 10, 15),
                   child: Row(
                     children: <Widget>[
                       Text(
                         '${_authMode == AuthMode.Login ? 'Don\'t Have Account? ' : 'Have Account? '}',
-                        style: TextStyle(fontSize: 16.0, color: sc_ItemTitleColor ),
+                        style:
+                            TextStyle(fontSize: 16.0, color: sc_ItemTitleColor),
                       ),
                       GestureDetector(
                         child: Text(
                           '${_authMode == AuthMode.Login ? 'Register' : 'Login'} with Google',
-                          style: TextStyle(fontSize: 16.0, color: sc_PrimaryColor ),
+                          style:
+                              TextStyle(fontSize: 16.0, color: sc_PrimaryColor),
                         ),
                         onTap: () {
-                        setState(() {
-                          _authMode =
-                              _authMode == AuthMode.Login ? AuthMode.Signup : AuthMode.Login;
-                        });
-                      },
+                          setState(() {
+                            _authMode = _authMode == AuthMode.Login
+                                ? AuthMode.Signup
+                                : AuthMode.Login;
+                          });
+                        },
                       )
-                      
                     ],
                   ),
                 )
