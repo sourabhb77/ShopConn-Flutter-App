@@ -35,6 +35,7 @@ class Chat extends State<ChatPage> with TickerProviderStateMixin {
     DocumentReference ref = Firestore.instance
         .collection("rooms/${_currentRoom.id}/chats")
         .document();
+
     ChatMessage message = ChatMessage();
     message.id = ref.documentID;
     message.message = msg;
@@ -91,6 +92,7 @@ class Chat extends State<ChatPage> with TickerProviderStateMixin {
                     fit: BoxFit.fill,
                   ),
                 )),
+                
             Container(
               padding: EdgeInsets.symmetric(horizontal: 10.0),
               child: Text(_user.name != null ? _user.name : ""),
