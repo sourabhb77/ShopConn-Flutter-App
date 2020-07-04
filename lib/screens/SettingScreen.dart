@@ -120,7 +120,7 @@ class _SettingScreenState extends State<SettingScreen> {
                         MaterialPageRoute(builder: (context) => Profile()),
                       );
                     },
-                    splashRadius: 30.0,
+                    // splashRadius: 30.0,
                     padding: EdgeInsets.all(0),
                     splashColor: sc_PrimaryColor,
                   ),

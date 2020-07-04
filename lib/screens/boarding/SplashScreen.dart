@@ -18,6 +18,10 @@ class SplashScreen extends StatefulWidget {
 class SplashScreenState extends State<SplashScreen>
     with AfterLayoutMixin<SplashScreen> {
   Future checkFirstSeen() async {
+
+      AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
+    initializeCurrentUser(authNotifier);
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool _seen = (prefs.getBool('seen') ?? false);
     bool _logined = (prefs.getBool('logined') ?? false);

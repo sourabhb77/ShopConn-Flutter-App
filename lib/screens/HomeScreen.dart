@@ -190,6 +190,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     category: "Clothes")),
                           );
                         },
+                        
                         child: Image.asset(
                           'assets/images/CatClothes.png',
                           height: 80.0,

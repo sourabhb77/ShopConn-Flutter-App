@@ -126,6 +126,7 @@ class SearchProduct extends SearchDelegate<dynamic> {
     Stream<QuerySnapshot> productStream =
         postRef.where('tagList', arrayContainsAny: inputTagList).snapshots();
 
+
     return WillPopScope(
       onWillPop: () async {
         Navigator.pop(context);
