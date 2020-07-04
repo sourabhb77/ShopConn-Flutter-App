@@ -18,6 +18,7 @@ class _MyProductsState extends State<MyProducts> {
     AuthNotifier _authNotifier = Provider.of<AuthNotifier>(context);
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: sc_PrimaryColor,
         title: Text(
           "My Products",
           style: TextStyle(color: sc_AppBarTextColor),
@@ -26,7 +27,8 @@ class _MyProductsState extends State<MyProducts> {
       body: StreamBuilder(
         stream: Firestore.instance
             .collection("post")
-            .where("ownerId", isEqualTo: _authNotifier.userId).orderBy("postedAt",descending: true)
+            .where("ownerId", isEqualTo: _authNotifier.userId)
+            .orderBy("postedAt", descending: true)
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) return Text("error");
@@ -36,10 +38,12 @@ class _MyProductsState extends State<MyProducts> {
           return ListView.builder(
               itemBuilder: (context, index) {
                 // return Text("data");
-                  return Padding(
-                              padding: const EdgeInsets.all(5.0),
-                              child: DeleteableProductItem(data: snapshot.data.documents[index],),
-                            );
+                return Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: DeleteableProductItem(
+                    data: snapshot.data.documents[index],
+                  ),
+                );
               },
               itemCount: snapshot.data.documents.length);
         },

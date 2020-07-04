@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -6,19 +5,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
 import 'package:shopconn/api/shopconnApi.dart';
 import 'package:shopconn/const/Theme.dart';
 import 'package:shopconn/notifier/authNotifier.dart';
-import 'package:shopconn/widgets/ImagePicker/ImageCapture.dart';
-import 'package:flutter/material.dart';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
-enum ProfilePicState {Default, DB, PICK}
+enum ProfilePicState { Default, DB, PICK }
+
 class Profile extends StatefulWidget {
   @override
   _ProfileState createState() => _ProfileState();
@@ -28,15 +24,15 @@ class _ProfileState extends State<Profile> {
   File image;
   ProfilePicState state = ProfilePicState.Default;
   bool selected = false;
-  String name, imageUrl,mobile,email;
+  String name, imageUrl, mobile, email;
   StorageReference storageReference;
   TextEditingController nameController = TextEditingController(),
       mobileController = TextEditingController(),
-      emailController =TextEditingController();
+      emailController = TextEditingController();
   String _user;
   AuthNotifier authNotifier;
 
-  void LoadUserDetails() async {
+  void loadUserDetails() async {
     print("*******************************************************");
     _user = await getCurrentUser(authNotifier);
     print("USER ID: ${_user}");
@@ -47,17 +43,15 @@ class _ProfileState extends State<Profile> {
       print("setting state");
       imageUrl = snapshot.data["imageUrl"];
       name = snapshot.data["name"];
-      mobile=snapshot.data["mobile"];
-      email=snapshot.data["email"];
+      mobile = snapshot.data["mobile"];
+      email = snapshot.data["email"];
       // nameController= TextEditingController(text: name);
-      nameController.text=name;
-      mobileController.text=mobile;
-      emailController.text=snapshot.data["email"];
+      nameController.text = name;
+      mobileController.text = mobile;
+      emailController.text = snapshot.data["email"];
 
-
-      if(imageUrl!=null && imageUrl .length>5)
-      {
-        state=ProfilePicState.DB;
+      if (imageUrl != null && imageUrl.length > 5) {
+        state = ProfilePicState.DB;
       }
     });
     print("Image URL : $imageUrl Name : $name");
@@ -66,9 +60,8 @@ class _ProfileState extends State<Profile> {
   @override
   void initState() {
     super.initState();
-    LoadUserDetails();
+    loadUserDetails();
   }
-
 
   void uploadToDatabase() async {
     String name = nameController.text, mobile = mobileController.text;
@@ -94,12 +87,12 @@ class _ProfileState extends State<Profile> {
       // ratioY: 1.0,
       // maxWidth: 512,
       // maxHeight: 512,
-   //   toolbarColor: Colors.purple,
+      //   toolbarColor: Colors.purple,
       // toolbarWidgetColor: Colors.white,
     );
     setState(() {
       image = Timage;
-      state=ProfilePicState.PICK;
+      state = ProfilePicState.PICK;
       selected = true;
       print("Selected : $selected");
     });
@@ -110,163 +103,232 @@ class _ProfileState extends State<Profile> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: Text("My Profile"),
+        title: Text("Edit Profile"),
         actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.save),
+          FlatButton(
             onPressed: () {
               uploadToDatabase();
             },
-          )
+            child: Center(
+              child: Text(
+                "SAVE",
+                style: TextStyle(
+                  color: sc_AppBarTextColor,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          ),
         ],
         backgroundColor: sc_AppBarBackgroundColor,
-        automaticallyImplyLeading: true,
       ),
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
             Container(
-              color: sc_PrimaryColor,
-              child: Column(
-                children: <Widget>[
-                  InkWell(
-                    onTap: () {
-                      _selectImage();
-
-                      //    Navigator.push(
-                      // context,
-                      // MaterialPageRoute(builder: (context) => ImageCapture()),);
-                    },
-                    child: Container(
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                      child:  state== ProfilePicState.DB ?
-                      CircleAvatar(
-                        backgroundImage: NetworkImage(imageUrl),
-                        radius: 60,
-                      ):
-                      state== ProfilePicState.Default ? 
-                      CircleAvatar(
-                        backgroundImage: NetworkImage("https://image.freepik.com/free-vector/doctor-character-background_1270-84.jpg"),
-                        radius: 60,)
-                        : CircleAvatar(radius: 60,
-                        backgroundImage: FileImage(image),)
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
-                        padding: EdgeInsets.fromLTRB(0, 10, 0, 15),
-                        child: Text(
-                          name != null ? name : "",
-                          style: TextStyle(
-                            fontSize: 22.0,
-                            fontWeight: FontWeight.bold,
+                child: Column(
+              children: <Widget>[
+                SizedBox(
+                  height: 15.0,
+                ),
+                Container(
+                  decoration: BoxDecoration(shape: BoxShape.circle, boxShadow: [
+                    BoxShadow(
+                      color: Colors.red,
+                      blurRadius: 5.0,
+                      spreadRadius: 2.0,
+                    )
+                  ]),
+                  alignment: Alignment.center,
+                  child: Stack(
+                    children: [
+                      state == ProfilePicState.DB
+                          ? CircleAvatar(
+                              backgroundImage: NetworkImage(imageUrl),
+                              radius: 70,
+                            )
+                          : state == ProfilePicState.Default
+                              ? CircleAvatar(
+                                  backgroundImage: NetworkImage(
+                                      "https://image.freepik.com/free-vector/doctor-character-background_1270-84.jpg"),
+                                  radius: 70,
+                                )
+                              : CircleAvatar(
+                                  radius: 70,
+                                  backgroundImage: FileImage(image),
+                                ),
+                      Positioned(
+                        bottom: 0,
+                        right: -15,
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.add_photo_alternate,
+                            color: Colors.red,
+                            size: 35.0,
                           ),
+                          onPressed: () {
+                            _selectImage();
+                          },
                         ),
                       ),
                     ],
                   ),
-                ],
-              )
-            ),
-            
-
-            Column(
-              // crossAxisAlignment: CrossAxisAlignment.baseline,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(left: 15, right: 15),
-                  child: TextField(
-                    controller: emailController,
-                    maxLength: 20,
-                    maxLines: 1,
-                    toolbarOptions: ToolbarOptions(
-                      paste: true,
-                      selectAll: false,
-                    ),
-                    // obscureText: true,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Email',
-                      prefixIcon: Icon(Icons.person),
-                    ),
-                    enabled: false,
-                    textCapitalization: TextCapitalization.words,
-                    autocorrect: false,
-
-                    // cursorRadius: Radius.circular(100),
-                  ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 15, right: 15),
-                  child: TextField(
-                    
-                    controller: nameController,
-                    
-                    maxLength: 20,
-                    maxLines: 1,
-                    toolbarOptions: ToolbarOptions(
-                      paste: true,
-                      selectAll: false,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      padding: EdgeInsets.fromLTRB(0, 20, 0, 15),
+                      child: Text(
+                        name != null ? name : "",
+                        style: TextStyle(
+                          fontSize: 22.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
-                    // obscureText: true,
-                    decoration: InputDecoration(
-                      
-                      border: OutlineInputBorder(),
-                      labelText: 'Full Name',
-                      prefixIcon: Icon(Icons.person),
-                    ),
-
-                    
-                    textCapitalization: TextCapitalization.words,
-                    autocorrect: false,
-
-                    // cursorRadius: Radius.circular(100),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 15, right: 15),
-                  child: TextField(
-                    maxLength: 20,
-                    maxLines: 1,
-                    toolbarOptions: ToolbarOptions(
-                      paste: true,
-                      selectAll: false,
-                    ),
-                    keyboardType: TextInputType.number,
-                    controller: mobileController,
-                    // obscureText: true,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Mobile Phone',
-                      prefixIcon: Icon(Icons.phone),
-                    ),
-                    textCapitalization: TextCapitalization.words,
-                    autocorrect: false,
-
-                    // cursorRadius: Radius.circular(100),
-                  ),
+                  ],
                 ),
               ],
+            )),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    "Email",
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      color: sc_ItemTitleColor,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5.0,
+                  ),
+                  TextField(
+                    controller: emailController,
+                    toolbarOptions: ToolbarOptions(
+                      paste: true,
+                      selectAll: false,
+                    ),
+                    decoration: InputDecoration(
+                      // fillColor: sc_skyblue,
+                      filled: true,
+                      isDense: true,
+                      contentPadding: EdgeInsets.all(15),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: sc_PrimaryColor),
+                        borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                      ),
+                      prefixIcon: Icon(Icons.email),
+                    ),
+                    enabled: false,
+                  ),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  Text(
+                    "Full Name",
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      color: sc_ItemTitleColor,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5.0,
+                  ),
+                  TextField(
+                    controller: nameController,
+                    toolbarOptions: ToolbarOptions(
+                      paste: true,
+                      selectAll: false,
+                    ),
+                    decoration: InputDecoration(
+                      fillColor: sc_InputBackgroundColor,
+                      filled: true,
+                      isDense: true,
+                      contentPadding: EdgeInsets.all(15),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                        borderSide: BorderSide(color: sc_InputBackgroundColor),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: sc_InputBackgroundColor),
+                        borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                      ),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: sc_InputBackgroundColor),
+                        borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                      ),
+                      prefixIcon: Icon(Icons.person),
+                    ),
+                    textCapitalization: TextCapitalization.words,
+                    autocorrect: false,
+                  ),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  Text(
+                    "Mobile No.",
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      color: sc_ItemTitleColor,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5.0,
+                  ),
+                  TextField(
+                    controller: mobileController,
+                    toolbarOptions: ToolbarOptions(
+                      paste: true,
+                      selectAll: false,
+                    ),
+                    decoration: InputDecoration(
+                      fillColor: sc_InputBackgroundColor,
+                      filled: true,
+                      isDense: true,
+                      contentPadding: EdgeInsets.all(15),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                        borderSide: BorderSide(color: sc_InputBackgroundColor),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: sc_InputBackgroundColor),
+                        borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                      ),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: sc_InputBackgroundColor),
+                        borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                      ),
+                      prefixIcon: Icon(Icons.phone),
+                    ),
+                    keyboardType: TextInputType.number,
+                  ),
+                ],
+              ),
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Text("click"),
-        elevation: 4,
-        hoverColor: Colors.green,
-        splashColor: Colors.green,
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ImageCapture()),
-          );
-        },
-        backgroundColor: Colors.pink,
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   child: Text("click"),
+      //   elevation: 4,
+      //   hoverColor: Colors.green,
+      //   splashColor: Colors.green,
+      //   onPressed: () {
+      //     Navigator.push(
+      //       context,
+      //       MaterialPageRoute(builder: (context) => ImageCapture()),
+      //     );
+      //   },
+      //   backgroundColor: Colors.pink,
+      // ),
     );
   }
 }
