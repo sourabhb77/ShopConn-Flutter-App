@@ -111,7 +111,7 @@ class DeleteableProductItem extends StatelessWidget {
       background: Container(color: Colors.red,
       child: Icon(Icons.delete_forever),
       alignment: Alignment.bottomRight,),
-      
+
       key: Key(data["id"]),
       onDismissed: (direction) {
         if (direction == DismissDirection.endToStart) {
@@ -315,8 +315,6 @@ class ProductItem extends StatelessWidget {
                           data["imgList"] != null
                               ? data["imgList"][0]
                               : 'https://www.testingxperts.com/wp-content/uploads/2019/02/placeholder-img.jpg',
-                          // width: 120,
-                          // fit: BoxFit.fitWidth,
                           height: 130,
                           fit: BoxFit.fitHeight,
                         ),
