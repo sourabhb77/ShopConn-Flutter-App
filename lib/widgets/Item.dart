@@ -112,7 +112,7 @@ class DeleteableProductItem extends StatelessWidget {
         child: Icon(Icons.delete_forever),
         alignment: Alignment.bottomRight,
       ),
-      key: Key(data["id"]),
+           key: Key(data["id"]),
       onDismissed: (direction) {
         if (direction == DismissDirection.endToStart) {
           deleteBookMark(data["id"]);

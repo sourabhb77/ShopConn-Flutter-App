@@ -49,6 +49,8 @@ class SplashScreenState extends State<SplashScreen>
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => BoardingScreen()));
     }
+
+   
   }
 
   @override
