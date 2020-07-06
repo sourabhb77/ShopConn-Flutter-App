@@ -51,14 +51,15 @@ class ChatMessageBox extends StatelessWidget {
           Container(
               decoration: BoxDecoration(
                 color: sc_AppBarBackgroundColor, //Change color!!!
-                borderRadius: BorderRadius.all(Radius.circular(10)),
+                borderRadius: BorderRadius.all(Radius.circular(5)),
               ),
-              padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+              padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
               child: Column(
                 crossAxisAlignment:
                     sender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(message.message),
+                  Text(message.message,
+                  style: TextStyle(color: Colors.white),),
                   Text(
                     "$hour:$minute",
                   ),

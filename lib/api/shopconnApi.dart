@@ -2,18 +2,19 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:shopconn/models/Message.dart';
 import 'package:shopconn/models/SavedProductData.dart';
 import 'package:shopconn/models/clothes.dart';
 import 'package:shopconn/models/note.dart';
 import 'package:shopconn/models/other.dart';
 import 'package:shopconn/models/user.dart';
+import 'package:shopconn/notifier/ChatNotifier.dart';
 import 'package:shopconn/notifier/authNotifier.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shopconn/notifier/productNotifier.dart';
 
 import 'package:shopconn/screens/Bookmarks.dart';
-
 
 login(User user, AuthNotifier authNotifier) async {
   AuthResult authResult = await FirebaseAuth.instance
@@ -144,7 +145,6 @@ Future<String> UploadProfileImage(String user, File image) async {
   return url;
 }
 
-
 void UpdateProfile(String name, String mobile, File image) async {
   FirebaseUser user = await FirebaseAuth.instance.currentUser();
   String url = await UploadProfileImage(user.uid, image);
@@ -217,7 +217,7 @@ Future<bool> deleteBookMark(dataId) async {
         .collection("users/$id/bookmarks")
         .where("id", isEqualTo: dataId)
         .getDocuments();
-        
+
     for (var document in ref.documents) {
       document.reference.delete();
     }
@@ -226,4 +226,26 @@ Future<bool> deleteBookMark(dataId) async {
     print("Error removing from bookmarks: $err");
     return false;
   }
+}
+
+isPresent(String sender, String receiver, ChatNotifier chatNotifier,
+    AuthNotifier authNotifier) async {
+  QuerySnapshot snapshot =
+      await Firestore.instance.collection("rooms").getDocuments();
+  String ans;
+  snapshot.documents.forEach((document) {
+    if ((document.data["members"][1].toString() == sender &&
+            document.data["members"][0].toString() == receiver) ||
+        (document.data["members"][0].toString() == sender &&
+            document.data["members"][1].toString() == receiver)) {
+      FirebaseUser user = authNotifier.user;
+      ChatRoom chatroom = ChatRoom.fromMap(document.data);
+      chatNotifier.setCurrentRoom = chatroom;
+      chatNotifier.setChatUser = chatroom.members[1] == authNotifier.user.uid
+          ? chatroom.members[0]
+          : chatroom.members[1];
+      ans = document.data["id"].toString();
+    }
+  });
+  return ans;
 }

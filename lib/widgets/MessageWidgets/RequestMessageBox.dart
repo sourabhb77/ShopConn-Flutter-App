@@ -7,7 +7,6 @@ import 'package:shopconn/models/user.dart';
 import 'package:shopconn/notifier/ChatNotifier.dart';
 import 'package:shopconn/api/MessageApi.dart';
 import 'package:shopconn/screens/chatbox.dart';
-import 'package:shopconn/screens/dash.dart';
 import 'package:tuple/tuple.dart';
 
 class RequestBox extends StatelessWidget {
