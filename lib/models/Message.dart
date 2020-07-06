@@ -159,6 +159,7 @@ class ChatMessage {
     sender = data["sender"];
     receiver = data["receiver"];
     message = data["message"];
+    timeStamp = data["timeStamp"];
   }
 
   Map<String, dynamic> toMap() {
