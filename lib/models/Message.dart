@@ -104,7 +104,7 @@ class MessageRequest {
       {this.requesterId,
       this.requestedId,
       this.productId,
-      this.requestMessage: "Hi, I am Intereseted in Your Product"});
+      this.requestMessage});
 
   Map<String, dynamic> toMap() {
     return {

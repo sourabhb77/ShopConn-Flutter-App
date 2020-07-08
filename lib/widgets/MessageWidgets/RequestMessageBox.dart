@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shopconn/const/Theme.dart';
 import 'package:shopconn/models/Message.dart';
 import 'package:shopconn/models/user.dart';
 import 'package:shopconn/notifier/ChatNotifier.dart';
@@ -14,52 +15,42 @@ class RequestBox extends StatelessWidget {
   final MessageRequest request;
   RequestBox({this.request});
 
-
   Future<ChatUser> getUserProfile() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
 
-    String id =  request.requesterId;
+    String id = request.requesterId;
 
     var ref = await Firestore.instance.document("users/$id").get();
- 
+
     return ChatUser.fromMap(ref.data);
   }
 
-
   @override
   Widget build(BuildContext context) {
-    return 
-    FutureBuilder(
+    return FutureBuilder(
       future: getUserProfile(),
-      builder: (context,snap)
-      {
-        if(snap.hasError)
-        {
+      builder: (context, snap) {
+        if (snap.hasError) {
           return Text("Error Loading..");
         }
-        if(!snap.hasData)
-        {
+        if (!snap.hasData) {
           return Text("Loading...");
         }
-        return RequestCard(user:snap.data);
+        return RequestCard(user: snap.data, request: request);
       },
-
     );
-    
-    
   }
 }
 
-
 class RequestCard extends StatelessWidget {
   final ChatUser user;
-
-  RequestCard({this.user});
+  final MessageRequest request;
+  RequestCard({this.user, this.request});
 
   @override
   Widget build(BuildContext context) {
-    return 
-     Card(
+    return Card(
+      shadowColor: sc_PrimaryColor,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(0.0, 8.0, 0.0, 8.0),
         child: Row(
@@ -78,28 +69,43 @@ class RequestCard extends StatelessWidget {
             //   ),
             // ),
             Expanded(
-                child: CircleAvatar(
-                    radius: 30.0,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(28),
-                      child: Image.network(
-                        user != null
-                            ? user.imageUrl.length != 0
-                                ? user.imageUrl
-                                : 'https://image.freepik.com/free-vector/doctor-character-background_1270-83.jpg'
-                            : 'https://image.freepik.com/free-vector/doctor-character-background_1270-84.jpg',
-                        fit: BoxFit.fill,
-                      ),
-                    )),
+              child: CircleAvatar(
+                radius: 30.0,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(30),
+                  child: Image.network(
+                    user != null
+                        ? user.imageUrl.length != 0
+                            ? user.imageUrl
+                            : 'https://image.freepik.com/free-vector/doctor-character-background_1270-83.jpg'
+                        : 'https://image.freepik.com/free-vector/doctor-character-background_1270-84.jpg',
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
+            ),
             SizedBox(
-              width: 5,
+              width: 10,
             ),
             Expanded(
-                flex: 5,
-                child: Text(user.email,
+              flex: 5,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    user.name,
                     textAlign: TextAlign.start,
-                    style: new TextStyle(fontSize: 15.0, color: Colors.black))),
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  Text(request.requestMessage)
+                ],
+              ),
+            ),
             Expanded(
                 child: IconButton(
               icon: new Icon(
@@ -110,6 +116,7 @@ class RequestCard extends StatelessWidget {
               onPressed: () {
                 print("Accepted");
                 var t = makeRoom(user.userId);
+                deleteRequest(request.id);
                 t.then((value) {
                   if (value == true) {
                     print("Room created");
@@ -119,13 +126,17 @@ class RequestCard extends StatelessWidget {
               },
             )),
             Expanded(
-                child: IconButton(
-                    icon: new Icon(
-                      IconData(57676, fontFamily: 'MaterialIcons'),
-                      color: Colors.red,
-                      size: 30.0,
-                    ),
-                    onPressed: () {})),
+              child: IconButton(
+                icon: new Icon(
+                  IconData(57676, fontFamily: 'MaterialIcons'),
+                  color: Colors.red,
+                  size: 30.0,
+                ),
+                onPressed: () {
+                  deleteRequest(request.id);
+                },
+              ),
+            ),
           ],
         ),
       ),

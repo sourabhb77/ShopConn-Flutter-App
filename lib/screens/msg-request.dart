@@ -162,11 +162,20 @@ class _MessageStreamState extends State<MessageStream> {
           .snapshots(),
       builder: (context, snapshot) {
         print("User Id: ${authNotifier.userId}");
-        if (!snapshot.hasData) {
-          return Text("Loading...");
-        }
         if (snapshot.hasError) return Text("Error");
-
+        if (!snapshot.hasData) {
+          // return Text("Loading...");
+          return Center(
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
+            ),
+          );
+        }
+        if (snapshot.data.documents.length == 0) {
+          return Center(
+            child: Text("No Messages"),
+          );
+        }
         return ListView.builder(
           itemBuilder: (context, index) {
             return Messagebox(
@@ -212,7 +221,7 @@ class _RequestStream extends State<RequestStream> {
               valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
             ),
           );
-        } else {
+        } else if (snapshot.data.documents.length != 0) {
           return ListView.builder(
             itemBuilder: (context, index) {
               print("Length : ${snapshot.data.documents.length}");
@@ -221,6 +230,10 @@ class _RequestStream extends State<RequestStream> {
                       snapshot.data.documents[index].data));
             },
             itemCount: snapshot.data.documents.length,
+          );
+        } else {
+          return Center(
+            child: Text("No request"),
           );
         }
       },

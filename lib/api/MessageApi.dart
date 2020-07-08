@@ -55,10 +55,21 @@ Future<List<ChatUser>> getNewRequest() async {
 }
 
 Future<bool> sendNewRequest(
-    String requesterId, String requestedId, String productId) async {
+  String requesterId,
+  String requestedId,
+  String productId,
+  String message,
+) async {
+  print("***********\n");
+  print(message);
+  print("***********\n");
   DocumentReference ref = Firestore.instance.collection("request").document();
   MessageRequest requestObject = MessageRequest(
-      requesterId: requesterId, requestedId: requestedId, productId: productId);
+    requesterId: requesterId,
+    requestedId: requestedId,
+    productId: productId,
+    requestMessage: message,
+  );
   requestObject.id = ref.documentID;
 
   try {
@@ -253,4 +264,13 @@ getChatsDetails() async* {
       .snapshots();
 
   var rooms = getRooms();
+}
+
+deleteRequest(String id) async {
+  var ref = Firestore.instance.collection("request").where("id", isEqualTo: id);
+  ref.getDocuments().then((val) {
+    val.documents.forEach((element) {
+      element.reference.delete();
+    });
+  });
 }
