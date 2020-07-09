@@ -126,7 +126,6 @@ class SearchProduct extends SearchDelegate<dynamic> {
     Stream<QuerySnapshot> productStream =
         postRef.where('tagList', arrayContainsAny: inputTagList).snapshots();
 
-
     return WillPopScope(
       onWillPop: () async {
         Navigator.pop(context);
@@ -226,13 +225,16 @@ class SearchProduct extends SearchDelegate<dynamic> {
               itemBuilder: (BuildContext context, index) {
                 return Container(
                   padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                  child: Row(
-                    children: [
-                      Text(
-                        snapshot.data.documents[index]["name"],
-                        style: TextStyle(fontSize: 16.0),
-                      ),
-                    ],
+                  child: InkWell(
+                    onTap: () {},
+                    child: Row(
+                      children: [
+                        Text(
+                          snapshot.data.documents[index]["name"],
+                          style: TextStyle(fontSize: 16.0),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },
@@ -279,10 +281,25 @@ class SortBox extends StatefulWidget {
 }
 
 class _SortBoxState extends State<SortBox> {
-  SingingCharacter _character = SingingCharacter.nameAZ;
   _showModalBottomSheet(context) {
     SortNotifier sortNotifier =
         Provider.of<SortNotifier>(context, listen: true);
+    SingingCharacter _character; // = SingingCharacter.nameAZ;
+    if (sortNotifier.currentSortParameter == "name" &&
+        sortNotifier.currentSortDesc == false) {
+      _character = SingingCharacter.nameAZ;
+    } else if (sortNotifier.currentSortParameter == "name" &&
+        sortNotifier.currentSortDesc == true) {
+      _character = SingingCharacter.nameZA;
+    } else if (sortNotifier.currentSortParameter == "price" &&
+        sortNotifier.currentSortDesc == false) {
+      _character = SingingCharacter.priceLH;
+    } else if (sortNotifier.currentSortParameter == "price" &&
+        sortNotifier.currentSortDesc == true) {
+      _character = SingingCharacter.priceHL;
+    } else {
+      _character = SingingCharacter.nameAZ;
+    }
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {

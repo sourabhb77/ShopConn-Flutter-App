@@ -85,7 +85,7 @@ class Chat extends State<ChatPage> with TickerProviderStateMixin {
                   borderRadius: BorderRadius.circular(28),
                   child: Image.network(
                     // 'https://image.freepik.com/free-vector/doctor-character-background_1270-84.jpg',
-                    _user.imageUrl != null
+                    _user != null
                         ? _user.imageUrl
                         : 'https://image.freepik.com/free-vector/doctor-character-background_1270-84.jpg',
                     height: 45,
@@ -95,7 +95,7 @@ class Chat extends State<ChatPage> with TickerProviderStateMixin {
                 )),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 10.0),
-              child: Text(_user.name != null ? _user.name : ""),
+              child: Text(_user != null ? _user.name : ""),
             ),
           ],
         ),
@@ -152,7 +152,7 @@ class Chat extends State<ChatPage> with TickerProviderStateMixin {
                   width: 10.0,
                 ),
                 Expanded(
-                  flex: 6,
+                  flex: 5,
                   child: TextField(
                       controller: _textController,
                       onChanged: (String txt) {
@@ -164,12 +164,12 @@ class Chat extends State<ChatPage> with TickerProviderStateMixin {
                       decoration: InputDecoration(
                         fillColor: sc_InputBackgroundColor,
                         filled: true,
-                        prefixIcon: Padding(
-                          padding: const EdgeInsetsDirectional.only(start: 0),
-                          child: Icon(
-                            IconData(58430, fontFamily: 'MaterialIcons'),
-                          ),
-                        ),
+                        // prefixIcon: Padding(
+                        //   padding: const EdgeInsetsDirectional.only(start: 0),
+                        //   child: Icon(
+                        //     IconData(58430, fontFamily: 'MaterialIcons'),
+                        //   ),
+                        // ),
                         hintText: 'type here ..',
                         border: InputBorder.none,
                       )),
@@ -283,3 +283,4 @@ class Chat extends State<ChatPage> with TickerProviderStateMixin {
 //     );
 //   }
 // }
+

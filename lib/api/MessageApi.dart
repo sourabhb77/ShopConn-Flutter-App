@@ -81,7 +81,7 @@ Future<bool> sendNewRequest(
   }
 }
 
-Future<bool> makeRoom(String userId) async {
+Future<bool> makeRoom(String userId, String message) async {
   FirebaseUser user = await FirebaseAuth.instance.currentUser();
   List<String> members = List();
   //Prodcut owner Id = User.uid;
@@ -99,7 +99,7 @@ Future<bool> makeRoom(String userId) async {
     ChatMessage msg = ChatMessage();
     var ref2 = Firestore.instance.collection("rooms/$id/chats").document();
     msg.id = ref2.documentID;
-    msg.message = "HI";
+    msg.message = message;
     msg.receiver = userId;
     msg.sender = user.uid;
 

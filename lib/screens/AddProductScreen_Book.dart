@@ -11,7 +11,6 @@ import 'package:shopconn/notifier/bookNotifier.dart';
 import '../const/Theme.dart';
 import 'package:image_picker/image_picker.dart';
 
-
 class AddProuctScreen_Book extends StatefulWidget {
   String name;
   AddProuctScreen_Book({Key key, @required this.name}) : super(key: key);
@@ -27,79 +26,70 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
   List<String> authorList = [];
   String _branch = 'IT';
   String _bookCat = "Educational";
-  String _condition ="Very Good"; //[very good, good , not bad]
+  String _condition = "Very Good"; //[very good, good , not bad]
   // List newList = List.from(authorList);
   TextEditingController authorListController = new TextEditingController();
-  List<File> imageList= List(); //To store Path of each Images
+  List<File> imageList = List(); //To store Path of each Images
   List<String> tagList = []; // to store tags for searching
-  
 
-  initBook()
-  {
+  initBook() {
     print("Initial Constructor");
     Future<FirebaseUser> user = getCurrendFirebaseUser();
     user.then((value) => {
-      _currentBook.ownerId= value.uid,
-      _currentBook.postedAt=Timestamp.now(),
-      _currentBook.productCategory ="Book",
-
-    });
+          _currentBook.ownerId = value.uid,
+          _currentBook.postedAt = Timestamp.now(),
+          _currentBook.productCategory = "Book",
+        });
     print("After firebase user call");
   }
 
-  void _SelectImage() async  //Function to keep track of all the image files that are needed to be uploaded
+  void
+      _SelectImage() async //Function to keep track of all the image files that are needed to be uploaded
   {
-    File image =await ImagePicker.pickImage(
-      source: ImageSource.gallery
-      );
-      setState(() {
-        imageList.add(image);
-      });
-    
+    File image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      imageList.add(image);
+    });
   }
 
-  uploadData() async
-  {
+  uploadData() async {
     print("Upload starting");
-    bool ans =await  uploadProduct(_currentBook, imageList);
+    bool ans = await uploadProduct(_currentBook, imageList);
 
     print("Upload Finisehd");
-    if(ans==true)
-    {
-        print("\n*******Upload Status********\n");
-    print("Success");
-    print("\n***************\n");
-
+    if (ans == true) {
+      print("\n*******Upload Status********\n");
+      print("Success");
+      print("\n***************\n");
+    } else {
+      print("\n*******book screen********\n");
+      print("FAILURE");
+      print("\n***************\n");
     }
-    else
-    {
-        print("\n*******book screen********\n");
-        print("FAILURE");
-    print("\n***************\n");
-    }
-
   }
 
-  addToTagList(String tag){
-    tag= tag.toLowerCase();
+  addToTagList(String tag) {
+    tag = tag.toLowerCase();
     for (var i = 0; i < tag.length; i++) {
-      for (var j = i; j < tag.length ; j++) {
-        tagList.add(tag.substring(i,j+1));
+      for (var j = i; j < tag.length; j++) {
+        tagList.add(tag.substring(i, j + 1));
       }
     }
     print(tagList);
   }
 
-  _AddProuctScreen_BookState(this.name){
+  _AddProuctScreen_BookState(this.name) {
     initBook();
   }
   @override
   void initState() {
     super.initState();
-    AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
-    BookNotifier bookNotifier = Provider.of<BookNotifier>(context, listen: false);
+    AuthNotifier authNotifier =
+        Provider.of<AuthNotifier>(context, listen: false);
+    BookNotifier bookNotifier =
+        Provider.of<BookNotifier>(context, listen: false);
     _currentBook = Book();
-    _currentBook.branch = _branch;  
+    _currentBook.branch = _branch;
   }
 
   Widget _buildAuthorNameField() {
@@ -117,10 +107,10 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
             color: sc_InputHintTextColor,
             fontSize: 16.0,
           ),
-          enabledBorder: OutlineInputBorder(      
+          enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(8.0)),
-            borderSide: BorderSide(color: sc_InputBackgroundColor),   
-          ),  
+            borderSide: BorderSide(color: sc_InputBackgroundColor),
+          ),
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(color: sc_InputBackgroundColor),
             borderRadius: BorderRadius.all(Radius.circular(8.0)),
@@ -135,7 +125,7 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
     );
   }
 
-  _add_authorIntoList(String text){
+  _add_authorIntoList(String text) {
     if (text.isNotEmpty) {
       setState(() {
         authorList.add(text);
@@ -145,7 +135,6 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
       authorListController.clear();
     }
   }
-
 
   Widget _buildEditionField() {
     return Container(
@@ -162,7 +151,9 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
               fontWeight: FontWeight.w600,
             ),
           ),
-          SizedBox(height: 5.0,),
+          SizedBox(
+            height: 5.0,
+          ),
           TextFormField(
             decoration: InputDecoration(
               fillColor: sc_InputBackgroundColor,
@@ -174,10 +165,10 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
                 color: sc_InputHintTextColor,
                 fontSize: 16.0,
               ),
-              enabledBorder: OutlineInputBorder(      
+              enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                borderSide: BorderSide(color: sc_InputBackgroundColor),   
-              ),  
+                borderSide: BorderSide(color: sc_InputBackgroundColor),
+              ),
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: sc_InputBackgroundColor),
                 borderRadius: BorderRadius.all(Radius.circular(8.0)),
@@ -194,7 +185,7 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
               }
               try {
                 var edi = int.tryParse(value);
-                if (edi <1  || edi > 10) {
+                if (edi < 1 || edi > 10) {
                   return 'Edition must be betweem 1 and 10';
                 }
               } catch (err) {
@@ -204,7 +195,7 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
             },
             onSaved: (String value) {
               var edi = int.tryParse(value);
-              _currentBook.edition =edi;
+              _currentBook.edition = edi;
               print(edi);
             },
           ),
@@ -212,7 +203,6 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
       ),
     );
   }
-
 
   Widget _buildDescriptionField() {
     return Container(
@@ -233,14 +223,13 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
               ),
               Text(
                 "optional",
-                style: TextStyle(
-                  fontSize: 15.0,
-                  color: sc_ItemTitleColor
-                ),
+                style: TextStyle(fontSize: 15.0, color: sc_ItemTitleColor),
               ),
             ],
           ),
-          SizedBox(height: 5.0,),
+          SizedBox(
+            height: 5.0,
+          ),
           TextFormField(
             maxLines: 5,
             decoration: InputDecoration(
@@ -253,10 +242,10 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
                 color: sc_InputHintTextColor,
                 fontSize: 16.0,
               ),
-              enabledBorder: OutlineInputBorder(      
+              enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                borderSide: BorderSide(color: sc_InputBackgroundColor),   
-              ),  
+                borderSide: BorderSide(color: sc_InputBackgroundColor),
+              ),
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: sc_InputBackgroundColor),
                 borderRadius: BorderRadius.all(Radius.circular(8.0)),
@@ -272,14 +261,14 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
                 return 'Description is required';
               }
 
-              if (value.length <5  || value.length > 200) {
+              if (value.length < 5 || value.length > 200) {
                 return 'Description must be betweem 4 and 200 characters';
               }
 
               return null;
             },
             onSaved: (String value) {
-              _currentBook.description =value;
+              _currentBook.description = value;
               print(value);
             },
           ),
@@ -303,7 +292,9 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
               fontWeight: FontWeight.w600,
             ),
           ),
-          SizedBox(height: 5.0,),
+          SizedBox(
+            height: 5.0,
+          ),
           TextFormField(
             decoration: InputDecoration(
               fillColor: sc_InputBackgroundColor,
@@ -326,10 +317,10 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
                 color: sc_InputHintTextColor,
                 fontSize: 16.0,
               ),
-              enabledBorder: OutlineInputBorder(      
+              enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                borderSide: BorderSide(color: sc_InputBackgroundColor),   
-              ),  
+                borderSide: BorderSide(color: sc_InputBackgroundColor),
+              ),
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: sc_InputBackgroundColor),
                 borderRadius: BorderRadius.all(Radius.circular(8.0)),
@@ -346,7 +337,7 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
               }
               try {
                 var pr = int.tryParse(value);
-                if (pr <0  || pr > 30000) {
+                if (pr < 0 || pr > 30000) {
                   return 'Price must be greater equal to 0';
                 }
               } catch (err) {
@@ -356,7 +347,7 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
             },
             onSaved: (String value) {
               var pr = int.tryParse(value);
-              _currentBook.price =pr;
+              _currentBook.price = pr;
               print(pr);
             },
           ),
@@ -379,7 +370,9 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
               fontWeight: FontWeight.w600,
             ),
           ),
-          SizedBox(height: 5.0,),
+          SizedBox(
+            height: 5.0,
+          ),
           TextFormField(
             // maxLines: 5,
             decoration: InputDecoration(
@@ -392,10 +385,10 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
                 color: sc_InputHintTextColor,
                 fontSize: 16.0,
               ),
-              enabledBorder: OutlineInputBorder(      
+              enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                borderSide: BorderSide(color: sc_InputBackgroundColor),   
-              ),  
+                borderSide: BorderSide(color: sc_InputBackgroundColor),
+              ),
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: sc_InputBackgroundColor),
                 borderRadius: BorderRadius.all(Radius.circular(8.0)),
@@ -411,14 +404,14 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
                 return 'Publication is required';
               }
 
-              if (value.length <5  || value.length > 100) {
+              if (value.length < 5 || value.length > 100) {
                 return 'Publication must be betweem 4 and 100 characters';
               }
 
               return null;
             },
             onSaved: (String value) {
-              _currentBook.publication =value;
+              _currentBook.publication = value;
               print(value);
               addToTagList(value);
             },
@@ -442,7 +435,9 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
               fontWeight: FontWeight.w600,
             ),
           ),
-          SizedBox(height: 5.0,),
+          SizedBox(
+            height: 5.0,
+          ),
           Row(
             children: <Widget>[
               Expanded(
@@ -451,13 +446,16 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
                   onTap: () => setState(() => _condition = "Very Good"),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: _condition == "Very Good" ? sc_InputBackgroundColor : sc_AppBarTextColor,
+                      color: _condition == "Very Good"
+                          ? sc_InputBackgroundColor
+                          : sc_AppBarTextColor,
                       border: Border.all(
-                        color: _condition == "Very Good" ? sc_PrimaryColor : sc_InputBackgroundColor,
+                        color: _condition == "Very Good"
+                            ? sc_PrimaryColor
+                            : sc_InputBackgroundColor,
                         width: 1.0,
                       ),
                       borderRadius: BorderRadius.circular(8.0),
-
                     ),
                     padding: EdgeInsets.symmetric(vertical: 13.0),
                     child: Column(
@@ -468,7 +466,9 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
                           style: TextStyle(
                             fontSize: 16.0,
                             color: sc_ItemTitleColor,
-                            fontWeight: _condition == "Very Good" ? FontWeight.w500 : FontWeight.normal,
+                            fontWeight: _condition == "Very Good"
+                                ? FontWeight.w500
+                                : FontWeight.normal,
                           ),
                         ),
                       ],
@@ -483,13 +483,16 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
                   child: Container(
                     // margin: EdgeInsets.symmetric(horizontal: 2.0),
                     decoration: BoxDecoration(
-                      color: _condition == "Good" ? sc_InputBackgroundColor : sc_AppBarTextColor,
+                      color: _condition == "Good"
+                          ? sc_InputBackgroundColor
+                          : sc_AppBarTextColor,
                       border: Border.all(
-                        color: _condition == "Good" ? sc_PrimaryColor : sc_InputBackgroundColor,
+                        color: _condition == "Good"
+                            ? sc_PrimaryColor
+                            : sc_InputBackgroundColor,
                         width: 1.0,
                       ),
                       borderRadius: BorderRadius.circular(8.0),
-
                     ),
                     padding: EdgeInsets.symmetric(vertical: 13.0),
                     child: Column(
@@ -500,7 +503,9 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
                           style: TextStyle(
                             fontSize: 16.0,
                             color: sc_ItemTitleColor,
-                            fontWeight: _condition == "Good" ? FontWeight.w500 : FontWeight.normal,
+                            fontWeight: _condition == "Good"
+                                ? FontWeight.w500
+                                : FontWeight.normal,
                           ),
                         ),
                       ],
@@ -514,13 +519,16 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
                   onTap: () => setState(() => _condition = "Not Bad"),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: _condition == "Not Bad" ? sc_InputBackgroundColor : sc_AppBarTextColor,
+                      color: _condition == "Not Bad"
+                          ? sc_InputBackgroundColor
+                          : sc_AppBarTextColor,
                       border: Border.all(
-                        color: _condition == "Not Bad" ? sc_PrimaryColor : sc_InputBackgroundColor,
+                        color: _condition == "Not Bad"
+                            ? sc_PrimaryColor
+                            : sc_InputBackgroundColor,
                         width: 1.0,
                       ),
                       borderRadius: BorderRadius.circular(8.0),
-
                     ),
                     padding: EdgeInsets.symmetric(vertical: 13.0),
                     child: Column(
@@ -531,7 +539,9 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
                           style: TextStyle(
                             fontSize: 16.0,
                             color: sc_ItemTitleColor,
-                            fontWeight: _condition == "Not Bad" ? FontWeight.w500 : FontWeight.normal,
+                            fontWeight: _condition == "Not Bad"
+                                ? FontWeight.w500
+                                : FontWeight.normal,
                           ),
                         ),
                       ],
@@ -560,7 +570,9 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
               fontWeight: FontWeight.w600,
             ),
           ),
-          SizedBox(height: 5.0,),
+          SizedBox(
+            height: 5.0,
+          ),
           TextFormField(
             decoration: InputDecoration(
               fillColor: sc_InputBackgroundColor,
@@ -572,10 +584,10 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
                 color: sc_InputHintTextColor,
                 fontSize: 16.0,
               ),
-              enabledBorder: OutlineInputBorder(      
+              enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                borderSide: BorderSide(color: sc_InputBackgroundColor),   
-              ),  
+                borderSide: BorderSide(color: sc_InputBackgroundColor),
+              ),
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: sc_InputBackgroundColor),
                 borderRadius: BorderRadius.all(Radius.circular(8.0)),
@@ -591,14 +603,14 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
                 return 'Subject is required';
               }
 
-              if (value.length <2  || value.length > 100) {
+              if (value.length < 2 || value.length > 100) {
                 return 'Subject must be betweem 2 and 100 characters';
               }
 
               return null;
             },
             onSaved: (String value) {
-              _currentBook.subject =value;
+              _currentBook.subject = value;
               print(value);
               addToTagList(value);
             },
@@ -621,7 +633,9 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
               fontWeight: FontWeight.w600,
             ),
           ),
-          SizedBox(height: 5.0,),
+          SizedBox(
+            height: 5.0,
+          ),
           Container(
             decoration: BoxDecoration(
               color: sc_InputBackgroundColor,
@@ -630,17 +644,17 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
             padding: EdgeInsets.symmetric(horizontal: 10.0),
             child: DropdownButton<String>(
               value: _branch,
-              // icon: Icon(Icons.arrow_downward),    
+              // icon: Icon(Icons.arrow_downward),
               iconSize: 30,
               // elevation: 16,
               style: TextStyle(color: sc_ItemTitleColor),
               onChanged: (String newValue) {
                 setState(() {
                   _branch = newValue;
-                  _currentBook.branch= newValue;
+                  _currentBook.branch = newValue;
                 });
               },
-              items: <String>['IT', 'CS', 'ETRX', 'EXTC','MECH']
+              items: <String>['IT', 'CS', 'ETRX', 'EXTC', 'MECH']
                   .map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
@@ -668,7 +682,9 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
               fontWeight: FontWeight.w600,
             ),
           ),
-          SizedBox(height: 5.0,),
+          SizedBox(
+            height: 5.0,
+          ),
           Row(
             children: <Widget>[
               Expanded(
@@ -677,13 +693,16 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
                   onTap: () => setState(() => _bookCat = "Educational"),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: _bookCat == "Educational" ? sc_InputBackgroundColor : sc_AppBarTextColor,
+                      color: _bookCat == "Educational"
+                          ? sc_InputBackgroundColor
+                          : sc_AppBarTextColor,
                       border: Border.all(
-                        color: _bookCat == "Educational" ? sc_PrimaryColor : sc_InputBackgroundColor,
+                        color: _bookCat == "Educational"
+                            ? sc_PrimaryColor
+                            : sc_InputBackgroundColor,
                         width: 1.0,
                       ),
                       borderRadius: BorderRadius.circular(8.0),
-
                     ),
                     padding: EdgeInsets.symmetric(vertical: 13.0),
                     child: Column(
@@ -694,7 +713,9 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
                           style: TextStyle(
                             fontSize: 16.0,
                             color: sc_ItemTitleColor,
-                            fontWeight: _bookCat == "Educational" ? FontWeight.w500 : FontWeight.normal,
+                            fontWeight: _bookCat == "Educational"
+                                ? FontWeight.w500
+                                : FontWeight.normal,
                           ),
                         ),
                       ],
@@ -708,13 +729,16 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
                   onTap: () => setState(() => _bookCat = "NonEducational"),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: _bookCat == "NonEducational" ? sc_InputBackgroundColor : sc_AppBarTextColor,
+                      color: _bookCat == "NonEducational"
+                          ? sc_InputBackgroundColor
+                          : sc_AppBarTextColor,
                       border: Border.all(
-                        color: _bookCat == "NonEducational" ? sc_PrimaryColor : sc_InputBackgroundColor,
+                        color: _bookCat == "NonEducational"
+                            ? sc_PrimaryColor
+                            : sc_InputBackgroundColor,
                         width: 1.0,
                       ),
                       borderRadius: BorderRadius.circular(8.0),
-
                     ),
                     padding: EdgeInsets.symmetric(vertical: 13.0),
                     child: Column(
@@ -725,7 +749,9 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
                           style: TextStyle(
                             fontSize: 16.0,
                             color: sc_ItemTitleColor,
-                            fontWeight: _bookCat == "NonEducational" ? FontWeight.w500 : FontWeight.normal,
+                            fontWeight: _bookCat == "NonEducational"
+                                ? FontWeight.w500
+                                : FontWeight.normal,
                           ),
                         ),
                       ],
@@ -740,11 +766,8 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
     );
   }
 
-
-
   @override
   Widget build(BuildContext context) {
-    
     print("\n*******book screen********\n");
     return Scaffold(
       appBar: AppBar(
@@ -764,14 +787,14 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
             OutlineButton(
               padding: EdgeInsets.all(13.0),
               color: sc_InputBackgroundColor,
-              child: Text('Cancel',
+              child: Text(
+                'Cancel',
                 style: TextStyle(
                   fontSize: 18.0,
                 ),
               ),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0)
-              ),
+                  borderRadius: BorderRadius.circular(8.0)),
               onPressed: () {
                 Navigator.pop(context);
               },
@@ -784,13 +807,12 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
                 style: TextStyle(
                   color: sc_AppBarTextColor,
                   fontSize: 18.0,
-                ),                      
+                ),
               ),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0)
-              ),
+                  borderRadius: BorderRadius.circular(8.0)),
               onPressed: () {
-                _currentBook.name=name;
+                _currentBook.name = name;
                 addToTagList(_currentBook.name);
                 _currentBook.authorList = authorList;
                 _currentBook.bookCategory = _bookCat;
@@ -798,7 +820,8 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
                 _currentBook.tagList = tagList;
                 if (!_formkey.currentState.validate()) {
                   print("Errororororororo");
-                } else { // No Error upload all the details to the database!!
+                } else {
+                  // No Error upload all the details to the database!!
                   _formkey.currentState.save();
                   uploadData();
                   print(_currentBook.toMap());
@@ -809,17 +832,14 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
                 // );
               },
             ),
-            
           ],
         ),
       ),
-
-
       body: SingleChildScrollView(
         child: Form(
           key: _formkey,
           autovalidate: true,
-            child: Column(
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               // Padding(
@@ -834,7 +854,9 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
               //   ),
               // ),
 
-              SizedBox(height: 15.0,),
+              SizedBox(
+                height: 15.0,
+              ),
 
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
@@ -849,26 +871,29 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    SizedBox(height: 5.0,),
+                    SizedBox(
+                      height: 5.0,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                      _buildAuthorNameField(),
-                      ButtonTheme(
-                        // minWidth: 260,
-                        child: RaisedButton(
-                          color: sc_PrimaryColor,
-                          padding: EdgeInsets.all(13.0),
-                          onPressed: () => _add_authorIntoList(authorListController.text),
-                          child: Text(
-                            'Add',
-                            style: TextStyle(fontSize: 18, color: sc_AppBarTextColor),
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0)
+                        _buildAuthorNameField(),
+                        ButtonTheme(
+                          // minWidth: 260,
+                          child: RaisedButton(
+                            color: sc_PrimaryColor,
+                            padding: EdgeInsets.all(13.0),
+                            onPressed: () =>
+                                _add_authorIntoList(authorListController.text),
+                            child: Text(
+                              'Add',
+                              style: TextStyle(
+                                  fontSize: 18, color: sc_AppBarTextColor),
+                            ),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0)),
                           ),
                         ),
-                      ),
                       ],
                     ),
                   ],
@@ -880,7 +905,7 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: authorList.map((authorName){
+                  children: authorList.map((authorName) {
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
@@ -892,14 +917,17 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
                           ),
                         ),
                         IconButton(
-                          icon: Icon(Icons.clear,color: Colors.red,),
+                          icon: Icon(
+                            Icons.clear,
+                            color: Colors.red,
+                          ),
                           tooltip: 'delete',
                           iconSize: 30,
                           onPressed: () {
                             setState(() {
                               authorList.remove(authorName);
                             });
-                          //  authorList.reload
+                            //  authorList.reload
                           },
                         ),
                       ],
@@ -931,7 +959,7 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
 
               GestureDetector(
                 onTap: () {
-                    _SelectImage();
+                  _SelectImage();
                 },
                 child: Container(
                   height: 80.0,
@@ -943,7 +971,8 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
                     ),
                     borderRadius: BorderRadius.circular(8.0),
                   ),
-                  margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                  margin:
+                      EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -964,19 +993,18 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
                 height: 30.0,
               ),
               GridView.count(
-                shrinkWrap: true,
-                scrollDirection: Axis.vertical,
-                padding: EdgeInsets.fromLTRB(15,0,15,0),
-                crossAxisCount: 2,
-                crossAxisSpacing: 10,
-                // mainAxisSpacing: 2,
-                
-                children: List.generate(imageList.length, (index) {
-                  return Container(
-                    child: Image(image:FileImage(imageList[index]))
-                    ,);
-                })
-              ),
+                  shrinkWrap: true,
+                  scrollDirection: Axis.vertical,
+                  padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 10,
+                  // mainAxisSpacing: 2,
+
+                  children: List.generate(imageList.length, (index) {
+                    return Container(
+                      child: Image(image: FileImage(imageList[index])),
+                    );
+                  })),
             ],
           ),
         ),

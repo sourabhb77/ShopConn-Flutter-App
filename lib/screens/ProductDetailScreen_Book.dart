@@ -429,8 +429,11 @@ class _ProductDetailScreen_BookState extends State<ProductDetailScreen_Book> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ChatBoxWidget(
-                                    ownerId: bookNotifier.currentBook.ownerId)),
+                              builder: (context) => ChatBoxWidget(
+                                ownerId: bookNotifier.currentBook.ownerId,
+                                productId: bookNotifier.currentBook.id,
+                              ),
+                            ),
                           );
                         } else if (ans != "null") {
                           Navigator.push(

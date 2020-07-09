@@ -36,8 +36,9 @@ class ChatMessageBox extends StatelessWidget {
   }
 
   Widget text(BuildContext context) {
-    int hour = message.timeStamp.toDate().hour;
-    int minute = message.timeStamp.toDate().minute;
+    int hour = message.timeStamp != null ? message.timeStamp.toDate().hour : 0;
+    int minute =
+        message.timeStamp != null ? message.timeStamp.toDate().minute : 0;
 
     AuthNotifier authnotifier = Provider.of<AuthNotifier>(context);
 
@@ -51,15 +52,20 @@ class ChatMessageBox extends StatelessWidget {
           Container(
               decoration: BoxDecoration(
                 color: sc_AppBarBackgroundColor, //Change color!!!
-                borderRadius: BorderRadius.all(Radius.circular(5)),
+                borderRadius: BorderRadius.all(Radius.circular(7)),
               ),
               padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
               child: Column(
                 crossAxisAlignment:
                     sender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(message.message,
-                  style: TextStyle(color: Colors.white),),
+                  Text(
+                    message != null ? message.message : "",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16.0,
+                    ),
+                  ),
                   Text(
                     "$hour:$minute",
                   ),

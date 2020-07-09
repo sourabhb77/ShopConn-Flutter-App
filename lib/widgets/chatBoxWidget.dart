@@ -19,10 +19,11 @@ import 'package:shopconn/screens/chatbox.dart';
 const defaultUserChatBoxWidget = "Doctor Daddy";
 
 class ChatBoxWidget extends StatefulWidget {
-  String ownerId;
-  ChatBoxWidget({Key key, @required this.ownerId}) : super(key: key);
+  String ownerId, productId;
+  ChatBoxWidget({Key key, @required this.ownerId, @required this.productId})
+      : super(key: key);
   @override
-  _ChatBoxWidgetState createState() => _ChatBoxWidgetState(ownerId);
+  _ChatBoxWidgetState createState() => _ChatBoxWidgetState(ownerId, productId);
 }
 
 class _ChatBoxWidgetState extends State<ChatBoxWidget>
@@ -34,7 +35,6 @@ class _ChatBoxWidgetState extends State<ChatBoxWidget>
   bool selected = false;
   String ChatBoxWidget, imageUrl, ChatBoxWidgetRec, imageUrlRec;
   StorageReference storageReference;
-  String ownerId;
   String txt = "I am interested in your product";
   bool one = false;
 
@@ -46,15 +46,14 @@ class _ChatBoxWidgetState extends State<ChatBoxWidget>
 
   bool _isWriting = false;
 
-  bool sentRequest = false;
+  bool sentRequest = true;
 
-  _ChatBoxWidgetState(this.ownerId) {
-    inituserData();
-  }
+  _ChatBoxWidgetState(this.ownerId, this.productId);
+  String ownerId, productId;
 
-  sendRequest(String userId, String ownerId, String currentBookId,
-      String message) async {
-    await sendNewRequest(userId, ownerId, currentBookId, message);
+  sendRequest(
+      String userId, String ownerId, String productId, String message) async {
+    await sendNewRequest(userId, ownerId, productId, message);
     setState(() {
       sentRequest = true;
     });
@@ -258,8 +257,8 @@ class _ChatBoxWidgetState extends State<ChatBoxWidget>
                                     "Sending Chat Request NOW ****************");
                                 sendRequest(
                                   authNotifier.userId,
-                                  bookNotifier.currentBook.ownerId,
-                                  bookNotifier.currentBook.id,
+                                  ownerId,
+                                  productId,
                                   message,
                                 );
 
@@ -310,8 +309,6 @@ class _ChatBoxWidgetState extends State<ChatBoxWidget>
     super.dispose();
   }
 }
-
-void inituserData() {}
 
 class Msg extends StatelessWidget {
   Msg({this.txt, this.imageUrl, this.ChatBoxWidget, this.animationController});

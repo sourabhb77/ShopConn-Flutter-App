@@ -115,14 +115,14 @@ class RequestCard extends StatelessWidget {
               ),
               onPressed: () {
                 print("Accepted");
-                var t = makeRoom(user.userId);
-                deleteRequest(request.id);
+                var t = makeRoom(user.userId, request.requestMessage);
                 t.then((value) {
                   if (value == true) {
                     print("Room created");
                   } else
                     print("Room creation failed");
                 });
+                deleteRequest(request.id);
               },
             )),
             Expanded(
