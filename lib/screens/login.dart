@@ -45,7 +45,10 @@ class _LoginState extends State<Login> {
     super.initState();
 
     //Accessing FCM token
-    _firebaseMessaging.getToken().then((value) => print("TOKEN: ${value}")).catchError((err)=>print("Error token : $err"));
+    _firebaseMessaging
+        .getToken()
+        .then((value) => print("TOKEN: ${value}"))
+        .catchError((err) => print("Error token : $err"));
   }
 
   void _submitForm() async {
@@ -59,10 +62,22 @@ class _LoginState extends State<Login> {
         Provider.of<AuthNotifier>(context, listen: false);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (_authMode == AuthMode.Login) {
-      login(_user, authNotifier);
-      Navigator.of(context).pushReplacement(
-          new MaterialPageRoute(builder: (context) => HomeScreen()));
-      await prefs.setBool('logined', true);
+
+      String result = await login(_user, authNotifier);
+
+      
+      if (result.compareTo("True") == 0) {
+        await prefs.setBool('logined', true);
+
+        Navigator.of(context).pushReplacement(
+            new MaterialPageRoute(builder: (context) => HomeScreen()));
+      } else {
+        var snackBar = new SnackBar(
+            content: new Text(result), backgroundColor: Colors.red);
+
+        // Find the Scaffold in the Widget tree and use it to show a SnackBar!
+        Scaffold.of(_formKey.currentContext).showSnackBar(snackBar);
+      }
     } else {
       signup(_user, authNotifier);
     }

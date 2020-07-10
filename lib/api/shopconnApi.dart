@@ -16,10 +16,14 @@ import 'package:shopconn/notifier/productNotifier.dart';
 
 import 'package:shopconn/screens/Bookmarks.dart';
 
-login(User user, AuthNotifier authNotifier) async {
+Future<String> login(User user, AuthNotifier authNotifier) async {
+  String errorCode;
   AuthResult authResult = await FirebaseAuth.instance
       .signInWithEmailAndPassword(email: user.email, password: user.password)
-      .catchError((error) => print(error.code));
+      .catchError((error) {
+    print("Error code: ${error.code}");
+    errorCode = error.code.toString();
+  });
 
   if (authResult != null) {
     FirebaseUser firebaseUser = authResult.user;
@@ -27,8 +31,10 @@ login(User user, AuthNotifier authNotifier) async {
     if (firebaseUser != null) {
       print("Log In: $firebaseUser");
       authNotifier.setUser(firebaseUser);
+      return "True";
     }
   }
+  return errorCode;
 }
 
 signup(User user, AuthNotifier authNotifier) async {
