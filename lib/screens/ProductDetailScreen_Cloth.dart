@@ -8,6 +8,7 @@ import 'package:shopconn/notifier/ChatNotifier.dart';
 import 'package:shopconn/notifier/authNotifier.dart';
 import 'package:shopconn/notifier/clothesNotifier.dart';
 import 'package:shopconn/screens/chatbox.dart';
+import 'package:shopconn/widgets/Carousel.dart';
 import 'package:shopconn/widgets/chatBoxWidget.dart';
 
 class ProductDetailScreen_Cloth extends StatefulWidget {
@@ -79,57 +80,8 @@ class _ProductDetailScreen_ClothState extends State<ProductDetailScreen_Cloth> {
             SizedBox(
               height: 15.0,
             ),
-            Column(children: <Widget>[
-              CarouselSlider(
-                items: imgList.map((imgUrl) {
-                  return Builder(
-                    builder: (BuildContext context) {
-                      return Container(
-                        // width: MediaQuery.of(context).size.width,
-                        // height: MediaQuery.of(context).size.height,
-                        height: 400.0,
-                        // margin: EdgeInsets.symmetric(horizontal: 10.0),
-                        decoration: BoxDecoration(
-                          color: sc_PrimaryColor,
-                        ),
-                        child: Image.network(
-                          imgUrl,
-                          fit: BoxFit.fill,
-                        ),
-                      );
-                    },
-                  );
-                }).toList(),
-                // carouselController: buttonCarouselController,
-                options: CarouselOptions(
-                  autoPlay: false,
-                  enlargeCenterPage: true,
-                  viewportFraction: 0.9,
-                  aspectRatio: 1.0,
-                  initialPage: 2,
-                  //   onPageChanged: (_current) {
-                  //     setState(() {
-                  //       _current = index;
-                  //     }
-                  //   );
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: map<Widget>(imgList, (index, url) {
-                  return Container(
-                    width: 10.0,
-                    height: 10.0,
-                    margin:
-                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: _current == index ? sc_PrimaryColor : sc_grey,
-                    ),
-                  );
-                }),
-              ),
-            ]),
+            Carousel(imgList: clothesNotifier.currentClothes.imgList,),
+          
             Padding(
               padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
               child: Text(

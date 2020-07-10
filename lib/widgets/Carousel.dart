@@ -3,17 +3,21 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:shopconn/const/Theme.dart';
 
 class Carousel extends StatefulWidget {
+  List<String> imgList;
+  Carousel({this.imgList});
   @override
   _CarouselState createState() => _CarouselState();
 }
 
 class _CarouselState extends State<Carousel> {
-  // CarouselController buttonCarouselController = CarouselController();
+  CarouselController buttonCarouselController = CarouselController();
   List imgList = [
     'https://rukminim1.flixcart.com/image/352/352/jpu324w0/book/3/8/4/database-system-concepts-6e-original-imafbz6nzfbhbsfr.jpeg?q=70',
     'https://d20ohkaloyme4g.cloudfront.net/img/document_thumbnails/0cd25c4f984290d57c8c1703ff27930c/thumb_1200_1553.png',
     'https://images-na.ssl-images-amazon.com/images/I/51ibUItxzcL._SX258_BO1,204,203,200_.jpg',
   ];
+
+  CarouselController carouselController = CarouselController();
   List<T> map<T>(List list, Function handler) {
     List<T> result = [];
     for (var i = 0; i < list.length; i++) {
@@ -27,7 +31,7 @@ class _CarouselState extends State<Carousel> {
   @override
   Widget build(BuildContext context) => Column(children: <Widget>[
         CarouselSlider(
-          items: imgList.map((imgUrl) {
+          items: widget.imgList.map((imgUrl) {
             return Builder(
               builder: (BuildContext context) {
                 return Container(
@@ -52,17 +56,24 @@ class _CarouselState extends State<Carousel> {
             enlargeCenterPage: true,
             viewportFraction: 0.9,
             aspectRatio: 1.0,
-            initialPage: 2,
-            //   onPageChanged: (_current) {
-            //     setState(() {
-            //       _current = index;
-            //     }
-            //   );
+            initialPage: 0,
+            onPageChanged: (index, reason) {
+              setState(() {
+                print("Page Changed");
+                _current = index;
+              });
+            },
+            // onPageChanged: (_current) {
+            //   setState(() {
+            //     _current = index;
+            //   }
+            // );
           ),
+          carouselController: carouselController,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: map<Widget>(imgList, (index, url) {
+          children: map<Widget>(widget.imgList, (index, url) {
             return Container(
               width: 10.0,
               height: 10.0,

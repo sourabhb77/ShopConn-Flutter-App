@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopconn/api/shopconnApi.dart';
 import 'package:shopconn/const/Theme.dart';
+import 'package:shopconn/models/SavedProductData.dart';
 import 'package:shopconn/notifier/ChatNotifier.dart';
 import 'package:shopconn/notifier/authNotifier.dart';
 import 'package:shopconn/notifier/bookNotifier.dart';
@@ -26,6 +27,7 @@ class _ProductDetailScreen_BookState extends State<ProductDetailScreen_Book> {
   BookNotifier bookNotifier;
   ChatNotifier chatNotifier;
   String ownerName = "";
+  Book currBook;
 
   @override
   void initState() {
@@ -50,6 +52,7 @@ class _ProductDetailScreen_BookState extends State<ProductDetailScreen_Book> {
     bookNotifier = Provider.of<BookNotifier>(context);
     chatNotifier = Provider.of<ChatNotifier>(context);
     authNotifier = Provider.of<AuthNotifier>(context);
+    currBook = bookNotifier.currentBook;
     // void loadUserDetails() async {
     //   DocumentSnapshot snapshot = await getProfile(bookNotifier.currentBook.ownerId);
     //   setState(() {
@@ -95,7 +98,7 @@ class _ProductDetailScreen_BookState extends State<ProductDetailScreen_Book> {
               // Container(
 
               // ),
-              Carousel(),
+              Carousel(imgList:currBook.imgList),
               // SizedBox(
               //   height: 30.0,
               // ),
@@ -160,6 +163,7 @@ class _ProductDetailScreen_BookState extends State<ProductDetailScreen_Book> {
                           decoration: new BoxDecoration(
                             color: sc_skyblue,
                             borderRadius: BorderRadius.circular(7),
+                            
                           ),
                           padding: EdgeInsets.all(10.0),
                           child: Column(
