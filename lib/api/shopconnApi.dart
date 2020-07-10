@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
 
@@ -8,6 +9,8 @@ import 'package:shopconn/models/clothes.dart';
 import 'package:shopconn/models/note.dart';
 import 'package:shopconn/models/other.dart';
 import 'package:shopconn/models/user.dart';
+import 'package:shopconn/models/Bookmark.dart';
+
 import 'package:shopconn/notifier/ChatNotifier.dart';
 import 'package:shopconn/notifier/authNotifier.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -187,7 +190,7 @@ Future<List<DocumentSnapshot>> getBookmarks() async {
     var ref2 = Firestore.instance
         .collection("post")
         .where("id", whereIn: documentList)
-        .orderBy("postedAt");
+        .orderBy("  At");
     var querySnapshot = await ref2.getDocuments();
 
     return querySnapshot.documents;
@@ -201,18 +204,24 @@ Future<List<DocumentSnapshot>> getBookmarks() async {
  */
 
 Future<bool> addToBookmarks(String postId) async {
-  FirebaseUser user = await FirebaseAuth.instance.currentUser();
+  
+  // await new Future.delayed(const Duration(seconds : 5));
+
+ FirebaseUser user = await FirebaseAuth.instance.currentUser();
 
   try {
     String id = user.uid;
-    CollectionReference ref =
-        Firestore.instance.collection("users/$id/bookmarks");
-    await ref.add({"timeStamp": FieldValue.serverTimestamp(), "id": postId});
+    Bookmark bookMark = Bookmark(id: postId);
+    DocumentReference ref =
+        Firestore.instance.collection("users/$id/bookmarks").document(postId);
+    await ref.setData(bookMark.toMap());
+    print("bookMarkSuccess");
     return true;
   } catch (err) {
     print("Error adding to booksmarks : $err");
     return false;
   }
+
 }
 
 Future<bool> deleteBookMark(dataId) async {
