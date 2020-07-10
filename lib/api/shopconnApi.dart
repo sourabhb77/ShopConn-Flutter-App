@@ -190,7 +190,7 @@ Future<List<DocumentSnapshot>> getBookmarks() async {
     var ref2 = Firestore.instance
         .collection("post")
         .where("id", whereIn: documentList)
-        .orderBy("postedAt");
+        .orderBy("  At");
     var querySnapshot = await ref2.getDocuments();
 
     return querySnapshot.documents;
