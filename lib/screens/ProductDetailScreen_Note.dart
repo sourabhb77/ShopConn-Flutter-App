@@ -29,6 +29,8 @@ class _ProductDetailScreen_NoteState extends State<ProductDetailScreen_Note> {
     }
     return result;
   }
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
 
   void setBool() {
     setState(() => showmore = !showmore);
@@ -43,6 +45,7 @@ class _ProductDetailScreen_NoteState extends State<ProductDetailScreen_Note> {
     NoteNotifier noteNotifier = Provider.of<NoteNotifier>(context);
     imgList = noteNotifier.currentNote.imgList;
     return Scaffold(
+      key: _scaffoldKey,
         appBar: AppBar(
           backgroundColor: sc_AppBarBackgroundColor,
           actions: <Widget>[
@@ -398,7 +401,13 @@ class _ProductDetailScreen_NoteState extends State<ProductDetailScreen_Note> {
                           fontSize: 16.0,
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                         Future<bool> result =
+                            addToBookmarks(noteNotifier.currentNote.id);
+                        result.then((value) => value == true
+                            ? showSnackBar("Added to BookMarks")
+                            : showSnackBar("Error Occured"));
+                      },
                     ),
                   ],
                 ),
@@ -409,5 +418,26 @@ class _ProductDetailScreen_NoteState extends State<ProductDetailScreen_Note> {
             ],
           ),
         ));
+  }
+    void showSnackBar(String string) {
+    var snackBar =
+        new SnackBar(content: new Text(string,
+        style: TextStyle(color: Colors.white,
+        fontWeight: FontWeight.bold,
+        fontStyle: FontStyle.normal,  
+        ),
+        
+        ), backgroundColor: Colors.teal, action: SnackBarAction(
+          label: "Ok",
+          textColor: Colors.white,
+
+          onPressed: () {
+          },
+        ),
+        elevation: 4.0,
+      );
+    if(_scaffoldKey.currentState != null)
+    _scaffoldKey.currentState.showSnackBar(snackBar);
+
   }
 }
