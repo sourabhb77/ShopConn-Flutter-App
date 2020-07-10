@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shopconn/api/shopconnApi.dart';
 import 'package:shopconn/const/Theme.dart';
@@ -20,6 +23,7 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _passwordController = new TextEditingController();
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   AuthMode _authMode = AuthMode.Login;
 
   User _user = User();
@@ -39,6 +43,9 @@ class _LoginState extends State<Login> {
     });
 
     super.initState();
+
+    //Accessing FCM token
+    _firebaseMessaging.getToken().then((value) => print("TOKEN: ${value}")).catchError((err)=>print("Error token : $err"));
   }
 
   void _submitForm() async {

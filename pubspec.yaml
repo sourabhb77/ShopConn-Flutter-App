@@ -31,11 +31,7 @@ dependencies:
   carousel_slider: ^2.0.0
   image_cropper: ^1.0.2
   image_picker: ^0.6.7+3
-  # firebase_auth: ^0.16.0
-  cloud_firestore: ^0.13.5
-  firebase_storage: ^3.0.8
   # provider: ^4.1.2
-  firebase_auth: ^0.14.0+5
   # cloud_firestore: ^0.12.9+4
   provider: ^3.1.0
   tuple: ^1.0.3
@@ -46,6 +42,16 @@ dependencies:
   after_layout: ^1.0.7+2
 
   dash_chat: ^1.1.11
+
+  firebase_messaging: ^6.0.16
+  cloud_firestore: ^0.13.7
+  firebase_core: ^0.4.5
+  firebase_auth: ^0.16.1
+  firebase_storage: ^3.1.6
+
+
+
+
 
   
 
