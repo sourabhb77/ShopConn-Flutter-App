@@ -28,6 +28,7 @@ class _ProductDetailScreen_BookState extends State<ProductDetailScreen_Book> {
   ChatNotifier chatNotifier;
   String ownerName = "";
   Book currBook;
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -61,6 +62,7 @@ class _ProductDetailScreen_BookState extends State<ProductDetailScreen_Book> {
     // }
     // loadUserDetails();
     return Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
           backgroundColor: sc_AppBarBackgroundColor,
           actions: <Widget>[
@@ -72,7 +74,12 @@ class _ProductDetailScreen_BookState extends State<ProductDetailScreen_Book> {
             IconButton(
               icon: Icon(Icons.bookmark),
               tooltip: 'Saved Product',
-              onPressed: () {},
+              onPressed: () {
+                Future<bool> result =
+                    addToBookmarks(bookNotifier.currentBook.id);
+                result.then((value) =>
+                    value == true ? Navigator.pop(context) : print("Error"));
+              },
             ),
           ],
         ),
@@ -98,7 +105,7 @@ class _ProductDetailScreen_BookState extends State<ProductDetailScreen_Book> {
               // Container(
 
               // ),
-              Carousel(imgList:currBook.imgList),
+              Carousel(imgList: currBook.imgList),
               // SizedBox(
               //   height: 30.0,
               // ),
@@ -163,7 +170,6 @@ class _ProductDetailScreen_BookState extends State<ProductDetailScreen_Book> {
                           decoration: new BoxDecoration(
                             color: sc_skyblue,
                             borderRadius: BorderRadius.circular(7),
-                            
                           ),
                           padding: EdgeInsets.all(10.0),
                           child: Column(
@@ -467,7 +473,13 @@ class _ProductDetailScreen_BookState extends State<ProductDetailScreen_Book> {
                           fontSize: 16.0,
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Future<bool> result =
+                            addToBookmarks(bookNotifier.currentBook.id);
+                        result.then((value) => value == true
+                            ? showSnackBar("Added to BookMarks")
+                            : showSnackBar("Error Occured"));
+                      },
                     ),
                   ],
                 ),
@@ -478,5 +490,27 @@ class _ProductDetailScreen_BookState extends State<ProductDetailScreen_Book> {
             ],
           ),
         ));
+  }
+
+  void showSnackBar(String string) {
+    var snackBar =
+        new SnackBar(content: new Text(string,
+        style: TextStyle(color: Colors.white,
+        fontWeight: FontWeight.bold,
+        fontStyle: FontStyle.normal,  
+        ),
+        
+        ), backgroundColor: Colors.teal, action: SnackBarAction(
+          label: "Ok",
+          textColor: Colors.white,
+
+          onPressed: () {
+          },
+        ),
+        elevation: 4.0,
+      );
+    if(_scaffoldKey.currentState != null)
+    _scaffoldKey.currentState.showSnackBar(snackBar);
+
   }
 }

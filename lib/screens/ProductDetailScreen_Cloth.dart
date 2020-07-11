@@ -31,6 +31,8 @@ class _ProductDetailScreen_ClothState extends State<ProductDetailScreen_Cloth> {
   }
 
   int _current = 0;
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
 
   AuthNotifier authNotifier;
   ClothesNotifier bookNotifier;
@@ -43,6 +45,7 @@ class _ProductDetailScreen_ClothState extends State<ProductDetailScreen_Cloth> {
     ClothesNotifier clothesNotifier = Provider.of<ClothesNotifier>(context);
     imgList = clothesNotifier.currentClothes.imgList;
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         backgroundColor: sc_AppBarBackgroundColor,
         actions: <Widget>[
@@ -346,7 +349,14 @@ class _ProductDetailScreen_ClothState extends State<ProductDetailScreen_Cloth> {
                         fontSize: 16.0,
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Future<bool> result =
+                            addToBookmarks(clothesNotifier.currentClothes.id);
+                        result.then((value) => value == true
+                            ? showSnackBar("Added to BookMarks")
+                            : showSnackBar("Error Occured"));
+
+                    },
                   ),
                 ],
               ),
@@ -358,5 +368,26 @@ class _ProductDetailScreen_ClothState extends State<ProductDetailScreen_Cloth> {
         ),
       ),
     );
+  }
+    void showSnackBar(String string) {
+    var snackBar =
+        new SnackBar(content: new Text(string,
+        style: TextStyle(color: Colors.white,
+        fontWeight: FontWeight.bold,
+        fontStyle: FontStyle.normal,  
+        ),
+        
+        ), backgroundColor: Colors.teal, action: SnackBarAction(
+          label: "Ok",
+          textColor: Colors.white,
+
+          onPressed: () {
+          },
+        ),
+        elevation: 4.0,
+      );
+    if(_scaffoldKey.currentState != null)
+    _scaffoldKey.currentState.showSnackBar(snackBar);
+
   }
 }

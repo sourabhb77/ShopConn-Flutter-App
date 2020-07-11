@@ -32,7 +32,7 @@ class _ProductDetailScreen_OtherState extends State<ProductDetailScreen_Other> {
     return result;
   }
 
-  int _current = 0;
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   void setBool() {
     setState(() => showmore = !showmore);
@@ -45,6 +45,7 @@ class _ProductDetailScreen_OtherState extends State<ProductDetailScreen_Other> {
     OtherNotifier otherNotifier = Provider.of<OtherNotifier>(context);
     imgList = otherNotifier.currentOther.imgList;
     return Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
           backgroundColor: sc_AppBarBackgroundColor,
           actions: <Widget>[
@@ -82,7 +83,7 @@ class _ProductDetailScreen_OtherState extends State<ProductDetailScreen_Other> {
               // Container(
 
               // ),
-              Carousel(imgList:otherNotifier.currentOther.imgList),
+              Carousel(imgList: otherNotifier.currentOther.imgList),
               Padding(
                 padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
                 child: Text(
@@ -312,7 +313,13 @@ class _ProductDetailScreen_OtherState extends State<ProductDetailScreen_Other> {
                           fontSize: 16.0,
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Future<bool> result =
+                            addToBookmarks(otherNotifier.currentOther.id);
+                        result.then((value) => value == true
+                            ? showSnackBar("Added to BookMarks")
+                            : showSnackBar("Error Occured"));
+                      },
                     ),
                   ],
                 ),
@@ -323,5 +330,27 @@ class _ProductDetailScreen_OtherState extends State<ProductDetailScreen_Other> {
             ],
           ),
         ));
+  }
+
+  void showSnackBar(String string) {
+    var snackBar = new SnackBar(
+      content: new Text(
+        string,
+        style: TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+          fontStyle: FontStyle.normal,
+        ),
+      ),
+      backgroundColor: Colors.teal,
+      action: SnackBarAction(
+        label: "Ok",
+        textColor: Colors.white,
+        onPressed: () {},
+      ),
+      elevation: 4.0,
+    );
+    if (_scaffoldKey.currentState != null)
+      _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 }

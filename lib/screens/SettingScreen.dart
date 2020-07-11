@@ -259,6 +259,7 @@ class _SettingScreenState extends State<SettingScreen> {
                 Navigator.of(context).pushReplacement(
                     MaterialPageRoute(builder: (context) => Login()));
                 _clearUser();
+
               },
               child: Container(
                 padding: EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 15.0),
