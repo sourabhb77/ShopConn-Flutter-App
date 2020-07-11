@@ -103,10 +103,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           onTap: () {
                             print("going to search screen");
                             showSearch(
-                                context: context, delegate: SearchProduct());
+                                context: context,
+                                delegate: SearchProduct(category: ""));
                           },
                           child: Container(
-                            height: 45.0,
+                            height: 48.0,
                             decoration: BoxDecoration(
                               color: sc_AppBarTextColor,
                               borderRadius: BorderRadius.circular(8.0),
@@ -190,7 +191,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                     category: "Clothes")),
                           );
                         },
-                        
                         child: Image.asset(
                           'assets/images/CatClothes.png',
                           height: 80.0,

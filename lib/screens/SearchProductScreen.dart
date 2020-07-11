@@ -9,6 +9,8 @@ import 'package:shopconn/notifier/sortNotifier.dart';
 import 'package:shopconn/widgets/Item.dart';
 
 class SearchProduct extends SearchDelegate<dynamic> {
+  String category;
+  SearchProduct({this.category});
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
@@ -69,6 +71,9 @@ class SearchProduct extends SearchDelegate<dynamic> {
           .where("price",
               isGreaterThanOrEqualTo: filterNotifier.currentMinPrice);
     }
+
+    //to get only type of products
+    filterNotifier.currentProductCategory = category;
 
     if (filterNotifier.currentProductCategory != "") {
       switch (filterNotifier.currentProductCategory) {
@@ -143,7 +148,7 @@ class SearchProduct extends SearchDelegate<dynamic> {
         return true;
       },
       child: Scaffold(
-        appBar: CustomAppBar(),
+        appBar: CustomAppBar(category: category),
         body: StreamBuilder(
           stream: productStream,
           builder: (context, snapshot) {
@@ -204,10 +209,24 @@ class SearchProduct extends SearchDelegate<dynamic> {
     // );
 
     List inputTagList = query.toLowerCase().split(" ");
-    Stream<QuerySnapshot> productStream = Firestore.instance
-        .collection("post")
-        .where('tagList', arrayContainsAny: inputTagList)
-        .snapshots();
+    dynamic suggestRef = Firestore.instance.collection("post");
+    switch (category) {
+      case "Book":
+        suggestRef = suggestRef.where("productCategory", isEqualTo: category);
+        break;
+      case "Clothes":
+        suggestRef = suggestRef.where("productCategory", isEqualTo: category);
+        break;
+      case "Note":
+        suggestRef = suggestRef.where("productCategory", isEqualTo: category);
+        break;
+      case "Other":
+        suggestRef = suggestRef.where("productCategory", isEqualTo: category);
+        break;
+      default:
+    }
+    Stream<QuerySnapshot> productStream =
+        suggestRef.where('tagList', arrayContainsAny: inputTagList).snapshots();
     return StreamBuilder(
       stream: productStream,
       builder: (context, snapshot) {
@@ -223,18 +242,17 @@ class SearchProduct extends SearchDelegate<dynamic> {
             child: ListView.builder(
               padding: EdgeInsets.all(0.0),
               itemBuilder: (BuildContext context, index) {
-                return Container(
-                  padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                  child: InkWell(
-                    onTap: () {},
-                    child: Row(
-                      children: [
-                        Text(
-                          snapshot.data.documents[index]["name"],
-                          style: TextStyle(fontSize: 16.0),
-                        ),
-                      ],
-                    ),
+                return ListTile(
+                  onTap: () {
+                    query = snapshot.data.documents[index]["name"]
+                        .toString()
+                        .toLowerCase();
+                    showResults(context);
+                  },
+                  leading: SizedBox(),
+                  title: Text(
+                    snapshot.data.documents[index]["name"],
+                    style: TextStyle(fontSize: 16.0),
                   ),
                 );
               },
@@ -248,6 +266,8 @@ class SearchProduct extends SearchDelegate<dynamic> {
 }
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+  String category;
+  CustomAppBar({this.category});
   @override
   Widget build(BuildContext context) {
     print("building result");
@@ -258,7 +278,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         children: [
           Row(
             children: <Widget>[
-              Expanded(flex: 3, child: FilterBox()),
+              Expanded(flex: 3, child: FilterBox(category: category)),
               Expanded(flex: 3, child: SortBox()),
             ],
           ),
@@ -439,6 +459,8 @@ class _SortBoxState extends State<SortBox> {
 }
 
 class FilterBox extends StatelessWidget {
+  String category;
+  FilterBox({this.category});
   _showModalBottomSheet(context) {
     FilterNotifier filterNotifier =
         Provider.of<FilterNotifier>(context, listen: true);
@@ -510,7 +532,9 @@ class FilterBox extends StatelessWidget {
                                 filterNotifier.currentMinPrice = 0;
                                 filterNotifier.currentMaxPrice = 3000;
                                 filterNotifier.currentCondition = "";
-                                filterNotifier.currentProductCategory = "";
+                                if (category != "") {
+                                  filterNotifier.currentProductCategory = "";
+                                }
                                 Navigator.pop(context);
                                 print("****cleared******\n");
                               },
@@ -530,7 +554,7 @@ class FilterBox extends StatelessWidget {
                         color: sc_grey,
                         thickness: 8.0,
                       ),
-                      ProductCategory(),
+                      ProductCategory(category: category),
                       Divider(
                         height: 10.0,
                         color: sc_grey,
@@ -808,10 +832,11 @@ class _EstheticConditionState extends State<EstheticCondition> {
 }
 
 class ProductCategory extends StatefulWidget {
-  ProductCategory({Key key}) : super(key: key);
+  String category;
+  ProductCategory({Key key, @required this.category}) : super(key: key);
 
   @override
-  _ProductCategoryState createState() => _ProductCategoryState();
+  _ProductCategoryState createState() => _ProductCategoryState(category);
 }
 
 class _ProductCategoryState extends State<ProductCategory> {
@@ -824,6 +849,8 @@ class _ProductCategoryState extends State<ProductCategory> {
 
   String _branchNote = "";
   String _year = '';
+  String category;
+  _ProductCategoryState(this.category);
 
   Widget _buildBookOptions(BuildContext context) {
     FilterNotifier filterNotifier =
@@ -1769,135 +1796,143 @@ class _ProductCategoryState extends State<ProductCategory> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
-            child: Text(
-              "Product Category",
-              style: TextStyle(
-                fontSize: 16.0,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              GestureDetector(
-                onTap: () {
-                  if (filterNotifier.currentProductCategory != "Book") {
-                    filterNotifier.currentProductCategory = "Book";
-                  } else {
-                    filterNotifier.currentProductCategory = "";
-                  }
-                  filterNotifier.currentTypeOfCloth = "";
-                  filterNotifier.currentBranchNote = "";
-                  filterNotifier.currentYear = "";
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: filterNotifier.currentProductCategory == "Book"
-                        ? Border.all(
-                            color: sc_PrimaryColor,
-                            width: 5.0,
-                          )
-                        : null,
-                    borderRadius: BorderRadius.all(Radius.circular(13.0)),
-                  ),
-                  child: Image.asset(
-                    'assets/images/CatBooks.png',
-                    height: 70.0,
+          category != ""
+              ? Container()
+              : Padding(
+                  padding: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
+                  child: Text(
+                    "Product Category",
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  if (filterNotifier.currentProductCategory != "Clothes") {
-                    filterNotifier.currentProductCategory = "Clothes";
-                  } else {
-                    filterNotifier.currentProductCategory = "";
-                  }
-                  filterNotifier.currentBookCategory = "";
-                  filterNotifier.currentBranchBook = "";
-                  filterNotifier.currentYear = "";
-                  filterNotifier.currentBranchNote = "";
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: filterNotifier.currentProductCategory == "Clothes"
-                        ? Border.all(
-                            color: sc_PrimaryColor,
-                            width: 5.0,
-                          )
-                        : null,
-                    borderRadius: BorderRadius.all(Radius.circular(13.0)),
-                  ),
-                  child: Image.asset(
-                    'assets/images/CatClothes.png',
-                    height: 70.0,
-                  ),
+          category != ""
+              ? Container()
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    GestureDetector(
+                      onTap: () {
+                        if (filterNotifier.currentProductCategory != "Book") {
+                          filterNotifier.currentProductCategory = "Book";
+                        } else {
+                          filterNotifier.currentProductCategory = "";
+                        }
+                        filterNotifier.currentTypeOfCloth = "";
+                        filterNotifier.currentBranchNote = "";
+                        filterNotifier.currentYear = "";
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border:
+                              filterNotifier.currentProductCategory == "Book"
+                                  ? Border.all(
+                                      color: sc_PrimaryColor,
+                                      width: 5.0,
+                                    )
+                                  : null,
+                          borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                        ),
+                        child: Image.asset(
+                          'assets/images/CatBooks.png',
+                          height: 70.0,
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        if (filterNotifier.currentProductCategory !=
+                            "Clothes") {
+                          filterNotifier.currentProductCategory = "Clothes";
+                        } else {
+                          filterNotifier.currentProductCategory = "";
+                        }
+                        filterNotifier.currentBookCategory = "";
+                        filterNotifier.currentBranchBook = "";
+                        filterNotifier.currentYear = "";
+                        filterNotifier.currentBranchNote = "";
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border:
+                              filterNotifier.currentProductCategory == "Clothes"
+                                  ? Border.all(
+                                      color: sc_PrimaryColor,
+                                      width: 5.0,
+                                    )
+                                  : null,
+                          borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                        ),
+                        child: Image.asset(
+                          'assets/images/CatClothes.png',
+                          height: 70.0,
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        if (filterNotifier.currentProductCategory != "Note") {
+                          filterNotifier.currentProductCategory = "Note";
+                        } else {
+                          filterNotifier.currentProductCategory = "";
+                        }
+                        filterNotifier.currentBookCategory = "";
+                        filterNotifier.currentBranchBook = "";
+                        filterNotifier.currentTypeOfCloth = "";
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border:
+                              filterNotifier.currentProductCategory == "Note"
+                                  ? Border.all(
+                                      color: sc_PrimaryColor,
+                                      width: 5.0,
+                                    )
+                                  : null,
+                          borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                        ),
+                        child: Image.asset(
+                          'assets/images/CatNotes.png',
+                          height: 70.0,
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        if (filterNotifier.currentProductCategory != "Other") {
+                          filterNotifier.currentProductCategory = "Other";
+                        } else {
+                          filterNotifier.currentProductCategory = "";
+                        }
+                        filterNotifier.currentBookCategory = "";
+                        filterNotifier.currentBranchBook = "";
+                        filterNotifier.currentTypeOfCloth = "";
+                        filterNotifier.currentBranchNote = "";
+                        filterNotifier.currentYear = "";
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border:
+                              filterNotifier.currentProductCategory == "Other"
+                                  ? Border.all(
+                                      color: sc_PrimaryColor,
+                                      width: 5.0,
+                                    )
+                                  : null,
+                          borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                        ),
+                        child: Image.asset(
+                          'assets/images/CatOther.png',
+                          height: 70.0,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  if (filterNotifier.currentProductCategory != "Note") {
-                    filterNotifier.currentProductCategory = "Note";
-                  } else {
-                    filterNotifier.currentProductCategory = "";
-                  }
-                  filterNotifier.currentBookCategory = "";
-                  filterNotifier.currentBranchBook = "";
-                  filterNotifier.currentTypeOfCloth = "";
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: filterNotifier.currentProductCategory == "Note"
-                        ? Border.all(
-                            color: sc_PrimaryColor,
-                            width: 5.0,
-                          )
-                        : null,
-                    borderRadius: BorderRadius.all(Radius.circular(13.0)),
-                  ),
-                  child: Image.asset(
-                    'assets/images/CatNotes.png',
-                    height: 70.0,
-                  ),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  if (filterNotifier.currentProductCategory != "Other") {
-                    filterNotifier.currentProductCategory = "Other";
-                  } else {
-                    filterNotifier.currentProductCategory = "";
-                  }
-                  filterNotifier.currentBookCategory = "";
-                  filterNotifier.currentBranchBook = "";
-                  filterNotifier.currentTypeOfCloth = "";
-                  filterNotifier.currentBranchNote = "";
-                  filterNotifier.currentYear = "";
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: filterNotifier.currentProductCategory == "Other"
-                        ? Border.all(
-                            color: sc_PrimaryColor,
-                            width: 5.0,
-                          )
-                        : null,
-                    borderRadius: BorderRadius.all(Radius.circular(13.0)),
-                  ),
-                  child: Image.asset(
-                    'assets/images/CatOther.png',
-                    height: 70.0,
-                  ),
-                ),
-              ),
-            ],
-          ),
 
           // different options by diff category
-
           filterNotifier.currentProductCategory == "Book"
               ? _buildBookOptions(context)
               : Container(),
