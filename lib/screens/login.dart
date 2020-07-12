@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shopconn/api/googleSignInApi.dart';
 import 'package:shopconn/api/shopconnApi.dart';
 import 'package:shopconn/const/Theme.dart';
 import 'package:shopconn/models/user.dart';
@@ -10,6 +11,10 @@ import 'package:shopconn/notifier/authNotifier.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopconn/screens/HomeScreen.dart';
+
+import '../api/shopconnApi.dart';
+import '../api/shopconnApi.dart';
+import '../notifier/authNotifier.dart';
 
 enum AuthMode { Signup, Login }
 
@@ -24,14 +29,14 @@ class _LoginState extends State<Login> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _passwordController = new TextEditingController();
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  AuthNotifier authNotifier;
   AuthMode _authMode = AuthMode.Login;
 
   User _user = User();
 
   @override
   void initState() {
-    AuthNotifier authNotifier =
-        Provider.of<AuthNotifier>(context, listen: false);
+    authNotifier = Provider.of<AuthNotifier>(context, listen: false);
     initializeCurrentUser(authNotifier);
     Future<FirebaseUser> user = FirebaseAuth.instance.currentUser();
     user.then((FirebaseUser _user) {
@@ -41,7 +46,6 @@ class _LoginState extends State<Login> {
         print("User is not null , uid: ${_user.uid} email: ${_user.email}");
       }
     });
-
     super.initState();
 
     //Accessing FCM token
@@ -62,10 +66,8 @@ class _LoginState extends State<Login> {
         Provider.of<AuthNotifier>(context, listen: false);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (_authMode == AuthMode.Login) {
-
       String result = await login(_user, authNotifier);
 
-      
       if (result.compareTo("True") == 0) {
         await prefs.setBool('logined', true);
 
@@ -83,6 +85,29 @@ class _LoginState extends State<Login> {
     }
   }
 
+  void _sigInGoogle() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    if (_authMode == AuthMode.Login) {
+      var result = await signInWithGoogle();
+
+      if (result == true) {
+        await prefs.setBool('logined', true);
+        initializeCurrentUser(authNotifier);
+
+        Navigator.of(context).pushReplacement(
+            new MaterialPageRoute(builder: (context) => HomeScreen()));
+      } else {
+        var snackBar = new SnackBar(
+            content: new Text("An Error Occured!!, Try again Later!!!"),
+            backgroundColor: Colors.red);
+
+        // Find the Scaffold in the Widget tree and use it to show a SnackBar!
+        Scaffold.of(_formKey.currentContext).showSnackBar(snackBar);
+      }
+    }
+  }
+
   Widget _buildDisplayNameField() {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
@@ -91,7 +116,7 @@ class _LoginState extends State<Login> {
           fillColor: sc_InputBackgroundColor,
           filled: true,
           prefixIcon: Icon(
-            Icons.print,
+            Icons.email,
             color: sc_ItemTitleColor,
           ),
           hintText: "Display Name",
@@ -137,7 +162,7 @@ class _LoginState extends State<Login> {
           fillColor: sc_InputBackgroundColor,
           filled: true,
           prefixIcon: Icon(
-            Icons.print,
+            Icons.email,
             color: sc_ItemTitleColor,
           ),
           hintText: "Email",
@@ -185,7 +210,7 @@ class _LoginState extends State<Login> {
           fillColor: sc_InputBackgroundColor,
           filled: true,
           prefixIcon: Icon(
-            Icons.print,
+            Icons.lock,
             color: sc_ItemTitleColor,
           ),
           hintText: "Password",
@@ -231,7 +256,7 @@ class _LoginState extends State<Login> {
           fillColor: sc_InputBackgroundColor,
           filled: true,
           prefixIcon: Icon(
-            Icons.print,
+            Icons.enhanced_encryption,
             color: sc_ItemTitleColor,
           ),
           hintText: "Confirm Password",
@@ -264,6 +289,11 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     print("Building login screen");
+    if (authNotifier.user != null) {
+      print("Authno Notifier");
+      Navigator.of(context).pushReplacement(
+          new MaterialPageRoute(builder: (context) => HomeScreen()));
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -330,7 +360,9 @@ class _LoginState extends State<Login> {
                   child: RaisedButton(
                     color: sc_AppBarTextColor,
                     padding: EdgeInsets.all(10.0),
-                    onPressed: () {},
+                    onPressed: () {
+                      _sigInGoogle();
+                    },
                     child: Text(
                       _authMode == AuthMode.Login
                           ? 'Login with Google'

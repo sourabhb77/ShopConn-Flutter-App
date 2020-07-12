@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:shopconn/api/googleSignInApi.dart';
 import 'package:shopconn/models/Message.dart';
 import 'package:shopconn/models/SavedProductData.dart';
 import 'package:shopconn/models/clothes.dart';
@@ -76,10 +77,15 @@ Future<FirebaseUser> getCurrendFirebaseUser() async {
 }
 
 signout(AuthNotifier authNotifier) async {
-  await FirebaseAuth.instance
-      .signOut()
-      .catchError((error) => print(error.code));
-  authNotifier.setUser(null);
+  try {
+    await signOutGoogle();
+    await FirebaseAuth.instance
+        .signOut()
+        .catchError((error) => print(error.code));
+    authNotifier.setUser(null);
+  } catch (err) {
+    print("Error : $err");
+  }
 }
 
 initializeCurrentUser(AuthNotifier authNotifier) async {
@@ -204,10 +210,9 @@ Future<List<DocumentSnapshot>> getBookmarks() async {
  */
 
 Future<bool> addToBookmarks(String postId) async {
-  
   // await new Future.delayed(const Duration(seconds : 5));
 
- FirebaseUser user = await FirebaseAuth.instance.currentUser();
+  FirebaseUser user = await FirebaseAuth.instance.currentUser();
 
   try {
     String id = user.uid;
@@ -221,7 +226,6 @@ Future<bool> addToBookmarks(String postId) async {
     print("Error adding to booksmarks : $err");
     return false;
   }
-
 }
 
 Future<bool> deleteBookMark(dataId) async {
