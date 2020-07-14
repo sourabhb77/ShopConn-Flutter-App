@@ -278,11 +278,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       print(
                           "Home :Posted At: ${snapshot.data.documents[index]["postedAt"]}");
 
-                      return Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: ProductItem(
-                          data: snapshot.data.documents[index],
-                        ),
+                      return ProductItem(
+                        data: snapshot.data.documents[index],
                       );
                     }, childCount: snapshot.data.documents.length),
                   );

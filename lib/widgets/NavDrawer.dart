@@ -44,7 +44,7 @@ class _NavDrawer extends State<NavDrawer> {
   @override
   Widget build(BuildContext context) {
     AuthNotifier _authNotifier =
-        Provider.of<AuthNotifier>(context, listen: false);
+        Provider.of<AuthNotifier>(context, listen: true);
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,

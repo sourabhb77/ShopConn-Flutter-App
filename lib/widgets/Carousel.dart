@@ -63,6 +63,7 @@ class _CarouselState extends State<Carousel> {
                 _current = index;
               });
             },
+            enableInfiniteScroll: false,
             // onPageChanged: (_current) {
             //   setState(() {
             //     _current = index;

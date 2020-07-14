@@ -255,7 +255,7 @@ class ProductItem extends StatelessWidget {
     NoteNotifier noteNotifier = Provider.of<NoteNotifier>(context);
     OtherNotifier otherNotifier = Provider.of<OtherNotifier>(context);
     return Container(
-      padding: EdgeInsets.fromLTRB(0, 3, 0, 3),
+      padding: EdgeInsets.fromLTRB(0, 7, 0, 2),
       decoration: BoxDecoration(
         // color: sc_grey,
         borderRadius: BorderRadius.circular(7),
@@ -266,7 +266,7 @@ class ProductItem extends StatelessWidget {
             margin: EdgeInsets.all(0.0),
             elevation: 0.0,
             child: InkWell(
-              splashColor: Colors.red,
+              splashColor: sc_PrimaryColor,
               onTap: () {
                 switch (data["productCategory"]) {
                   case "Book":

@@ -196,7 +196,7 @@ Future<List<DocumentSnapshot>> getBookmarks() async {
     var ref2 = Firestore.instance
         .collection("post")
         .where("id", whereIn: documentList)
-        .orderBy("  At");
+        .orderBy("postedAt");
     var querySnapshot = await ref2.getDocuments();
 
     return querySnapshot.documents;
@@ -267,4 +267,33 @@ isPresent(String sender, String receiver, ChatNotifier chatNotifier,
     }
   });
   return ans;
+}
+
+//to delete product
+Future<bool> deleteProduct(String productId) async {
+  try {
+    QuerySnapshot ref = await Firestore.instance
+        .collection("post")
+        .where("id", isEqualTo: productId)
+        .getDocuments();
+
+    for (var document in ref.documents) {
+      document.reference.delete();
+    }
+    return true;
+  } catch (err) {
+    print("Error in removing: $err");
+    return false;
+  }
+}
+
+markAsSold(String productId) async {
+  await Firestore.instance
+      .collection("post")
+      .document(productId)
+      .updateData({"onSell": false})
+      .then((value) => print("marked as sold"))
+      .catchError((err) {
+        print("got error");
+      });
 }

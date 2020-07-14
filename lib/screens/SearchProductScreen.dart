@@ -74,7 +74,6 @@ class SearchProduct extends SearchDelegate<dynamic> {
 
     //to get only type of products
     filterNotifier.currentProductCategory = category;
-
     if (filterNotifier.currentProductCategory != "") {
       switch (filterNotifier.currentProductCategory) {
         case "Book":
