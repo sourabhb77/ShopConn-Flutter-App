@@ -352,6 +352,7 @@ class _ProductDetailScreen_NoteState extends State<ProductDetailScreen_Note> {
               SizedBox(
                 height: 15.0,
               ),
+              authNotifier.userId!=noteNotifier.currentNote.ownerId?
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 50.0),
                 child: Column(
@@ -413,7 +414,7 @@ class _ProductDetailScreen_NoteState extends State<ProductDetailScreen_Note> {
                     ),
                   ],
                 ),
-              ),
+              ):Container(),
               SizedBox(
                 height: 15.0,
               ),

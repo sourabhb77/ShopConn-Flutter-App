@@ -8,6 +8,7 @@ import 'package:shopconn/models/clothes.dart';
 import 'package:shopconn/notifier/clothesNotifier.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:shopconn/screens/AfterProductScreen.dart';
 // import 'package:shopconn/screens/SavedProductScreen.dart';
 
 import '../api/shopconnApi.dart';
@@ -33,7 +34,8 @@ class _AddProuctScreen_ClothState extends State<AddProuctScreen_Cloth> {
   String _condition = "Good";
   TextEditingController authorListController = new TextEditingController();
   List<File> imageList = List();
-  List<String> tagList = []; // to store tags for searching
+  List<String> tagList = []; 
+  String category;// to store tags for searching
 
   initClothes() {
     print("Initial Constructor");
@@ -78,6 +80,12 @@ class _AddProuctScreen_ClothState extends State<AddProuctScreen_Cloth> {
       }
     }
     print(tagList);
+  }
+
+    void _deleteImage({int index}){
+    setState(() {
+      imageList.remove(imageList[index]);
+    });
   }
 
   _AddProuctScreen_ClothState(this.name) {
@@ -586,8 +594,8 @@ class _AddProuctScreen_ClothState extends State<AddProuctScreen_Cloth> {
                   ),
                 ),
               ),
-              SizedBox(
-                height: 30.0,
+               SizedBox(
+                height: 5.0,
               ),
               GridView.count(
                   shrinkWrap: true,
@@ -598,10 +606,31 @@ class _AddProuctScreen_ClothState extends State<AddProuctScreen_Cloth> {
                   // mainAxisSpacing: 2,
 
                   children: List.generate(imageList.length, (index) {
-                    return Container(
-                      child: Image(image: FileImage(imageList[index])),
+                    return Stack(
+                    children:[
+                      Container(
+                        child: Image(image: FileImage(imageList[index]),
+                        height: 300,
+                        width: 150,),
+                      ),
+                       Positioned(
+                        bottom: 0,
+                        right: 5,
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.delete,
+                            color: sc_AppBarBackgroundColor,
+                            size: 35.0,
+                          ),
+                          onPressed: () {
+                            _deleteImage(index:index);
+                          },
+                        ),
+                      ),
+                      ]
                     );
                   })),
+                  SizedBox(height:60.0),
             ],
           ),
         ),
@@ -639,22 +668,30 @@ class _AddProuctScreen_ClothState extends State<AddProuctScreen_Cloth> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0)),
               onPressed: () {
-                _currentClothes.name = name;
-                _currentClothes.condition = _condition;
-                _currentClothes.type = _type;
-                tagList.add(_currentClothes.type.toLowerCase());
-                addToTagList(_currentClothes.name);
-                _currentClothes.tagList = tagList;
-                if (!_formKey.currentState.validate()) {
-                  print("Errorrr");
-                } else {
-                  _formKey.currentState.save();
-                  saveClothes();
+                if(imageList.length<1)
+                {
+                  _showMyDialog();
                 }
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => SavedProductScreen()),
-                // );
+                                  else{
+                                  _currentClothes.name = name;
+                                  _currentClothes.condition = _condition;
+                                  _currentClothes.type = _type;
+                                  tagList.add(_currentClothes.type.toLowerCase());
+                                  addToTagList(_currentClothes.name);
+                                  _currentClothes.tagList = tagList;
+                                  if (!_formKey.currentState.validate()) {
+                                    print("Errorrr");
+                                  } else {
+                                    _formKey.currentState.save();
+                                    saveClothes();
+                                  }
+                 Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => AfterProductScreen(category: _currentClothes.productCategory,),
+                                    ),
+                                    (route)=>route.isFirst,
+                                  );
+                                  }
               },
             ),
           ],
@@ -662,4 +699,30 @@ class _AddProuctScreen_ClothState extends State<AddProuctScreen_Cloth> {
       ),
     );
   }
+   Future<void> _showMyDialog() async{
+    return showDialog<void>(
+    context: context,
+    barrierDismissible: false, // user must tap button!
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Photo not uploaded.'),
+        content: SingleChildScrollView(
+          child: ListBody(
+            children: <Widget>[
+              Text('You cannot post without uploading a image.'),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          FlatButton(
+            child: Text('Ok'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );         
+}
 }

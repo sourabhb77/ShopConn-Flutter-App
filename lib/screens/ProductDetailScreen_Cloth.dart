@@ -298,6 +298,7 @@ class _ProductDetailScreen_ClothState extends State<ProductDetailScreen_Cloth> {
             SizedBox(
               height: 15.0,
             ),
+            authNotifier.userId!=clothesNotifier.currentClothes.ownerId?
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 50.0),
               child: Column(
@@ -359,7 +360,7 @@ class _ProductDetailScreen_ClothState extends State<ProductDetailScreen_Cloth> {
                   ),
                 ],
               ),
-            ),
+            ):Container(),
             SizedBox(
               height: 15.0,
             ),

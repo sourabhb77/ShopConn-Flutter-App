@@ -415,6 +415,7 @@ class _ProductDetailScreen_BookState extends State<ProductDetailScreen_Book> {
               SizedBox(
                 height: 15.0,
               ),
+               authNotifier.userId!=bookNotifier.currentBook.ownerId?
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 50.0),
                 child: Column(
@@ -483,7 +484,7 @@ class _ProductDetailScreen_BookState extends State<ProductDetailScreen_Book> {
                     ),
                   ],
                 ),
-              ),
+              ):Container(),
               SizedBox(
                 height: 15.0,
               ),
