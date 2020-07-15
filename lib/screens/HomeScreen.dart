@@ -242,15 +242,15 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         textAlign: TextAlign.start,
                       ),
-                      Text(
-                        "See More",
-                        style: TextStyle(
-                          color: sc_ItemTitleColor,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 18.0,
-                        ),
-                        textAlign: TextAlign.end,
-                      )
+                      // Text(
+                      //   "See More",
+                      //   style: TextStyle(
+                      //     color: sc_ItemTitleColor,
+                      //     fontWeight: FontWeight.w500,
+                      //     fontSize: 18.0,
+                      //   ),
+                      //   textAlign: TextAlign.end,
+                      // )
                     ],
                   ),
                 ),

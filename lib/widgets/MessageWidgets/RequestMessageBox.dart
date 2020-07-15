@@ -178,7 +178,7 @@ class _MessageboxState extends State<Messagebox> {
     });
   }
 
-  Future<Tuple2<ChatUser, String>> getLatest() async {
+  Future<Tuple3<ChatUser, String, Timestamp>> getLatest() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
 
     String id = user.uid == widget.room.members[0]
@@ -192,8 +192,11 @@ class _MessageboxState extends State<Messagebox> {
         .limit(1)
         .getDocuments();
 
-    return Tuple2(ChatUser.fromMap(ref.data),
-        ref2.documents[0].data["message"].toString());
+    return Tuple3(
+      ChatUser.fromMap(ref.data),
+      ref2.documents[0].data["message"].toString(),
+      ref2.documents[0].data["timeStamp"],
+    );
   }
 
   @override
@@ -212,6 +215,7 @@ class _MessageboxState extends State<Messagebox> {
         return ChatCard(
             user: snapshot.data.item1,
             latestMessage: snapshot.data.item2,
+            lastSeen: snapshot.data.item3,
             room: widget.room);
       },
     );
@@ -222,8 +226,9 @@ class ChatCard extends StatelessWidget {
   final ChatUser user;
   final String latestMessage;
   final ChatRoom room;
+  final Timestamp lastSeen;
 
-  ChatCard({this.user, this.latestMessage, this.room}) {}
+  ChatCard({this.user, this.latestMessage, this.room, this.lastSeen});
   @override
   Widget build(BuildContext context) {
     ChatNotifier chatNotifier =
@@ -243,36 +248,44 @@ class ChatCard extends StatelessWidget {
           );
         },
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(0.0, 8.0, 0.0, 8.0),
+          padding: const EdgeInsets.fromLTRB(10.0, 8.0, 10.0, 8.0),
           child: Row(
             children: <Widget>[
-              Expanded(
-                child: CircleAvatar(
-                    radius: 30.0,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(28),
-                      child: Image.network(
-                        user != null
-                            ? user.imageUrl.length != 0
-                                ? user.imageUrl
-                                : 'https://image.freepik.com/free-vector/doctor-character-background_1270-83.jpg'
-                            : 'https://image.freepik.com/free-vector/doctor-character-background_1270-84.jpg',
-                        fit: BoxFit.fill,
-                      ),
-                    )),
+              CircleAvatar(
+                radius: 30.0,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(30),
+                  child: Image.network(
+                    user != null
+                        ? user.imageUrl.length != 0
+                            ? user.imageUrl
+                            : 'https://image.freepik.com/free-vector/doctor-character-background_1270-83.jpg'
+                        : 'https://image.freepik.com/free-vector/doctor-character-background_1270-84.jpg',
+                    fit: BoxFit.fill,
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 20.0,
               ),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    Text(user != null ? user.email : "Email",
+                    Text(user != null ? user.name : "Name",
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 14.0, color: Colors.black)),
-                    Text(latestMessage,
-                        textAlign: TextAlign.center,
-                        style: new TextStyle(
-                            fontSize: 14.0, color: Colors.grey[400])),
+                    Text(
+                      latestMessage.length > 12
+                          ? latestMessage.substring(0, 12) + "..."
+                          : latestMessage,
+                      textAlign: TextAlign.center,
+                      style: new TextStyle(
+                        fontSize: 14.0,
+                        color: Colors.grey[400],
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -282,14 +295,32 @@ class ChatCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    Text('yesterday',
-                        textAlign: TextAlign.center,
-                        style:
-                            new TextStyle(fontSize: 14.0, color: Colors.black)),
-                    Text('12.00pm',
-                        textAlign: TextAlign.center,
-                        style: new TextStyle(
-                            fontSize: 14.0, color: Colors.grey[400])),
+                    Text(
+                      lastSeen != null
+                          ? lastSeen.toDate().day.toString() +
+                              "/" +
+                              lastSeen.toDate().month.toString() +
+                              "/" +
+                              lastSeen.toDate().year.toString()
+                          : "",
+                      textAlign: TextAlign.center,
+                      style: new TextStyle(
+                        fontSize: 14.0,
+                        color: Colors.black,
+                      ),
+                    ),
+                    Text(
+                      lastSeen != null
+                          ? lastSeen.toDate().hour.toString() +
+                              ":" +
+                              lastSeen.toDate().minute.toString()
+                          : "",
+                      textAlign: TextAlign.center,
+                      style: new TextStyle(
+                        fontSize: 14.0,
+                        color: Colors.grey[400],
+                      ),
+                    ),
                   ],
                 ),
               ),

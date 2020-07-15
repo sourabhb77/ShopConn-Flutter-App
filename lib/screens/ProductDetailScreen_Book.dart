@@ -415,75 +415,78 @@ class _ProductDetailScreen_BookState extends State<ProductDetailScreen_Book> {
               SizedBox(
                 height: 15.0,
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 50.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    RaisedButton(
-                      onPressed: () async {
-                        receiver = bookNotifier.currentBook.ownerId;
-                        sender = authNotifier.userId;
-                        print(isPresent(
-                            sender, receiver, chatNotifier, authNotifier));
-                        ans = (await isPresent(
-                                sender, receiver, chatNotifier, authNotifier))
-                            .toString();
-                        change();
-                        if (ans == "null") {
-                          // print(bookNotifier.currentBook.ownerId);
-                          // print("Sending Chat Request NOW ****************");
+              authNotifier.userId == bookNotifier.currentBook.ownerId
+                  ? Container()
+                  : Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 50.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          RaisedButton(
+                            onPressed: () async {
+                              receiver = bookNotifier.currentBook.ownerId;
+                              sender = authNotifier.userId;
+                              print(isPresent(sender, receiver, chatNotifier,
+                                  authNotifier));
+                              ans = (await isPresent(sender, receiver,
+                                      chatNotifier, authNotifier))
+                                  .toString();
+                              change();
+                              if (ans == "null") {
+                                // print(bookNotifier.currentBook.ownerId);
+                                // print("Sending Chat Request NOW ****************");
 
-                          // sendRequest();
-                          // print("REQUEST SENT ************************");
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ChatBoxWidget(
-                                ownerId: bookNotifier.currentBook.ownerId,
-                                productId: bookNotifier.currentBook.id,
+                                // sendRequest();
+                                // print("REQUEST SENT ************************");
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ChatBoxWidget(
+                                      ownerId: bookNotifier.currentBook.ownerId,
+                                      productId: bookNotifier.currentBook.id,
+                                    ),
+                                  ),
+                                );
+                              } else if (ans != "null") {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ChatPage()),
+                                );
+                              }
+                            },
+                            color: sc_PrimaryColor,
+                            child: Column(
+                              children: <Widget>[
+                                Text(
+                                  "Chat now",
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                    color: sc_AppBarTextColor,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          OutlineButton(
+                            color: sc_PrimaryColor,
+                            child: Text(
+                              'Add to WishList',
+                              style: TextStyle(
+                                fontSize: 16.0,
                               ),
                             ),
-                          );
-                        } else if (ans != "null") {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => ChatPage()),
-                          );
-                        }
-                      },
-                      color: sc_PrimaryColor,
-                      child: Column(
-                        children: <Widget>[
-                          Text(
-                            "Chat now",
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              color: sc_AppBarTextColor,
-                            ),
+                            onPressed: () {
+                              Future<bool> result =
+                                  addToBookmarks(bookNotifier.currentBook.id);
+                              result.then((value) => value == true
+                                  ? showSnackBar("Added to BookMarks")
+                                  : showSnackBar("Error Occured"));
+                            },
                           ),
                         ],
                       ),
                     ),
-                    OutlineButton(
-                      color: sc_PrimaryColor,
-                      child: Text(
-                        'Add to WishList',
-                        style: TextStyle(
-                          fontSize: 16.0,
-                        ),
-                      ),
-                      onPressed: () {
-                        Future<bool> result =
-                            addToBookmarks(bookNotifier.currentBook.id);
-                        result.then((value) => value == true
-                            ? showSnackBar("Added to BookMarks")
-                            : showSnackBar("Error Occured"));
-                      },
-                    ),
-                  ],
-                ),
-              ),
               SizedBox(
                 height: 15.0,
               ),
@@ -493,24 +496,24 @@ class _ProductDetailScreen_BookState extends State<ProductDetailScreen_Book> {
   }
 
   void showSnackBar(String string) {
-    var snackBar =
-        new SnackBar(content: new Text(string,
-        style: TextStyle(color: Colors.white,
-        fontWeight: FontWeight.bold,
-        fontStyle: FontStyle.normal,  
+    var snackBar = new SnackBar(
+      content: new Text(
+        string,
+        style: TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+          fontStyle: FontStyle.normal,
         ),
-        
-        ), backgroundColor: Colors.teal, action: SnackBarAction(
-          label: "Ok",
-          textColor: Colors.white,
-
-          onPressed: () {
-          },
-        ),
-        elevation: 4.0,
-      );
-    if(_scaffoldKey.currentState != null)
-    _scaffoldKey.currentState.showSnackBar(snackBar);
-
+      ),
+      backgroundColor: Colors.teal,
+      action: SnackBarAction(
+        label: "Ok",
+        textColor: Colors.white,
+        onPressed: () {},
+      ),
+      elevation: 4.0,
+    );
+    if (_scaffoldKey.currentState != null)
+      _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 }

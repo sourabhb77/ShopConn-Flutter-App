@@ -13,6 +13,7 @@ class BookMarksState extends State<BookMarks> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: sc_PrimaryColor,
         title: Text(
           "Bookmarks",
           style: TextStyle(color: sc_AppBarTextColor),
@@ -28,11 +29,8 @@ class BookMarksState extends State<BookMarks> {
             return ListView.builder(
                 itemBuilder: (context, index) {
                   // return Text("data");
-                  return Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: DeleteableProductItem(
-                      data: snapshot.data[index].data,
-                    ),
+                  return DeleteableProductItem(
+                    data: snapshot.data[index].data,
                   );
                 },
                 itemCount: snapshot.data.length);

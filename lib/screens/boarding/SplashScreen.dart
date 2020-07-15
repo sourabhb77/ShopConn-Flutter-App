@@ -18,7 +18,6 @@ class SplashScreen extends StatefulWidget {
 class SplashScreenState extends State<SplashScreen>
     with AfterLayoutMixin<SplashScreen> {
   Future checkFirstSeen() async {
-
     //   AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
     // initializeCurrentUser(authNotifier);
 
@@ -49,8 +48,6 @@ class SplashScreenState extends State<SplashScreen>
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => BoardingScreen()));
     }
-
-   
   }
 
   @override
@@ -60,7 +57,9 @@ class SplashScreenState extends State<SplashScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text('Loading...'),
+        child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
+        ),
       ),
     );
   }

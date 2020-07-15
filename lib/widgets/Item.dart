@@ -123,17 +123,22 @@ class DeleteableProductItem extends StatelessWidget {
         }
       },
       child: Container(
+        padding: EdgeInsets.fromLTRB(0, 7, 0, 2),
+        decoration: BoxDecoration(
+          // color: sc_grey,
+          borderRadius: BorderRadius.circular(7),
+        ),
         child: Column(
           children: [
             Card(
               margin: EdgeInsets.all(0.0),
               elevation: 0.0,
               child: InkWell(
-                splashColor: Colors.red,
+                splashColor: sc_PrimaryColor,
                 onTap: () {
                   switch (data["productCategory"]) {
                     case "Book":
-                      Book book = Book.fromMap(data.data);
+                      Book book = Book.fromMap(data);
                       bookNotifier.currentBook = book;
                       Navigator.push(
                         context,
@@ -142,7 +147,7 @@ class DeleteableProductItem extends StatelessWidget {
                       );
                       break;
                     case "Clothes":
-                      Clothes cloth = Clothes.fromMap(data.data);
+                      Clothes cloth = Clothes.fromMap(data);
                       clothNotifier.currentClothes = cloth;
                       Navigator.push(
                         context,
@@ -151,7 +156,7 @@ class DeleteableProductItem extends StatelessWidget {
                       );
                       break;
                     case "Note":
-                      Note note = Note.fromMap(data.data);
+                      Note note = Note.fromMap(data);
                       noteNotifier.currentNote = note;
                       Navigator.push(
                         context,
@@ -160,7 +165,7 @@ class DeleteableProductItem extends StatelessWidget {
                       );
                       break;
                     case "Other":
-                      Other other = Other.fromMap(data.data);
+                      Other other = Other.fromMap(data);
                       otherNotifier.currentOther = other;
                       Navigator.push(
                         context,
@@ -176,16 +181,23 @@ class DeleteableProductItem extends StatelessWidget {
                     Expanded(
                       flex: 2,
                       child: Container(
+                        decoration: new BoxDecoration(
+                          color: sc_grey,
+                          borderRadius: BorderRadius.circular(7),
+                        ),
                         margin: const EdgeInsets.symmetric(horizontal: 15.0),
-                        color: Colors.blueGrey,
-                        child: Image.network(
-                          data["imgList"] != null
-                              ? data["imgList"][0]
-                              : 'https://www.testingxperts.com/wp-content/uploads/2019/02/placeholder-img.jpg',
-                          // width: 120,
-                          // fit: BoxFit.fitWidth,
-                          height: 130,
-                          fit: BoxFit.fitHeight,
+                        // color: Colors.blueGrey,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(7.0),
+                          child: Image.network(
+                            data["imgList"] != null
+                                ? data["imgList"][0]
+                                : 'https://www.testingxperts.com/wp-content/uploads/2019/02/placeholder-img.jpg',
+                            // width: 120,
+                            // fit: BoxFit.fitWidth,
+                            height: 130,
+                            fit: BoxFit.fitHeight,
+                          ),
                         ),
                       ),
                     ),
@@ -197,9 +209,7 @@ class DeleteableProductItem extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: <Widget>[
                               Text(
-                                data["name"] == null
-                                    ? "NULL NAME"
-                                    : data["name"],
+                                data["name"] == null ? "" : data["name"],
                                 style: TextStyle(
                                   color: sc_ItemTitleColor,
                                   fontWeight: FontWeight.w600,
@@ -234,10 +244,19 @@ class DeleteableProductItem extends StatelessWidget {
                 ),
               ),
             ),
-            Divider(
-              height: 10.0,
-              color: Colors.white,
+            Container(
+              color: sc_AppBarTextColor,
+              height: 5.0,
+            ),
+            Container(
+              color: sc_grey,
+              height: 3.0,
             )
+            // Divider(
+            //   height: 8.0,
+            //   thickness: 3.0,
+            //   color: sc_grey,
+            // )
           ],
         ),
       ),
