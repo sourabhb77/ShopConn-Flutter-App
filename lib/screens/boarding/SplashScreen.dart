@@ -30,7 +30,7 @@ class SplashScreenState extends State<SplashScreen>
             .pushReplacement(MaterialPageRoute(builder: (context) => Login()));
       } else {
         AuthNotifier authNotifier =
-            Provider.of<AuthNotifier>(context, listen: false);
+            Provider.of<AuthNotifier>(context, listen: true);
         initializeCurrentUser(authNotifier);
         Future<FirebaseUser> user = FirebaseAuth.instance.currentUser();
         user.then((FirebaseUser _user) {

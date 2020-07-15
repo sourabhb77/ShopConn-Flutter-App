@@ -12,7 +12,7 @@ class Clothes {
   String description;
   List<String> imgList;
   String productCategory;
-  bool onSell = true;
+  String buyerId;
   Timestamp postedAt;
   String condition;
   List<String> tagList;
@@ -30,7 +30,7 @@ class Clothes {
     // imgList=data['imgList'];
     imgList = List.from(data['imgList']);
     productCategory = data['productCategory'];
-    onSell = data['onSell'];
+    buyerId = data['buyerId'] ?? "";
     postedAt = data['postedAt'];
     condition = data['condition'];
     tagList = List.from(data['tagList']);
@@ -47,7 +47,7 @@ class Clothes {
       'description': description,
       'imgList': imgList,
       'productCategory': productCategory,
-      'onSell': onSell,
+      'buyerId': buyerId,
       'postedAt': postedAt,
       'condition': condition,
       'tagList': tagList,

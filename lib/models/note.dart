@@ -8,7 +8,7 @@ class Note {
   String description;
   List<String> imgList;
   String productCategory;
-  bool onSell = true;
+  String buyerId;
   String subject;
   String year; //I,II,III,IV
   String branch;
@@ -28,7 +28,7 @@ class Note {
     // imgList=data['imgList'];
     imgList = List.from(data['imgList']);
     productCategory = data['productCategory'];
-    onSell = data['onSell'];
+    buyerId = data['buyerId'];
     subject = data['subject'];
     year = data['year'];
     branch = data['branch'];
@@ -47,7 +47,7 @@ class Note {
       'description': description,
       'imgList': imgList,
       'productCategory': productCategory,
-      'onSell': onSell,
+      'buyerId': buyerId,
       'subject': subject,
       'year': year,
       'branch': branch,

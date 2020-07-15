@@ -27,7 +27,7 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
   String _condition = "Very Good"; //[very good, good , not bad]
   List<File> imageList = List(); //To store Path of each Images
   List<String> tagList = [];
-   String category; // to store tags for searching
+  String category; // to store tags for searching
 
   initNote() {
     print("Initial Constructor");
@@ -65,7 +65,7 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
     }
   }
 
-    void _deleteImage({int index}){
+  void _deleteImage({int index}) {
     setState(() {
       imageList.remove(imageList[index]);
     });
@@ -90,6 +90,7 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
     _currentNote = Note();
     _currentNote.branch = _branch;
     _currentNote.year = _year;
+    _currentNote.buyerId = "";
   }
 
   Widget _buildDescriptionField() {
@@ -648,29 +649,32 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0)),
               onPressed: () {
-                if(imageList.length<1){
-                   _showMyDialog();
-                }
-                else{
-                _currentNote.name = name;
-                addToTagList(_currentNote.name);
-                tagList.add(_currentNote.year.toLowerCase());
-                tagList.add(_currentNote.branch.toLowerCase());
-                _currentNote.condition = _condition;
-                _currentNote.tagList = tagList;
-                if (!_formkey.currentState.validate()) {
-                  print("Errororororororo");
+                if (imageList.length < 1) {
+                  _showMyDialog();
                 } else {
-                  // No Error upload all the details to the database!!
-                  _formkey.currentState.save();
-                  uploadData();
-                  print(_currentNote.toMap());
-                }
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => AfterProductScreen(category: _currentNote.productCategory,),),
-                  (route)=>route.isFirst,
-                );
+                  _currentNote.name = name;
+                  addToTagList(_currentNote.name);
+                  tagList.add(_currentNote.year.toLowerCase());
+                  tagList.add(_currentNote.branch.toLowerCase());
+                  _currentNote.condition = _condition;
+                  _currentNote.tagList = tagList;
+                  if (!_formkey.currentState.validate()) {
+                    print("Errororororororo");
+                  } else {
+                    // No Error upload all the details to the database!!
+                    _formkey.currentState.save();
+                    uploadData();
+                    print(_currentNote.toMap());
+                  }
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AfterProductScreen(
+                        category: _currentNote.productCategory,
+                      ),
+                    ),
+                    (route) => route.isFirst,
+                  );
                 }
               },
             ),
@@ -767,14 +771,15 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
                   // mainAxisSpacing: 2,
 
                   children: List.generate(imageList.length, (index) {
-                    return Stack(
-                    children:[
+                    return Stack(children: [
                       Container(
-                        child: Image(image: FileImage(imageList[index]),
-                        height: 300,
-                        width: 150,),
+                        child: Image(
+                          image: FileImage(imageList[index]),
+                          height: 300,
+                          width: 150,
+                        ),
                       ),
-                       Positioned(
+                      Positioned(
                         bottom: 0,
                         right: 5,
                         child: IconButton(
@@ -784,44 +789,44 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
                             size: 35.0,
                           ),
                           onPressed: () {
-                            _deleteImage(index:index);
+                            _deleteImage(index: index);
                           },
                         ),
                       ),
-                      ]
-                    );
+                    ]);
                   })),
-                  SizedBox(height:60.0),
+              SizedBox(height: 60.0),
             ],
           ),
         ),
       ),
     );
   }
-   Future<void> _showMyDialog() async{
+
+  Future<void> _showMyDialog() async {
     return showDialog<void>(
-    context: context,
-    barrierDismissible: false, // user must tap button!
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text('Photo not uploaded.'),
-        content: SingleChildScrollView(
-          child: ListBody(
-            children: <Widget>[
-              Text('You cannot post without uploading a image.'),
-            ],
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Photo not uploaded.'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('You cannot post without uploading a image.'),
+              ],
+            ),
           ),
-        ),
-        actions: <Widget>[
-          FlatButton(
-            child: Text('Ok'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      );
-    },
-  );         
-}
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Ok'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }

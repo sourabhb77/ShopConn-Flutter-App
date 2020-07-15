@@ -287,13 +287,29 @@ Future<bool> deleteProduct(String productId) async {
   }
 }
 
-markAsSold(String productId) async {
+markAsSold(String productId, String buyerId) async {
   await Firestore.instance
       .collection("post")
       .document(productId)
-      .updateData({"onSell": false})
+      .updateData({"buyerId": buyerId})
       .then((value) => print("marked as sold"))
       .catchError((err) {
         print("got error");
       });
+}
+
+//to get all purachsed products
+Future<List<DocumentSnapshot>> getMyPurchase() async {
+  FirebaseUser user = await FirebaseAuth.instance.currentUser();
+  try {
+    String id = user.uid;
+    var ref =
+        Firestore.instance.collection("post").where("buyerId", isEqualTo: id);
+    var querySnapshot = await ref.getDocuments();
+
+    return querySnapshot.documents;
+  } catch (err) {
+    print("Error fetching booksmarks : $err");
+    return null;
+  }
 }

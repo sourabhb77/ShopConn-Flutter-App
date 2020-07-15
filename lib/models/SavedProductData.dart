@@ -8,7 +8,7 @@ class Book {
   String description;
   List<String> imgList;
   String productCategory;
-  bool onSell = true;
+  String buyerId;
   String bookCategory;
   List<String> authorList;
   int edition;
@@ -20,8 +20,8 @@ class Book {
   List<String> tagList;
 
   Book();
-  
-  Book.fromMap(Map<String, dynamic> data){
+
+  Book.fromMap(Map<String, dynamic> data) {
     id = data['id'];
     ownerId = data['ownerId'];
     name = data['name'];
@@ -29,7 +29,7 @@ class Book {
     description = data['description'];
     imgList = List.from(data['imgList']);
     productCategory = data['productCategory'];
-    onSell = data['onSell'];
+    buyerId = data['buyerId'] ?? "";
     bookCategory = data['bookCategory'];
     authorList = List.from(data['authorList']);
     edition = data['edition'];
@@ -41,7 +41,7 @@ class Book {
     tagList = List.from(data['tagList']);
   }
 
-  Map<String, dynamic> toMap(){
+  Map<String, dynamic> toMap() {
     return {
       'id': id,
       'ownerId': ownerId,
@@ -50,7 +50,7 @@ class Book {
       'description': description,
       'imgList': imgList,
       'productCategory': productCategory,
-      'onSell': onSell,
+      'buyerId': buyerId,
       'bookCategory': bookCategory,
       'authorList': authorList,
       'edition': edition,
