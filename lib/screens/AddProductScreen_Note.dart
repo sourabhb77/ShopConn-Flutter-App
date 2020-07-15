@@ -8,6 +8,8 @@ import 'package:shopconn/models/note.dart';
 import '../const/Theme.dart';
 import 'package:image_picker/image_picker.dart';
 
+import 'AfterProductScreen.dart';
+
 class AddProuctScreen_Note extends StatefulWidget {
   String name;
   AddProuctScreen_Note({Key key, @required this.name}) : super(key: key);
@@ -24,7 +26,8 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
   String _year = "FY";
   String _condition = "Very Good"; //[very good, good , not bad]
   List<File> imageList = List(); //To store Path of each Images
-  List<String> tagList = []; // to store tags for searching
+  List<String> tagList = [];
+   String category; // to store tags for searching
 
   initNote() {
     print("Initial Constructor");
@@ -60,6 +63,12 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
       print("FAILURE");
       print("\n***************\n");
     }
+  }
+
+    void _deleteImage({int index}){
+    setState(() {
+      imageList.remove(imageList[index]);
+    });
   }
 
   addToTagList(String tag) {
@@ -639,6 +648,10 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0)),
               onPressed: () {
+                if(imageList.length<1){
+                   _showMyDialog();
+                }
+                else{
                 _currentNote.name = name;
                 addToTagList(_currentNote.name);
                 tagList.add(_currentNote.year.toLowerCase());
@@ -653,10 +666,12 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
                   uploadData();
                   print(_currentNote.toMap());
                 }
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => SavedProductScreen()),
-                // );
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => AfterProductScreen(category: _currentNote.productCategory,),),
+                  (route)=>route.isFirst,
+                );
+                }
               },
             ),
           ],
@@ -741,7 +756,7 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
                 ),
               ),
               SizedBox(
-                height: 30.0,
+                height: 5.0,
               ),
               GridView.count(
                   shrinkWrap: true,
@@ -752,14 +767,61 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
                   // mainAxisSpacing: 2,
 
                   children: List.generate(imageList.length, (index) {
-                    return Container(
-                      child: Image(image: FileImage(imageList[index])),
+                    return Stack(
+                    children:[
+                      Container(
+                        child: Image(image: FileImage(imageList[index]),
+                        height: 300,
+                        width: 150,),
+                      ),
+                       Positioned(
+                        bottom: 0,
+                        right: 5,
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.delete,
+                            color: sc_AppBarBackgroundColor,
+                            size: 35.0,
+                          ),
+                          onPressed: () {
+                            _deleteImage(index:index);
+                          },
+                        ),
+                      ),
+                      ]
                     );
                   })),
+                  SizedBox(height:60.0),
             ],
           ),
         ),
       ),
     );
   }
+   Future<void> _showMyDialog() async{
+    return showDialog<void>(
+    context: context,
+    barrierDismissible: false, // user must tap button!
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Photo not uploaded.'),
+        content: SingleChildScrollView(
+          child: ListBody(
+            children: <Widget>[
+              Text('You cannot post without uploading a image.'),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          FlatButton(
+            child: Text('Ok'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );         
+}
 }

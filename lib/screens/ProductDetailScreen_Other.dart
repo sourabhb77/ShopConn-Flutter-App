@@ -262,6 +262,7 @@ class _ProductDetailScreen_OtherState extends State<ProductDetailScreen_Other> {
               SizedBox(
                 height: 15.0,
               ),
+               authNotifier.userId!=otherNotifier.currentOther.ownerId?
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 50.0),
                 child: Column(
@@ -323,7 +324,7 @@ class _ProductDetailScreen_OtherState extends State<ProductDetailScreen_Other> {
                     ),
                   ],
                 ),
-              ),
+              ):Container(),
               SizedBox(
                 height: 15.0,
               ),

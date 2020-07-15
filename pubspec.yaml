@@ -61,13 +61,20 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_native_splash: ^0.1.9
+  flutter_launcher_icons: ^0.7.5
   
 
 flutter_native_splash:
-  image: assets/images/error.png
+  image: assets/images/splashScreen.png
+  # image: assets/images/error.png
   color: "42a5f5"
   fill : false
   android_disable_fullscreen: true
+
+flutter_icons:
+  image_path: "assets/images/shopconnLogo.png"
+  android: true
+  ios: true
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
