@@ -263,8 +263,12 @@ class _SettingScreenState extends State<SettingScreen> {
             InkWell(
               onTap: () {
                 signout(authNotifier);
-                Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => Login()));
+                // Navigator.of(context).popUntil((route) => false);
+                Navigator.of(context)
+                    .pushNamedAndRemoveUntil('/login', (route) => false);
+                // Navigator.of(context).pushReplacement(
+                //     MaterialPageRoute(builder: (context) => Login()));
+
                 _clearUser();
               },
               child: Container(

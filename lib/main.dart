@@ -10,12 +10,15 @@ import 'package:shopconn/notifier/otherNotifier.dart';
 import 'package:shopconn/notifier/productNotifier.dart';
 import 'package:shopconn/notifier/sortNotifier.dart';
 import 'package:shopconn/screens/boarding/SplashScreen.dart';
+import 'package:shopconn/screens/login.dart';
 import 'notifier/clothesNotifier.dart';
 
 void main() {
   runApp(MultiProvider(
+    
     providers: [
       ChangeNotifierProvider(
+
         create: (context) => AuthNotifier(),
       ),
       ChangeNotifierProvider(
@@ -43,7 +46,8 @@ void main() {
         create: (context) => FilterNotifier(),
       )
     ],
-    child: MyApp(),
+    
+    child: MyApp(    ),
   ));
 }
 
@@ -61,6 +65,9 @@ class MyApp extends StatelessWidget {
             bodyText2: TextStyle(color: sc_BodyTextColor),
           )),
       // home: SplashScreen(),
+      routes: {
+        '/login' : (contex)=> Login(),
+      },
       home: Consumer<AuthNotifier>(
         builder: (context, notifier, child) {
           return SplashScreen();

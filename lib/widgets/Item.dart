@@ -105,90 +105,83 @@ class DeleteableProductItem extends StatelessWidget {
     NoteNotifier noteNotifier = Provider.of<NoteNotifier>(context);
     OtherNotifier otherNotifier = Provider.of<OtherNotifier>(context);
 
-    return Dismissible(
-      direction: DismissDirection.endToStart,
-      background: Container(
-        color: Colors.red,
-        child: Icon(Icons.delete_forever),
-        alignment: Alignment.bottomRight,
-      ),
-      key: Key(data["id"]),
-      onDismissed: (direction) {
-        if (direction == DismissDirection.endToStart) {
-          deleteBookMark(data["id"]);
-          Scaffold.of(context)
-              .showSnackBar(SnackBar(content: Text("item dismissed")));
-        } else {
-          return;
-        }
-      },
-      child: Container(
-        padding: EdgeInsets.fromLTRB(0, 7, 0, 2),
-        decoration: BoxDecoration(
-          // color: sc_grey,
-          borderRadius: BorderRadius.circular(7),
+    return InkWell(
+      child: Dismissible(
+        direction: DismissDirection.endToStart,
+        background: Container(
+          color: Colors.red,
+          child: Icon(Icons.delete_forever),
+          alignment: Alignment.bottomRight,
         ),
-        child: Column(
-          children: [
-            Card(
-              margin: EdgeInsets.all(0.0),
-              elevation: 0.0,
-              child: InkWell(
-                splashColor: sc_PrimaryColor,
-                onTap: () {
-                  switch (data["productCategory"]) {
-                    case "Book":
-                      Book book = Book.fromMap(data);
-                      bookNotifier.currentBook = book;
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ProductDetailScreen_Book()),
-                      );
-                      break;
-                    case "Clothes":
-                      Clothes cloth = Clothes.fromMap(data);
-                      clothNotifier.currentClothes = cloth;
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ProductDetailScreen_Cloth()),
-                      );
-                      break;
-                    case "Note":
-                      Note note = Note.fromMap(data);
-                      noteNotifier.currentNote = note;
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ProductDetailScreen_Note()),
-                      );
-                      break;
-                    case "Other":
-                      Other other = Other.fromMap(data);
-                      otherNotifier.currentOther = other;
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ProductDetailScreen_Other()),
-                      );
-                      break;
-                    default:
-                  }
-                },
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      flex: 2,
-                      child: Container(
-                        decoration: new BoxDecoration(
-                          color: sc_grey,
-                          borderRadius: BorderRadius.circular(7),
-                        ),
-                        margin: const EdgeInsets.symmetric(horizontal: 15.0),
-                        // color: Colors.blueGrey,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(7.0),
+        key: Key(data["id"]),
+        onDismissed: (direction) {
+          if (direction == DismissDirection.endToStart) {
+            deleteBookMark(data["id"]);
+            Scaffold.of(context)
+                .showSnackBar(SnackBar(content: Text("item dismissed")));
+          } else {
+            return;
+          }
+        },
+        child: Container(
+          child: Column(
+            children: [
+              Card(
+                margin: EdgeInsets.all(0.0),
+                elevation: 0.0,
+                child: InkWell(
+                  splashColor: Colors.red,
+                  onTap: () {
+                    print("Data note : ${data.toString()}");
+                    switch (data["productCategory"]) {
+                      case "Book":
+                        Book book = Book.fromMap(data);
+                        bookNotifier.currentBook = book;
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProductDetailScreen_Book()),
+                        );
+                        break;
+                      case "Clothes":
+                        Clothes cloth = Clothes.fromMap(data);
+                        clothNotifier.currentClothes = cloth;
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  ProductDetailScreen_Cloth()),
+                        );
+                        break;
+                      case "Note":
+                        Note note = Note.fromMap(data);
+                        noteNotifier.currentNote = note;
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProductDetailScreen_Note()),
+                        );
+                        break;
+                      case "Other":
+                        Other other = Other.fromMap(data);
+                        otherNotifier.currentOther = other;
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  ProductDetailScreen_Other()),
+                        );
+                        break;
+                      default:
+                    }
+                  },
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        flex: 2,
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 15.0),
+                          color: Colors.blueGrey,
                           child: Image.network(
                             data["imgList"] != null
                                 ? data["imgList"][0]
@@ -200,64 +193,57 @@ class DeleteableProductItem extends StatelessWidget {
                           ),
                         ),
                       ),
-                    ),
-                    Expanded(
-                      flex: 4,
-                      child: Container(
-                          padding: EdgeInsets.fromLTRB(0, 10, 15, 10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: <Widget>[
-                              Text(
-                                data["name"] == null ? "" : data["name"],
-                                style: TextStyle(
-                                  color: sc_ItemTitleColor,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 18.0,
-                                  letterSpacing: 1.0,
-                                ),
-                              ),
-                              Text(
-                                data["description"],
-                                style: TextStyle(
-                                  fontSize: 16.0,
-                                  color: sc_ItemInfoColor,
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 15.0),
-                                child: Text(
-                                  data["price"] != null
-                                      ? "Rs ${data["price"]}"
-                                      : "NULL PRICE",
+                      Expanded(
+                        flex: 4,
+                        child: Container(
+                            padding: EdgeInsets.fromLTRB(0, 10, 15, 10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: <Widget>[
+                                Text(
+                                  data["name"] == null
+                                      ? "NULL NAME"
+                                      : data["name"],
                                   style: TextStyle(
-                                    fontSize: 20.0,
-                                    color: sc_PrimaryColor,
-                                    fontWeight: FontWeight.bold,
+                                    color: sc_ItemTitleColor,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 18.0,
+                                    letterSpacing: 1.0,
                                   ),
                                 ),
-                              ),
-                            ],
-                          )),
-                    ),
-                  ],
+                                Text(
+                                  data["description"],
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                    color: sc_ItemInfoColor,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 15.0),
+                                  child: Text(
+                                    data["price"] != null
+                                        ? "Rs ${data["price"]}"
+                                        : "NULL PRICE",
+                                    style: TextStyle(
+                                      fontSize: 20.0,
+                                      color: sc_PrimaryColor,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Container(
-              color: sc_AppBarTextColor,
-              height: 5.0,
-            ),
-            Container(
-              color: sc_grey,
-              height: 3.0,
-            )
-            // Divider(
-            //   height: 8.0,
-            //   thickness: 3.0,
-            //   color: sc_grey,
-            // )
-          ],
+              Divider(
+                height: 10.0,
+                color: Colors.white,
+              )
+            ],
+          ),
         ),
       ),
     );

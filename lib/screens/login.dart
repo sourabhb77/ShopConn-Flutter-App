@@ -36,7 +36,6 @@ class _LoginState extends State<Login> {
 
   @override
   void initState() {
-    authNotifier = Provider.of<AuthNotifier>(context, listen: false);
     initializeCurrentUser(authNotifier);
     Future<FirebaseUser> user = FirebaseAuth.instance.currentUser();
     user.then((FirebaseUser _user) {
@@ -62,14 +61,14 @@ class _LoginState extends State<Login> {
 
     _formKey.currentState.save();
 
-    AuthNotifier authNotifier =
-        Provider.of<AuthNotifier>(context, listen: false);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (_authMode == AuthMode.Login) {
       String result = await login(_user, authNotifier);
 
       if (result.compareTo("True") == 0) {
         await prefs.setBool('logined', true);
+        print("Intialize AuthNotifier");
+        initializeCurrentUser(authNotifier);
 
         Navigator.of(context).pushReplacement(
             new MaterialPageRoute(builder: (context) => HomeScreen()));
@@ -288,11 +287,12 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    authNotifier = Provider.of<AuthNotifier>(context);
     print("Building login screen");
     if (authNotifier.user != null) {
       print("Authno Notifier");
-      Navigator.of(context).pushReplacement(
-          new MaterialPageRoute(builder: (context) => HomeScreen()));
+      // Navigator.of(context).pushReplacement(
+      //     new MaterialPageRoute(builder: (context) => HomeScreen()));
     }
 
     return Scaffold(

@@ -139,8 +139,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 GestureDetector(
                   onTap: () {
                     signout(authNotifier);
-                    Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (context) => Login()));
+                    Navigator.of(context)
+                        .pushNamedAndRemoveUntil('/login', (route) => false);
                     _clearUser();
                   },
                   child: Text(
