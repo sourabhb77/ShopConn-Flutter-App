@@ -32,7 +32,7 @@ class MyPurchaseState extends State<MyPurchase> {
                 itemBuilder: (context, index) {
                   // return Text("data");
                   return ProductItem(
-                    data: snapshot.data[index].data,
+                    data: snapshot.data[index],
                   );
                 },
                 itemCount: snapshot.data.length);
