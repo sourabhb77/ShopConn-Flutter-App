@@ -7,13 +7,12 @@ class AuthNotifier with ChangeNotifier {
   String name;
   String eamil;
 
-
-
   FirebaseUser get user => _user;
 
   String get userId => _user.uid;
 
-  set currentUser(FirebaseUser user) {
+  void currentUser(FirebaseUser user) {
+    
     _user = user;
     notifyListeners();
   }
@@ -22,7 +21,4 @@ class AuthNotifier with ChangeNotifier {
     _user = user;
     notifyListeners();
   }
-
-
-  
 }

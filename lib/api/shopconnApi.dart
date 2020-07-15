@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shopconn/api/googleSignInApi.dart';
 import 'package:shopconn/models/Message.dart';
 import 'package:shopconn/models/SavedProductData.dart';
@@ -81,8 +82,11 @@ signout(AuthNotifier authNotifier) async {
     await signOutGoogle();
     await FirebaseAuth.instance
         .signOut()
-        .catchError((error) => print(error.code));
-    authNotifier.setUser(null);
+        .catchError((error) => print("Error code : ${error.code}"));
+    authNotifier.currentUser(null);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    
   } catch (err) {
     print("Error : $err");
   }
