@@ -298,73 +298,68 @@ class _ProductDetailScreen_ClothState extends State<ProductDetailScreen_Cloth> {
             SizedBox(
               height: 15.0,
             ),
-            authNotifier.userId == clothesNotifier.currentClothes.ownerId
-                ? Container()
-                : Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 50.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        RaisedButton(
-                          onPressed: () async {
-                            String ans = (await isPresent(
-                                    authNotifier.userId,
-                                    clothesNotifier.currentClothes.ownerId,
-                                    chatNotifier,
-                                    authNotifier))
-                                .toString();
-                            if (ans == "null") {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ChatBoxWidget(
-                                    ownerId:
-                                        clothesNotifier.currentClothes.ownerId,
-                                    productId:
-                                        clothesNotifier.currentClothes.id,
-                                  ),
-                                ),
-                              );
-                            } else if (ans != "null") {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ChatPage()),
-                              );
-                            }
-                          },
-                          color: sc_PrimaryColor,
-                          child: Column(
-                            children: <Widget>[
-                              Text(
-                                "Chat now",
-                                style: TextStyle(
-                                  fontSize: 16.0,
-                                  color: sc_AppBarTextColor,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        OutlineButton(
-                          color: sc_PrimaryColor,
-                          child: Text(
-                            'Add to WishList',
-                            style: TextStyle(
-                              fontSize: 16.0,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 50.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  RaisedButton(
+                    onPressed: () async {
+                      String ans = (await isPresent(
+                              authNotifier.userId,
+                              clothesNotifier.currentClothes.ownerId,
+                              chatNotifier,
+                              authNotifier))
+                          .toString();
+                      if (ans == "null") {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ChatBoxWidget(
+                              ownerId: clothesNotifier.currentClothes.ownerId,
+                              productId: clothesNotifier.currentClothes.id,
                             ),
                           ),
-                          onPressed: () {
-                            Future<bool> result = addToBookmarks(
-                                clothesNotifier.currentClothes.id);
-                            result.then((value) => value == true
-                                ? showSnackBar("Added to BookMarks")
-                                : showSnackBar("Error Occured"));
-                          },
+                        );
+                      } else if (ans != "null") {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => ChatPage()),
+                        );
+                      }
+                    },
+                    color: sc_PrimaryColor,
+                    child: Column(
+                      children: <Widget>[
+                        Text(
+                          "Chat now",
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            color: sc_AppBarTextColor,
+                          ),
                         ),
                       ],
                     ),
                   ),
+                  OutlineButton(
+                    color: sc_PrimaryColor,
+                    child: Text(
+                      'Add to WishList',
+                      style: TextStyle(
+                        fontSize: 16.0,
+                      ),
+                    ),
+                    onPressed: () {
+                      Future<bool> result =
+                          addToBookmarks(clothesNotifier.currentClothes.id);
+                      result.then((value) => value == true
+                          ? showSnackBar("Added to BookMarks")
+                          : showSnackBar("Error Occured"));
+                    },
+                  ),
+                ],
+              ),
+            ),
             SizedBox(
               height: 15.0,
             ),
