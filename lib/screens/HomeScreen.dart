@@ -7,6 +7,7 @@ import 'package:shopconn/api/shopconnApi.dart';
 import 'package:shopconn/const/Theme.dart';
 import 'package:shopconn/notifier/authNotifier.dart';
 import 'package:shopconn/screens/AddProductScreen.dart';
+import 'package:shopconn/screens/Bookmarks.dart';
 import 'package:shopconn/screens/OnlyCategoryProductScreen.dart';
 import 'package:shopconn/screens/SavedProductScreen.dart';
 import 'package:shopconn/screens/login.dart';
@@ -58,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => SavedProductScreen()),
+                MaterialPageRoute(builder: (context) => BookMarks()),
               );
             },
           ),
@@ -136,18 +137,18 @@ class _HomeScreenState extends State<HomeScreen> {
                     )),
 
                 //for testing purpose
-                GestureDetector(
-                  onTap: () {
-                    signout(authNotifier);
-                    Navigator.of(context)
-                        .pushNamedAndRemoveUntil('/login', (route) => false);
-                    _clearUser();
-                  },
-                  child: Text(
-                    "Sign Out",
-                    style: TextStyle(fontSize: 30.0),
-                  ),
-                ),
+                // GestureDetector(
+                //   onTap: () {
+                //     signout(authNotifier);
+                //     Navigator.of(context)
+                //         .pushNamedAndRemoveUntil('/login', (route) => false);
+                //     _clearUser();
+                //   },
+                //   child: Text(
+                //     "Sign Out",
+                //     style: TextStyle(fontSize: 30.0),
+                //   ),
+                // ),
 
                 //end testing purpose
 

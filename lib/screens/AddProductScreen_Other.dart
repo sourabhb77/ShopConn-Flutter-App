@@ -44,10 +44,16 @@ class _AddProuctScreen_OtherState extends State<AddProuctScreen_Other> {
   void
       _SelectImage() async //Function to keep track of all the image files that are needed to be uploaded
   {
-    File image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      imageList.add(image);
-    });
+    try {
+      File image = await ImagePicker.pickImage(source: ImageSource.gallery);
+      if (image != null) {
+        setState(() {
+          imageList.add(image);
+        });
+      }
+    } catch (e) {
+      print("got error $e");
+    }
   }
 
   uploadData() async {
@@ -390,7 +396,7 @@ class _AddProuctScreen_OtherState extends State<AddProuctScreen_Other> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Add Product",
+          "Add Your Product",
           style: TextStyle(
             color: sc_AppBarTextColor,
           ),
@@ -444,16 +450,16 @@ class _AddProuctScreen_OtherState extends State<AddProuctScreen_Other> {
                     _formkey.currentState.save();
                     uploadData();
                     print(_currentOther.toMap());
-                  }
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AfterProductScreen(
-                        category: _currentOther.productCategory,
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AfterProductScreen(
+                          category: _currentOther.productCategory,
+                        ),
                       ),
-                    ),
-                    (route) => route.isFirst,
-                  );
+                      (route) => route.isFirst,
+                    );
+                  }
                 }
               },
             ),
@@ -539,13 +545,13 @@ class _AddProuctScreen_OtherState extends State<AddProuctScreen_Other> {
                         ),
                       ),
                       Positioned(
-                        bottom: 0,
-                        right: 5,
+                        top: 0,
+                        right: 0,
                         child: IconButton(
                           icon: Icon(
-                            Icons.delete,
-                            color: sc_AppBarBackgroundColor,
-                            size: 35.0,
+                            Icons.clear,
+                            color: Colors.red,
+                            size: 30.0,
                           ),
                           onPressed: () {
                             _deleteImage(index: index);

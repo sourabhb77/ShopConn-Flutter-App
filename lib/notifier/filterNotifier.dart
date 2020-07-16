@@ -43,8 +43,10 @@ class FilterNotifier with ChangeNotifier {
   }
 
   set currentProductCategory(String val) {
-    _productCategory = val;
-    notifyListeners();
+    if (currentProductCategory != val) {
+      _productCategory = val;
+      notifyListeners();
+    }
   }
 
   set currentBookCategory(String val) {

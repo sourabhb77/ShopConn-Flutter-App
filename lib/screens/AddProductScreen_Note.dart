@@ -43,10 +43,16 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
   void
       _SelectImage() async //Function to keep track of all the image files that are needed to be uploaded
   {
-    File image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      imageList.add(image);
-    });
+    try {
+      File image = await ImagePicker.pickImage(source: ImageSource.gallery);
+      if (image != null) {
+        setState(() {
+          imageList.add(image);
+        });
+      }
+    } catch (e) {
+      print("got error $e");
+    }
   }
 
   uploadData() async {
@@ -609,7 +615,7 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Add Product",
+          "Add Your Notes",
           style: TextStyle(
             color: sc_AppBarTextColor,
           ),
@@ -665,16 +671,16 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
                     _formkey.currentState.save();
                     uploadData();
                     print(_currentNote.toMap());
-                  }
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AfterProductScreen(
-                        category: _currentNote.productCategory,
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AfterProductScreen(
+                          category: _currentNote.productCategory,
+                        ),
                       ),
-                    ),
-                    (route) => route.isFirst,
-                  );
+                      (route) => route.isFirst,
+                    );
+                  }
                 }
               },
             ),
@@ -780,13 +786,13 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
                         ),
                       ),
                       Positioned(
-                        bottom: 0,
-                        right: 5,
+                        top: 0,
+                        right: 0,
                         child: IconButton(
                           icon: Icon(
-                            Icons.delete,
-                            color: sc_AppBarBackgroundColor,
-                            size: 35.0,
+                            Icons.clear,
+                            color: Colors.red,
+                            size: 30.0,
                           ),
                           onPressed: () {
                             _deleteImage(index: index);

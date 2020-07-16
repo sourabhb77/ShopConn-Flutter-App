@@ -85,8 +85,6 @@ signout(AuthNotifier authNotifier) async {
         .catchError((error) => print("Error code : ${error.code}"));
     authNotifier.currentUser(null);
     SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    
   } catch (err) {
     print("Error : $err");
   }
@@ -314,6 +312,24 @@ Future<List<DocumentSnapshot>> getMyPurchase() async {
     return querySnapshot.documents;
   } catch (err) {
     print("Error fetching booksmarks : $err");
+    return null;
+  }
+}
+
+//to know product is already in bookmark list
+Future<bool> isBookmarkedProduct(String productId, String userId) async {
+  try {
+    var snapshot = await Firestore.instance
+        .collection("users/$userId/bookmarks")
+        .where("id", isEqualTo: productId)
+        .getDocuments();
+    if (snapshot.documents.length != 0) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    print("error in isBookmarked : $err");
     return null;
   }
 }

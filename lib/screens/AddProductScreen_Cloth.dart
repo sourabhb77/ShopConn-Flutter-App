@@ -51,10 +51,16 @@ class _AddProuctScreen_ClothState extends State<AddProuctScreen_Cloth> {
   void
       _SelectClothesImage() async //Function to keep track of all the image files that are needed to be uploaded
   {
-    File image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      imageList.add(image);
-    });
+    try {
+      File image = await ImagePicker.pickImage(source: ImageSource.gallery);
+      if (image != null) {
+        setState(() {
+          imageList.add(image);
+        });
+      }
+    } catch (e) {
+      print("got error $e");
+    }
   }
 
   saveClothes() async {
@@ -105,7 +111,7 @@ class _AddProuctScreen_ClothState extends State<AddProuctScreen_Cloth> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Add Product",
+          "Add Your Clothes",
           style: TextStyle(
             color: sc_AppBarTextColor,
           ),
@@ -616,13 +622,13 @@ class _AddProuctScreen_ClothState extends State<AddProuctScreen_Cloth> {
                         ),
                       ),
                       Positioned(
-                        bottom: 0,
-                        right: 5,
+                        top: 0,
+                        right: 0,
                         child: IconButton(
                           icon: Icon(
-                            Icons.delete,
-                            color: sc_AppBarBackgroundColor,
-                            size: 35.0,
+                            Icons.clear,
+                            color: Colors.red,
+                            size: 30.0,
                           ),
                           onPressed: () {
                             _deleteImage(index: index);
@@ -675,7 +681,9 @@ class _AddProuctScreen_ClothState extends State<AddProuctScreen_Cloth> {
                   _currentClothes.name = name;
                   _currentClothes.condition = _condition;
                   _currentClothes.type = _type;
-                  tagList.add(_currentClothes.type.toLowerCase());
+                  _currentClothes.type != null
+                      ? tagList.add(_currentClothes.type.toLowerCase())
+                      : null;
                   addToTagList(_currentClothes.name);
                   _currentClothes.tagList = tagList;
                   if (!_formKey.currentState.validate()) {
@@ -683,16 +691,16 @@ class _AddProuctScreen_ClothState extends State<AddProuctScreen_Cloth> {
                   } else {
                     _formKey.currentState.save();
                     saveClothes();
-                  }
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AfterProductScreen(
-                        category: _currentClothes.productCategory,
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AfterProductScreen(
+                          category: _currentClothes.productCategory,
+                        ),
                       ),
-                    ),
-                    (route) => route.isFirst,
-                  );
+                      (route) => route.isFirst,
+                    );
+                  }
                 }
               },
             ),

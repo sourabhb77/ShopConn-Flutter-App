@@ -91,27 +91,27 @@ class _ChatBoxState extends State<ChatBox> {
             ],
           ),
           title: Text(
-            'Chat box',
+            'Chats',
             style: TextStyle(color: Colors.white),
           ),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(
-                IconData(59574, fontFamily: 'MaterialIcons'),
-                color: Colors.white,
-                size: 30.0,
-              ),
-              onPressed: () {},
-            ),
-            IconButton(
-              icon: Icon(
-                IconData(59576, fontFamily: 'MaterialIcons'),
-                color: Colors.white,
-                size: 30.0,
-              ),
-              onPressed: () {},
-            ),
-          ],
+          // actions: <Widget>[
+          //   IconButton(
+          //     icon: Icon(
+          //       IconData(59574, fontFamily: 'MaterialIcons'),
+          //       color: Colors.white,
+          //       size: 30.0,
+          //     ),
+          //     onPressed: () {},
+          //   ),
+          //   IconButton(
+          //     icon: Icon(
+          //       IconData(59576, fontFamily: 'MaterialIcons'),
+          //       color: Colors.white,
+          //       size: 30.0,
+          //     ),
+          //     onPressed: () {},
+          //   ),
+          // ],
           elevation: 1.0,
         ),
         body: TabBarView(

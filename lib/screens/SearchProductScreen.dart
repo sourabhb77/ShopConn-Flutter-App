@@ -72,8 +72,12 @@ class SearchProduct extends SearchDelegate<dynamic> {
               isGreaterThanOrEqualTo: filterNotifier.currentMinPrice);
     }
 
-    //to get only type of products
-    filterNotifier.currentProductCategory = category;
+    //to specify what type of product we want to search
+    if (category.toString() != "") {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        filterNotifier.currentProductCategory = category;
+      });
+    }
     if (filterNotifier.currentProductCategory != "") {
       switch (filterNotifier.currentProductCategory) {
         case "Book":

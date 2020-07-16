@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shopconn/api/shopconnApi.dart';
 import 'package:shopconn/const/Theme.dart';
 import 'package:shopconn/notifier/authNotifier.dart';
+import 'package:shopconn/screens/Bookmarks.dart';
 import 'package:shopconn/screens/MyProdcuts.dart';
 import 'package:shopconn/screens/MyPurchase.dart';
 import 'package:shopconn/screens/Profile.dart';
@@ -215,10 +216,8 @@ class _SettingScreenState extends State<SettingScreen> {
             ),
             InkWell(
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => SavedProductScreen()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => BookMarks()));
               },
               child: Container(
                 padding: EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 15.0),

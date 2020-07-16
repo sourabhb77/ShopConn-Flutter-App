@@ -50,10 +50,16 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
   void
       _SelectImage() async //Function to keep track of all the image files that are needed to be uploaded
   {
-    File image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      imageList.add(image);
-    });
+    try {
+      File image = await ImagePicker.pickImage(source: ImageSource.gallery);
+      if (image != null) {
+        setState(() {
+          imageList.add(image);
+        });
+      }
+    } catch (e) {
+      print("got error $e");
+    }
   }
 
   void _deleteImage({int index}) {
@@ -72,9 +78,7 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
       print("Success");
       print("\n***************\n");
     } else {
-      print("\n*******book screen********\n");
-      print("FAILURE");
-      print("\n***************\n");
+      print("Something went wrong");
     }
   }
 
@@ -98,6 +102,7 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
   _AddProuctScreen_BookState(this.name) {
     initBook();
   }
+
   @override
   void initState() {
     super.initState();
@@ -795,7 +800,7 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Add Product",
+          "Add Your Book",
           style: TextStyle(
             color: sc_AppBarTextColor,
           ),
@@ -837,11 +842,13 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
               onPressed: () {
                 if (imageList.length < 1) {
                   _showMyDialog();
-                } else if (authorList.length < 1) {
-                  setState(() {
-                    txt = "Author name not added";
-                  });
-                } else {
+                }
+                // else if (authorList.length < 1) {
+                //   setState(() {
+                //     txt = "Author name not added";
+                //   });
+                // }
+                else {
                   _currentBook.name = name;
                   addToTagList(_currentBook.name);
                   _currentBook.authorList = authorList;
@@ -855,15 +862,15 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
                     _formkey.currentState.save();
                     uploadData();
                     print(_currentBook.toMap());
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AfterProductScreen(
+                            category: _currentBook.productCategory),
+                      ),
+                      (route) => route.isFirst,
+                    );
                   }
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AfterProductScreen(
-                          category: _currentBook.productCategory),
-                    ),
-                    (route) => route.isFirst,
-                  );
                 }
               },
             ),
@@ -1061,13 +1068,13 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
                         ),
                       ),
                       Positioned(
-                        bottom: 0,
-                        right: 5,
+                        top: 0,
+                        right: 0,
                         child: IconButton(
                           icon: Icon(
-                            Icons.delete,
-                            color: sc_AppBarBackgroundColor,
-                            size: 35.0,
+                            Icons.clear,
+                            color: Colors.red,
+                            size: 30.0,
                           ),
                           onPressed: () {
                             _deleteImage(index: index);
