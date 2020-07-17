@@ -209,6 +209,7 @@ class _MessageboxState extends State<Messagebox> {
       future: getLatest(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
+          print(snapshot.error);
           return Text("Error Loading...");
         }
         if (!snapshot.hasData) return Text("Loading....");

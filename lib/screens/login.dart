@@ -36,7 +36,6 @@ class _LoginState extends State<Login> {
 
   @override
   void initState() {
-    initializeCurrentUser(authNotifier);
     Future<FirebaseUser> user = FirebaseAuth.instance.currentUser();
     user.then((FirebaseUser _user) {
       if (_user == null) {
@@ -68,7 +67,7 @@ class _LoginState extends State<Login> {
       if (result.compareTo("True") == 0) {
         await prefs.setBool('logined', true);
         print("Intialize AuthNotifier");
-        initializeCurrentUser(authNotifier);
+        await initializeCurrentUser(authNotifier);
 
         Navigator.of(context).pushReplacement(
             new MaterialPageRoute(builder: (context) => HomeScreen()));
@@ -92,7 +91,12 @@ class _LoginState extends State<Login> {
 
       if (result == true) {
         await prefs.setBool('logined', true);
-        initializeCurrentUser(authNotifier);
+        if (authNotifier == null) {
+          print("Empty notifier !!!");
+
+          return;
+        }
+        await initializeCurrentUser(authNotifier);
 
         Navigator.of(context).pushReplacement(
             new MaterialPageRoute(builder: (context) => HomeScreen()));

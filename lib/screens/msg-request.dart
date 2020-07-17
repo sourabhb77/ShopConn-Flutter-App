@@ -178,6 +178,8 @@ class _MessageStreamState extends State<MessageStream> {
         }
         return ListView.builder(
           itemBuilder: (context, index) {
+        print("Snapshot lenght : ${snapshot.data.documents[index].data}");
+
             return Messagebox(
               room: ChatRoom.fromMap(snapshot.data.documents[index].data),
             );

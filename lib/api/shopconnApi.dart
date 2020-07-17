@@ -85,15 +85,14 @@ signout(AuthNotifier authNotifier) async {
         .catchError((error) => print("Error code : ${error.code}"));
     authNotifier.currentUser(null);
     SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    
   } catch (err) {
     print("Error : $err");
   }
 }
 
-initializeCurrentUser(AuthNotifier authNotifier) async {
+Future<void> initializeCurrentUser(AuthNotifier authNotifier) async {
   FirebaseUser firebaseUser = await FirebaseAuth.instance.currentUser();
+  print("authnotifier initialization !! : $firebaseUser");
 
   if (firebaseUser != null) {
     print(firebaseUser);

@@ -853,12 +853,14 @@ bool selected(){
                 _currentBook.tagList = tagList;
                 if (!_formkey.currentState.validate()) {
                   print("Errororororororo");
-                } else {
+                } 
+                else {
                   // No Error upload all the details to the database!!
                   _formkey.currentState.save();
                   uploadData();
                   print(_currentBook.toMap());
                 }
+
                Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => AfterProductScreen(category:_currentBook.productCategory),),
@@ -1065,7 +1067,8 @@ bool selected(){
                         child: IconButton(
                           icon: Icon(
                             Icons.delete,
-                            color: sc_AppBarBackgroundColor,
+
+                            color: Colors.red,
                             size: 35.0,
                           ),
                           onPressed: () {
