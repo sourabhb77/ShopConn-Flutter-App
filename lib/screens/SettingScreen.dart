@@ -4,7 +4,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shopconn/api/shopconnApi.dart';
 import 'package:shopconn/const/Theme.dart';
 import 'package:shopconn/notifier/authNotifier.dart';
+import 'package:shopconn/screens/Bookmarks.dart';
 import 'package:shopconn/screens/MyProdcuts.dart';
+import 'package:shopconn/screens/MyPurchase.dart';
 import 'package:shopconn/screens/Profile.dart';
 import 'package:shopconn/screens/SavedProductScreen.dart';
 import 'package:shopconn/screens/login.dart';
@@ -158,21 +160,27 @@ class _SettingScreenState extends State<SettingScreen> {
               color: sc_grey,
               height: 2.0,
             ),
-            Container(
-              padding: EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 15.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "My Purchase",
-                    style: TextStyle(
-                      fontSize: 15.0,
+            InkWell(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => MyPurchase()));
+              },
+              child: Container(
+                padding: EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 15.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "My Purchase",
+                      style: TextStyle(
+                        fontSize: 15.0,
+                      ),
                     ),
-                  ),
-                  Icon(
-                    Icons.arrow_forward_ios,
-                  ),
-                ],
+                    Icon(
+                      Icons.arrow_forward_ios,
+                    ),
+                  ],
+                ),
               ),
             ),
             Container(
@@ -208,10 +216,8 @@ class _SettingScreenState extends State<SettingScreen> {
             ),
             InkWell(
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => SavedProductScreen()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => BookMarks()));
               },
               child: Container(
                 padding: EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 15.0),

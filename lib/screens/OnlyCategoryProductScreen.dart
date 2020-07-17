@@ -13,7 +13,7 @@ class OnlyCategoryProductScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Products",
+          "$category" + "s",
           style: TextStyle(color: sc_AppBarTextColor),
         ),
         actions: <Widget>[

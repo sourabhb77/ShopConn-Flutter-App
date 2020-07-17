@@ -7,7 +7,7 @@ class Other {
   String description;
   int price;
   String productCategory;
-  bool onSell = true;
+  String buyerId;
   List<String> imgList;
   String condition;
   Timestamp postedAt;
@@ -22,7 +22,7 @@ class Other {
     description = data['description'];
     price = data['price'];
     productCategory = data['productCategory'];
-    onSell = data['onSell'];
+    buyerId = data['buyerId'];
     imgList = List.from(data['imgList']);
     condition = data['condition'];
     postedAt = data['postedAt'];
@@ -37,7 +37,7 @@ class Other {
       'description': description,
       'price': price,
       'productCategory': productCategory,
-      'onSell': onSell,
+      'buyerId': buyerId,
       'imgList': imgList,
       'condition': condition,
       'postedAt': postedAt,

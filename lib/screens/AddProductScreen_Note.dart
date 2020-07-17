@@ -27,7 +27,7 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
   String _condition = "Very Good"; //[very good, good , not bad]
   List<File> imageList = List(); //To store Path of each Images
   List<String> tagList = [];
-   String category; // to store tags for searching
+  String category; // to store tags for searching
 
   initNote() {
     print("Initial Constructor");
@@ -43,10 +43,16 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
   void
       _SelectImage() async //Function to keep track of all the image files that are needed to be uploaded
   {
-    File image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      imageList.add(image);
-    });
+    try {
+      File image = await ImagePicker.pickImage(source: ImageSource.gallery);
+      if (image != null) {
+        setState(() {
+          imageList.add(image);
+        });
+      }
+    } catch (e) {
+      print("got error $e");
+    }
   }
 
   uploadData() async {
@@ -65,7 +71,7 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
     }
   }
 
-    void _deleteImage({int index}){
+  void _deleteImage({int index}) {
     setState(() {
       imageList.remove(imageList[index]);
     });
@@ -90,6 +96,7 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
     _currentNote = Note();
     _currentNote.branch = _branch;
     _currentNote.year = _year;
+    _currentNote.buyerId = "";
   }
 
   Widget _buildDescriptionField() {
@@ -608,7 +615,7 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Add Product",
+          "Add Your Notes",
           style: TextStyle(
             color: sc_AppBarTextColor,
           ),
@@ -648,29 +655,32 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0)),
               onPressed: () {
-                if(imageList.length<1){
-                   _showMyDialog();
-                }
-                else{
-                _currentNote.name = name;
-                addToTagList(_currentNote.name);
-                tagList.add(_currentNote.year.toLowerCase());
-                tagList.add(_currentNote.branch.toLowerCase());
-                _currentNote.condition = _condition;
-                _currentNote.tagList = tagList;
-                if (!_formkey.currentState.validate()) {
-                  print("Errororororororo");
+                if (imageList.length < 1) {
+                  _showMyDialog();
                 } else {
-                  // No Error upload all the details to the database!!
-                  _formkey.currentState.save();
-                  uploadData();
-                  print(_currentNote.toMap());
-                }
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => AfterProductScreen(category: _currentNote.productCategory,),),
-                  (route)=>route.isFirst,
-                );
+                  _currentNote.name = name;
+                  addToTagList(_currentNote.name);
+                  tagList.add(_currentNote.year.toLowerCase());
+                  tagList.add(_currentNote.branch.toLowerCase());
+                  _currentNote.condition = _condition;
+                  _currentNote.tagList = tagList;
+                  if (!_formkey.currentState.validate()) {
+                    print("Errororororororo");
+                  } else {
+                    // No Error upload all the details to the database!!
+                    _formkey.currentState.save();
+                    uploadData();
+                    print(_currentNote.toMap());
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AfterProductScreen(
+                          category: _currentNote.productCategory,
+                        ),
+                      ),
+                      (route) => route.isFirst,
+                    );
+                  }
                 }
               },
             ),
@@ -767,61 +777,62 @@ class _AddProuctScreen_NoteState extends State<AddProuctScreen_Note> {
                   // mainAxisSpacing: 2,
 
                   children: List.generate(imageList.length, (index) {
-                    return Stack(
-                    children:[
+                    return Stack(children: [
                       Container(
-                        child: Image(image: FileImage(imageList[index]),
-                        height: 300,
-                        width: 150,),
+                        child: Image(
+                          image: FileImage(imageList[index]),
+                          height: 300,
+                          width: 150,
+                        ),
                       ),
-                       Positioned(
-                        bottom: 0,
-                        right: 5,
+                      Positioned(
+                        top: 0,
+                        right: 0,
                         child: IconButton(
                           icon: Icon(
-                            Icons.delete,
-                            color: sc_AppBarBackgroundColor,
-                            size: 35.0,
+                            Icons.clear,
+                            color: Colors.red,
+                            size: 30.0,
                           ),
                           onPressed: () {
-                            _deleteImage(index:index);
+                            _deleteImage(index: index);
                           },
                         ),
                       ),
-                      ]
-                    );
+                    ]);
                   })),
-                  SizedBox(height:60.0),
+              SizedBox(height: 60.0),
             ],
           ),
         ),
       ),
     );
   }
-   Future<void> _showMyDialog() async{
+
+  Future<void> _showMyDialog() async {
     return showDialog<void>(
-    context: context,
-    barrierDismissible: false, // user must tap button!
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text('Photo not uploaded.'),
-        content: SingleChildScrollView(
-          child: ListBody(
-            children: <Widget>[
-              Text('You cannot post without uploading a image.'),
-            ],
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Photo not uploaded.'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('You cannot post without uploading a image.'),
+              ],
+            ),
           ),
-        ),
-        actions: <Widget>[
-          FlatButton(
-            child: Text('Ok'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      );
-    },
-  );         
-}
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Ok'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }

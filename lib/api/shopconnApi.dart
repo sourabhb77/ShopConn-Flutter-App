@@ -290,13 +290,47 @@ Future<bool> deleteProduct(String productId) async {
   }
 }
 
-markAsSold(String productId) async {
+markAsSold(String productId, String buyerId) async {
   await Firestore.instance
       .collection("post")
       .document(productId)
-      .updateData({"onSell": false})
+      .updateData({"buyerId": buyerId})
       .then((value) => print("marked as sold"))
       .catchError((err) {
         print("got error");
       });
+}
+
+//to get all purachsed products
+Future<List<DocumentSnapshot>> getMyPurchase() async {
+  FirebaseUser user = await FirebaseAuth.instance.currentUser();
+  try {
+    String id = user.uid;
+    var ref =
+        Firestore.instance.collection("post").where("buyerId", isEqualTo: id);
+    var querySnapshot = await ref.getDocuments();
+
+    return querySnapshot.documents;
+  } catch (err) {
+    print("Error fetching booksmarks : $err");
+    return null;
+  }
+}
+
+//to know product is already in bookmark list
+Future<bool> isBookmarkedProduct(String productId, String userId) async {
+  try {
+    var snapshot = await Firestore.instance
+        .collection("users/$userId/bookmarks")
+        .where("id", isEqualTo: productId)
+        .getDocuments();
+    if (snapshot.documents.length != 0) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    print("error in isBookmarked : $err");
+    return null;
+  }
 }

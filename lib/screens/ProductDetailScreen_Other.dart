@@ -8,6 +8,7 @@ import 'package:shopconn/models/other.dart';
 import 'package:shopconn/notifier/ChatNotifier.dart';
 import 'package:shopconn/notifier/authNotifier.dart';
 import 'package:shopconn/notifier/otherNotifier.dart';
+import 'package:shopconn/screens/Bookmarks.dart';
 import 'package:shopconn/screens/chatbox.dart';
 import 'package:shopconn/widgets/Carousel.dart';
 import 'package:shopconn/widgets/chatBoxWidget.dart';
@@ -23,20 +24,29 @@ class ProductDetailScreen_Other extends StatefulWidget {
 
 class _ProductDetailScreen_OtherState extends State<ProductDetailScreen_Other> {
   List imgList = [];
-  bool showmore = true;
-  List<T> map<T>(List list, Function handler) {
-    List<T> result = [];
-    for (var i = 0; i < list.length; i++) {
-      result.add(handler(i, list[i]));
-    }
-    return result;
+  // List<T> map<T>(List list, Function handler) {
+  //   List<T> result = [];
+  //   for (var i = 0; i < list.length; i++) {
+  //     result.add(handler(i, list[i]));
+  //   }
+  //   return result;
+  // }
+  bool isBookmarked = false;
+
+  @override
+  void didChangeDependencies() {
+    OtherNotifier otherNotifier = Provider.of<OtherNotifier>(context);
+    AuthNotifier authNotifier = Provider.of<AuthNotifier>(context);
+    isBookmarkedProduct(otherNotifier.currentOther.id, authNotifier.userId)
+        .then((res) {
+      setState(() {
+        isBookmarked = res;
+      });
+    });
+    super.didChangeDependencies();
   }
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
-  void setBool() {
-    setState(() => showmore = !showmore);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +67,12 @@ class _ProductDetailScreen_OtherState extends State<ProductDetailScreen_Other> {
             IconButton(
               icon: Icon(Icons.bookmark),
               tooltip: 'Saved Product',
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => BookMarks()),
+                );
+              },
             ),
           ],
         ),
@@ -262,69 +277,79 @@ class _ProductDetailScreen_OtherState extends State<ProductDetailScreen_Other> {
               SizedBox(
                 height: 15.0,
               ),
-               authNotifier.userId!=otherNotifier.currentOther.ownerId?
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 50.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    RaisedButton(
-                      onPressed: () async {
-                        String ans = (await isPresent(
-                                authNotifier.userId,
-                                otherNotifier.currentOther.ownerId,
-                                chatNotifier,
-                                authNotifier))
-                            .toString();
-                        if (ans == "null") {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ChatBoxWidget(
-                                ownerId: otherNotifier.currentOther.ownerId,
-                                productId: otherNotifier.currentOther.id,
+              authNotifier.userId != otherNotifier.currentOther.ownerId
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 50.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          RaisedButton(
+                            onPressed: () async {
+                              String ans = (await isPresent(
+                                      authNotifier.userId,
+                                      otherNotifier.currentOther.ownerId,
+                                      chatNotifier,
+                                      authNotifier))
+                                  .toString();
+                              if (ans == "null") {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ChatBoxWidget(
+                                      ownerId:
+                                          otherNotifier.currentOther.ownerId,
+                                      productId: otherNotifier.currentOther.id,
+                                    ),
+                                  ),
+                                );
+                              } else if (ans != "null") {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ChatPage()),
+                                );
+                              }
+                            },
+                            color: sc_PrimaryColor,
+                            child: Column(
+                              children: <Widget>[
+                                Text(
+                                  "Chat now",
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                    color: sc_AppBarTextColor,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          OutlineButton(
+                            color: sc_PrimaryColor,
+                            child: Text(
+                              isBookmarked
+                                  ? "Added to Bookmarks"
+                                  : 'Add to WishList',
+                              style: TextStyle(
+                                fontSize: 16.0,
                               ),
                             ),
-                          );
-                        } else if (ans != "null") {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => ChatPage()),
-                          );
-                        }
-                      },
-                      color: sc_PrimaryColor,
-                      child: Column(
-                        children: <Widget>[
-                          Text(
-                            "Chat now",
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              color: sc_AppBarTextColor,
-                            ),
+                            onPressed: () {
+                              if (!isBookmarked) {
+                                Future<bool> result = addToBookmarks(
+                                    otherNotifier.currentOther.id);
+                                result.then((value) => value == true
+                                    ? showSnackBar("Added to BookMarks")
+                                    : showSnackBar("Error Occured"));
+                                setState(() {
+                                  isBookmarked = true;
+                                });
+                              }
+                            },
                           ),
                         ],
                       ),
-                    ),
-                    OutlineButton(
-                      color: sc_PrimaryColor,
-                      child: Text(
-                        'Add to WishList',
-                        style: TextStyle(
-                          fontSize: 16.0,
-                        ),
-                      ),
-                      onPressed: () {
-                        Future<bool> result =
-                            addToBookmarks(otherNotifier.currentOther.id);
-                        result.then((value) => value == true
-                            ? showSnackBar("Added to BookMarks")
-                            : showSnackBar("Error Occured"));
-                      },
-                    ),
-                  ],
-                ),
-              ):Container(),
+                    )
+                  : Container(),
               SizedBox(
                 height: 15.0,
               ),

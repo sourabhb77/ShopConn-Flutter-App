@@ -55,6 +55,9 @@ class ChatMessageBox extends StatelessWidget {
                 borderRadius: BorderRadius.all(Radius.circular(7)),
               ),
               padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
+              margin: sender
+                  ? EdgeInsets.fromLTRB(40.0, 0.0, 0, 0)
+                  : EdgeInsets.fromLTRB(0.0, 0.0, 40.0, 0),
               child: Column(
                 crossAxisAlignment:
                     sender ? CrossAxisAlignment.end : CrossAxisAlignment.start,

@@ -145,7 +145,7 @@ class Chat extends State<ChatPage> with TickerProviderStateMixin {
               borderRadius: BorderRadius.circular(20),
               color: sc_InputBackgroundColor,
             ),
-            padding: EdgeInsets.symmetric(vertical: 5.0),
+            padding: EdgeInsets.symmetric(vertical: 2.0),
             child: Row(
               children: <Widget>[
                 SizedBox(
@@ -283,4 +283,3 @@ class Chat extends State<ChatPage> with TickerProviderStateMixin {
 //     );
 //   }
 // }
-

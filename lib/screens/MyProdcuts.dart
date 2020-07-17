@@ -105,7 +105,9 @@ class _MyProductsState extends State<MyProducts> {
                             onPressed: () {
                               if (ownerId != "") {
                                 markAsSold(
-                                    productNotifier.currentProduct["id"]);
+                                  productNotifier.currentProduct["id"],
+                                  ownerId,
+                                );
                                 Navigator.pop(context);
                               }
                             },
@@ -272,7 +274,8 @@ class _MyProductsState extends State<MyProducts> {
                       },
                       itemBuilder: (BuildContext context) =>
                           <PopupMenuEntry<Action>>[
-                        snapshot.data.documents[index]["onSell"]
+                        snapshot.data.documents[index]["buyerId"].toString() ==
+                                ""
                             ? PopupMenuItem<Action>(
                                 value: Action.markAsSold,
                                 child: Text('Mark As SOLD'),
@@ -285,7 +288,7 @@ class _MyProductsState extends State<MyProducts> {
                       ],
                     ),
                   ),
-                  snapshot.data.documents[index]["onSell"] == false
+                  snapshot.data.documents[index]["buyerId"] != ""
                       ? Positioned(
                           top: 12,
                           left: 4,

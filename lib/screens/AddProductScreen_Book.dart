@@ -31,10 +31,10 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
   // List newList = List.from(authorList);
   TextEditingController authorListController = new TextEditingController();
   List<File> imageList = List(); //To store Path of each Images
-  List<String> tagList = [];// to store tags for searching 
+  List<String> tagList = []; // to store tags for searching
   String category;
-  bool select=false;
-  String txt="";
+  bool select = false;
+  String txt = "";
 
   initBook() {
     print("Initial Constructor");
@@ -50,13 +50,19 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
   void
       _SelectImage() async //Function to keep track of all the image files that are needed to be uploaded
   {
-    File image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      imageList.add(image);
-    });
+    try {
+      File image = await ImagePicker.pickImage(source: ImageSource.gallery);
+      if (image != null) {
+        setState(() {
+          imageList.add(image);
+        });
+      }
+    } catch (e) {
+      print("got error $e");
+    }
   }
 
-   void _deleteImage({int index}){
+  void _deleteImage({int index}) {
     setState(() {
       imageList.remove(imageList[index]);
     });
@@ -72,9 +78,7 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
       print("Success");
       print("\n***************\n");
     } else {
-      print("\n*******book screen********\n");
-      print("FAILURE");
-      print("\n***************\n");
+      print("Something went wrong");
     }
   }
 
@@ -88,17 +92,17 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
     print(tagList);
   }
 
-bool selected(){
-     setState(() {
-       select != select;
-     });
-     return select;
-   }
-
+  bool selected() {
+    setState(() {
+      select != select;
+    });
+    return select;
+  }
 
   _AddProuctScreen_BookState(this.name) {
     initBook();
   }
+
   @override
   void initState() {
     super.initState();
@@ -108,6 +112,7 @@ bool selected(){
         Provider.of<BookNotifier>(context, listen: false);
     _currentBook = Book();
     _currentBook.branch = _branch;
+    _currentBook.buyerId = "";
   }
 
   Widget _buildAuthorNameField() {
@@ -151,10 +156,9 @@ bool selected(){
       // print(authorList);
       addToTagList(text);
       authorListController.clear();
-      if(authorList.length>=1)
-      {
+      if (authorList.length >= 1) {
         setState(() {
-          txt="";
+          txt = "";
         });
       }
     }
@@ -796,7 +800,7 @@ bool selected(){
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Add Product",
+          "Add Your Book",
           style: TextStyle(
             color: sc_AppBarTextColor,
           ),
@@ -836,36 +840,37 @@ bool selected(){
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0)),
               onPressed: () {
-                if(imageList.length<1){
+                if (imageList.length < 1) {
                   _showMyDialog();
                 }
-                else if(authorList.length<1){
-                  setState(() {
-                    txt="Author name not added";
-                  });
-                }
-                else{
-                _currentBook.name = name;
-                addToTagList(_currentBook.name);
-                _currentBook.authorList = authorList;
-                _currentBook.bookCategory = _bookCat;
-                _currentBook.condition = _condition;
-                _currentBook.tagList = tagList;
-                if (!_formkey.currentState.validate()) {
-                  print("Errororororororo");
-                } 
+                // else if (authorList.length < 1) {
+                //   setState(() {
+                //     txt = "Author name not added";
+                //   });
+                // }
                 else {
-                  // No Error upload all the details to the database!!
-                  _formkey.currentState.save();
-                  uploadData();
-                  print(_currentBook.toMap());
-                }
-
-               Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => AfterProductScreen(category:_currentBook.productCategory),),
-                  (route)=>route.isFirst,
-                );
+                  _currentBook.name = name;
+                  addToTagList(_currentBook.name);
+                  _currentBook.authorList = authorList;
+                  _currentBook.bookCategory = _bookCat;
+                  _currentBook.condition = _condition;
+                  _currentBook.tagList = tagList;
+                  if (!_formkey.currentState.validate()) {
+                    print("Errororororororo");
+                  } else {
+                    // No Error upload all the details to the database!!
+                    _formkey.currentState.save();
+                    uploadData();
+                    print(_currentBook.toMap());
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AfterProductScreen(
+                            category: _currentBook.productCategory),
+                      ),
+                      (route) => route.isFirst,
+                    );
+                  }
                 }
               },
             ),
@@ -972,8 +977,8 @@ bool selected(){
                   }).toList(),
                 ),
               ),
-               Padding(
-                padding: const EdgeInsets.fromLTRB(30, 0, 16,0),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(30, 0, 16, 0),
                 child: Container(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -981,8 +986,8 @@ bool selected(){
                       Text(
                         txt,
                         style: TextStyle(
-                          color:Colors.redAccent,
-                          fontSize:12,
+                          color: Colors.redAccent,
+                          fontSize: 12,
                         ),
                       ),
                     ],
@@ -1054,62 +1059,62 @@ bool selected(){
                   // mainAxisSpacing: 2,
 
                   children: List.generate(imageList.length, (index) {
-                    return Stack(
-                    children:[
+                    return Stack(children: [
                       Container(
-                        child: Image(image: FileImage(imageList[index]),
-                        height: 300,
-                        width: 150,),
+                        child: Image(
+                          image: FileImage(imageList[index]),
+                          height: 300,
+                          width: 150,
+                        ),
                       ),
-                       Positioned(
-                        bottom: 0,
-                        right: 5,
+                      Positioned(
+                        top: 0,
+                        right: 0,
                         child: IconButton(
                           icon: Icon(
-                            Icons.delete,
-
+                            Icons.clear,
                             color: Colors.red,
-                            size: 35.0,
+                            size: 30.0,
                           ),
                           onPressed: () {
-                            _deleteImage(index:index);
+                            _deleteImage(index: index);
                           },
                         ),
                       ),
-                      ]
-                    );
+                    ]);
                   })),
-                  SizedBox(height:60.0),
+              SizedBox(height: 60.0),
             ],
           ),
         ),
       ),
     );
   }
-   Future<void> _showMyDialog() async{
+
+  Future<void> _showMyDialog() async {
     return showDialog<void>(
-    context: context,
-    barrierDismissible: false, // user must tap button!
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text('Photo not uploaded.'),
-        content: SingleChildScrollView(
-          child: ListBody(
-            children: <Widget>[
-              Text('You cannot post without uploading a image.'),
-            ],
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Photo not uploaded.'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('You cannot post without uploading a image.'),
+              ],
+            ),
           ),
-        ),
-        actions: <Widget>[
-          FlatButton(
-            child: Text('Ok'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      );
-    },
-  );         
-}
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Ok'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
