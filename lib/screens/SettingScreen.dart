@@ -4,10 +4,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shopconn/api/shopconnApi.dart';
 import 'package:shopconn/const/Theme.dart';
 import 'package:shopconn/notifier/authNotifier.dart';
+import 'package:shopconn/screens/AboutUsScreen.dart';
 import 'package:shopconn/screens/Bookmarks.dart';
 import 'package:shopconn/screens/MyProdcuts.dart';
 import 'package:shopconn/screens/MyPurchase.dart';
 import 'package:shopconn/screens/Profile.dart';
+import 'package:shopconn/screens/ReportScreen.dart';
 import 'package:shopconn/screens/SavedProductScreen.dart';
 import 'package:shopconn/screens/login.dart';
 import 'package:shopconn/screens/msg-request.dart';
@@ -289,18 +291,48 @@ class _SettingScreenState extends State<SettingScreen> {
               color: sc_grey,
               height: 8.0,
             ),
-            Container(
-              padding: EdgeInsets.fromLTRB(15.0, 17.0, 15.0, 17.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "About Us",
-                    style: TextStyle(
-                      fontSize: 15.0,
+            InkWell(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => AboutUsScreen()));
+              },
+              child: Container(
+                padding: EdgeInsets.fromLTRB(15.0, 17.0, 15.0, 17.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "About Us",
+                      style: TextStyle(
+                        fontSize: 15.0,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              color: sc_grey,
+              height: 2.0,
+            ),
+            InkWell(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ReportScreen()));
+              },
+              child: Container(
+                padding: EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 15.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Report Bug",
+                      style: TextStyle(
+                        fontSize: 15.0,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             Container(

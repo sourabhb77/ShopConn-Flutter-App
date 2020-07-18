@@ -51,6 +51,7 @@ signup(User user, AuthNotifier authNotifier) async {
   if (authResult != null) {
     UserUpdateInfo updateInfo = UserUpdateInfo();
     updateInfo.displayName = user.displayName;
+    print("updateInfo.displayName  ${updateInfo.displayName}");
 
     FirebaseUser firebaseUser = authResult.user;
 
@@ -58,7 +59,7 @@ signup(User user, AuthNotifier authNotifier) async {
       await firebaseUser.updateProfile(updateInfo);
 
       await firebaseUser.reload();
-
+      print("displayName ${firebaseUser.displayName}");
       print("Sign up: $firebaseUser");
 
       FirebaseUser currentUser = await FirebaseAuth.instance.currentUser();

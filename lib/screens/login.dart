@@ -124,12 +124,15 @@ class _LoginState extends State<Login> {
             fontSize: 16.0,
           ),
           enabledBorder: UnderlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8.0)),
             borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
           ),
           focusedBorder: UnderlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8.0)),
             borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
           ),
           border: UnderlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8.0)),
             borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
           ),
         ),
@@ -170,12 +173,15 @@ class _LoginState extends State<Login> {
             fontSize: 16.0,
           ),
           enabledBorder: UnderlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8.0)),
             borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
           ),
           focusedBorder: UnderlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8.0)),
             borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
           ),
           border: UnderlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8.0)),
             borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
           ),
         ),
@@ -218,12 +224,15 @@ class _LoginState extends State<Login> {
             fontSize: 16.0,
           ),
           enabledBorder: UnderlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8.0)),
             borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
           ),
           focusedBorder: UnderlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8.0)),
             borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
           ),
           border: UnderlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8.0)),
             borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
           ),
         ),
@@ -264,12 +273,15 @@ class _LoginState extends State<Login> {
             fontSize: 16.0,
           ),
           enabledBorder: UnderlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8.0)),
             borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
           ),
           focusedBorder: UnderlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8.0)),
             borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
           ),
           border: UnderlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8.0)),
             borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
           ),
         ),
@@ -298,13 +310,12 @@ class _LoginState extends State<Login> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text(_authMode == AuthMode.Login ? 'Login' : 'Register',
-            style: TextStyle(color: Colors.black)),
-        leading: Icon(
-          IconData(58135,
-              fontFamily: 'MaterialIcons', matchTextDirection: true),
-          color: Colors.black,
-          size: 30.0,
+        title: Text(
+          _authMode == AuthMode.Login ? 'Login' : 'Register',
+          style: TextStyle(
+            color: Colors.black,
+            letterSpacing: 1.0,
+          ),
         ),
         elevation: 0.5,
       ),
@@ -333,6 +344,8 @@ class _LoginState extends State<Login> {
                 ButtonTheme(
                   minWidth: 260,
                   child: RaisedButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0)),
                     color: sc_PrimaryColor,
                     padding: EdgeInsets.all(10.0),
                     onPressed: () => _submitForm(),
@@ -358,6 +371,8 @@ class _LoginState extends State<Login> {
                 ButtonTheme(
                   minWidth: 260,
                   child: RaisedButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0)),
                     color: sc_AppBarTextColor,
                     padding: EdgeInsets.all(10.0),
                     onPressed: () {
@@ -372,33 +387,31 @@ class _LoginState extends State<Login> {
                   ),
                 ),
                 SizedBox(
-                  height: 40.0,
+                  height: 50.0,
                 ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 0, 10, 15),
-                  child: Row(
-                    children: <Widget>[
-                      Text(
-                        '${_authMode == AuthMode.Login ? 'Don\'t Have Account? ' : 'Have Account? '}',
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      '${_authMode == AuthMode.Login ? 'Don\'t Have Account? ' : 'Have Account? '}',
+                      style:
+                          TextStyle(fontSize: 16.0, color: sc_ItemTitleColor),
+                    ),
+                    GestureDetector(
+                      child: Text(
+                        '${_authMode == AuthMode.Login ? 'Register' : 'Login'} Here',
                         style:
-                            TextStyle(fontSize: 16.0, color: sc_ItemTitleColor),
+                            TextStyle(fontSize: 16.0, color: sc_PrimaryColor),
                       ),
-                      GestureDetector(
-                        child: Text(
-                          '${_authMode == AuthMode.Login ? 'Register' : 'Login'} with Google',
-                          style:
-                              TextStyle(fontSize: 16.0, color: sc_PrimaryColor),
-                        ),
-                        onTap: () {
-                          setState(() {
-                            _authMode = _authMode == AuthMode.Login
-                                ? AuthMode.Signup
-                                : AuthMode.Login;
-                          });
-                        },
-                      )
-                    ],
-                  ),
+                      onTap: () {
+                        setState(() {
+                          _authMode = _authMode == AuthMode.Login
+                              ? AuthMode.Signup
+                              : AuthMode.Login;
+                        });
+                      },
+                    )
+                  ],
                 )
               ],
             ),

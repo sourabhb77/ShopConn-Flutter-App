@@ -64,7 +64,7 @@ dev_dependencies:
 flutter_native_splash:
   image: assets/images/splashScreen.png
   # image: assets/images/error.png
-  color: "42a5f5"
+  color: "ffffff"
   fill : false
   android_disable_fullscreen: true
 
