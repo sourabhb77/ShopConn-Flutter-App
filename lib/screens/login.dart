@@ -31,6 +31,7 @@ class _LoginState extends State<Login> {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   AuthNotifier authNotifier;
   AuthMode _authMode = AuthMode.Login;
+  bool load = false;
 
   User _user = User();
 
@@ -63,8 +64,13 @@ class _LoginState extends State<Login> {
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (_authMode == AuthMode.Login) {
+      setState(() {
+        load = true;
+      });
       String result = await login(_user, authNotifier);
-
+      setState(() {
+        load = false;
+      });
       if (result.compareTo("True") == 0) {
         await prefs.setBool('logined', true);
         print("Intialize AuthNotifier");
@@ -80,7 +86,13 @@ class _LoginState extends State<Login> {
         Scaffold.of(_formKey.currentContext).showSnackBar(snackBar);
       }
     } else {
+      setState(() {
+        load = true;
+      });
       String result = await signup(_user, authNotifier);
+      setState(() {
+        load = false;
+      });
       if (result.compareTo("True") == 0) {
         var snackBar = new SnackBar(
             content: new Text("Registered Succesfully, Login Now"),
@@ -359,10 +371,23 @@ class _LoginState extends State<Login> {
                     color: sc_PrimaryColor,
                     padding: EdgeInsets.all(10.0),
                     onPressed: () => _submitForm(),
-                    child: Text(
-                      _authMode == AuthMode.Login ? 'Login' : 'Signup',
-                      style: TextStyle(fontSize: 20, color: sc_AppBarTextColor),
-                    ),
+                    child: load
+                        ? Center(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10.0),
+                              child: LinearProgressIndicator(
+                                backgroundColor: Colors.white,
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(Colors.red),
+                              ),
+                            ),
+                          )
+                        : Text(
+                            _authMode == AuthMode.Login ? 'Login' : 'Signup',
+                            style: TextStyle(
+                                fontSize: 20, color: sc_AppBarTextColor),
+                          ),
                   ),
                 ),
                 SizedBox(
