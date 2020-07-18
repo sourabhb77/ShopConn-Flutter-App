@@ -42,30 +42,32 @@ Future<String> login(User user, AuthNotifier authNotifier) async {
   return errorCode;
 }
 
-signup(User user, AuthNotifier authNotifier) async {
+Future<String> signup(User user, AuthNotifier authNotifier) async {
+  String errorCode;
   AuthResult authResult = await FirebaseAuth.instance
       .createUserWithEmailAndPassword(
           email: user.email, password: user.password)
-      .catchError((error) => print(error.code));
+      .catchError((error) {
+    errorCode = error.code.toString();
+    print(error.code);
+  });
 
   if (authResult != null) {
-    UserUpdateInfo updateInfo = UserUpdateInfo();
-    updateInfo.displayName = user.displayName;
-    print("updateInfo.displayName  ${updateInfo.displayName}");
-
-    FirebaseUser firebaseUser = authResult.user;
-
-    if (firebaseUser != null) {
-      await firebaseUser.updateProfile(updateInfo);
-
-      await firebaseUser.reload();
-      print("displayName ${firebaseUser.displayName}");
-      print("Sign up: $firebaseUser");
-
+    await Firestore.instance
+        .collection('users')
+        .document(authResult.user.uid)
+        .updateData({
+      'name': user.displayName,
+    }).then((value) async {
+      print("resgisterd succesfully");
       FirebaseUser currentUser = await FirebaseAuth.instance.currentUser();
       authNotifier.setUser(currentUser);
-    }
+    }).catchError((err) {
+      print("got error");
+    });
+    return "True";
   }
+  return errorCode;
 }
 
 getCurrentUser(AuthNotifier authNotifier) async {

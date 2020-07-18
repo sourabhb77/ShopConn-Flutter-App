@@ -80,7 +80,17 @@ class _LoginState extends State<Login> {
         Scaffold.of(_formKey.currentContext).showSnackBar(snackBar);
       }
     } else {
-      signup(_user, authNotifier);
+      String result = await signup(_user, authNotifier);
+      if (result.compareTo("True") == 0) {
+        var snackBar = new SnackBar(
+            content: new Text("Registered Succesfully, Login Now"),
+            backgroundColor: Colors.teal);
+        Scaffold.of(_formKey.currentContext).showSnackBar(snackBar);
+      } else {
+        var snackBar = new SnackBar(
+            content: new Text(result), backgroundColor: Colors.red);
+        Scaffold.of(_formKey.currentContext).showSnackBar(snackBar);
+      }
     }
   }
 
