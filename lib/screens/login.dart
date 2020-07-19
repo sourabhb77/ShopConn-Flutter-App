@@ -68,6 +68,7 @@ class _LoginState extends State<Login> {
         await prefs.setBool('logined', true);
         print("Intialize AuthNotifier");
         await initializeCurrentUser(authNotifier);
+        await saveDeviceToken();
 
         Navigator.of(context).pushReplacement(
             new MaterialPageRoute(builder: (context) => HomeScreen()));
@@ -97,6 +98,9 @@ class _LoginState extends State<Login> {
           return;
         }
         await initializeCurrentUser(authNotifier);
+
+        //updating FCM token
+        await saveDeviceToken();
 
         Navigator.of(context).pushReplacement(
             new MaterialPageRoute(builder: (context) => HomeScreen()));

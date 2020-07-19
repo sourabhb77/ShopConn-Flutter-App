@@ -11,14 +11,17 @@ import 'package:shopconn/notifier/productNotifier.dart';
 import 'package:shopconn/notifier/sortNotifier.dart';
 import 'package:shopconn/screens/boarding/SplashScreen.dart';
 import 'package:shopconn/screens/login.dart';
+import 'package:shopconn/screens/msg-request.dart';
+import 'package:shopconn/services/navigation_service.dart';
 import 'notifier/clothesNotifier.dart';
-
+import 'locator.dart';
+// fHfBmaCzAYU:APA91bGRk7SdcEr6gEGSX5xl246IKEr7h7VI-WLtm_WqJu3fwv_0iY3-xYy2VfNOw9bXSvOL-Wih6tZiOBQZumlQ8KIQjWAZQ_uKesvOvL_JNjHM9VubphKI0iS-n-FkE4FAYAzIVCen
+// fHfBmaCzAYU:APA91bGRk7SdcEr6gEGSX5xl246IKEr7h7VI-WLtm_WqJu3fwv_0iY3-xYy2VfNOw9bXSvOL-Wih6tZiOBQZumlQ8KIQjWAZQ_uKesvOvL_JNjHM9VubphKI0iS-n-FkE4FAYAzIVCen
 void main() {
+  setupLocator();
   runApp(MultiProvider(
-    
     providers: [
       ChangeNotifierProvider(
-
         create: (context) => AuthNotifier(),
       ),
       ChangeNotifierProvider(
@@ -46,8 +49,7 @@ void main() {
         create: (context) => FilterNotifier(),
       )
     ],
-    
-    child: MyApp(    ),
+    child: MyApp(),
   ));
 }
 
@@ -66,7 +68,8 @@ class MyApp extends StatelessWidget {
           )),
       // home: SplashScreen(),
       routes: {
-        '/login' : (contex)=> Login(),
+        '/login': (contex) => Login(),
+        '/chatPage' : (context) => ChatBox(),
       },
       home: Consumer<AuthNotifier>(
         builder: (context, notifier, child) {
@@ -74,6 +77,7 @@ class MyApp extends StatelessWidget {
           // return notifier.user != null ? HomeScreen() : Login();
         },
       ),
+      navigatorKey: locator<NavigationService>().navigatorKey,
     );
   }
 }

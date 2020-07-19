@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shopconn/api/shopconnApi.dart';
 import 'package:shopconn/const/Theme.dart';
+import 'package:shopconn/const/push_nofitications.dart';
 import 'package:shopconn/notifier/authNotifier.dart';
 import 'package:shopconn/screens/AddProductScreen.dart';
 import 'package:shopconn/screens/Bookmarks.dart';
@@ -30,6 +31,14 @@ _clearUser() async {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+  @override
+  void initState() {
+      PushNotificationManager notificationManager = PushNotificationManager();
+    notificationManager.init();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     AuthNotifier authNotifier = Provider.of<AuthNotifier>(context);

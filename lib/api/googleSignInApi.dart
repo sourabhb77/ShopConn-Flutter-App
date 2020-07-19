@@ -1,7 +1,11 @@
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shopconn/const/constants.dart';
+import 'package:shopconn/const/push_nofitications.dart';
 
 Future<bool> signInWithGoogle() async {
   try {
@@ -18,7 +22,6 @@ Future<bool> signInWithGoogle() async {
       accessToken: googleSignInAuthentication.accessToken,
       idToken: googleSignInAuthentication.idToken,
     );
-    print("authCredential : ${credential.toString()}");
 
     final AuthResult authResult = await _auth.signInWithCredential(credential);
     final FirebaseUser user = authResult.user;
@@ -37,9 +40,8 @@ Future<bool> signInWithGoogle() async {
 }
 
 Future<void> signOutGoogle() async {
-  
-    final GoogleSignIn googleSignIn = GoogleSignIn();
-    await googleSignIn.signOut();
+  final GoogleSignIn googleSignIn = GoogleSignIn();
+  await googleSignIn.signOut();
 }
 
 Future<FirebaseUser> handleSignIn() async {
@@ -65,4 +67,22 @@ Future<FirebaseUser> handleSignIn() async {
   }
 
   return user;
+}
+
+Future<void> saveDeviceToken() async {
+  PushNotificationManager manager = PushNotificationManager();
+
+  try {
+    print("*****************************************************************************************");
+    String token = await manager.fcm.getToken();
+
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    String uid = user.uid;
+
+    var db = Firestore.instance;
+    var ref = db.collection("users").document(uid);
+    ref.setData({fcm: token}, merge: true);
+  } catch (err) {
+    print("Error Updating FCm token  ; $err");
+  }
 }
