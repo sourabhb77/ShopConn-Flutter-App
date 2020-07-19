@@ -109,7 +109,7 @@ class RequestCard extends StatelessWidget {
             Expanded(
                 child: IconButton(
               icon: new Icon(
-                IconData(59510, fontFamily: 'MaterialIcons'),
+                Icons.check,
                 color: Colors.green,
                 size: 30.0,
               ),
@@ -128,7 +128,7 @@ class RequestCard extends StatelessWidget {
             Expanded(
               child: IconButton(
                 icon: new Icon(
-                  IconData(57676, fontFamily: 'MaterialIcons'),
+                  Icons.clear,
                   color: Colors.red,
                   size: 30.0,
                 ),

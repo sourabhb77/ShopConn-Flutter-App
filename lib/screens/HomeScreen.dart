@@ -49,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Text(
           "ShopConn",
           style: TextStyle(
-              fontSize: 20.0, fontWeight: FontWeight.bold, letterSpacing: 2),
+              fontSize: 22.0, fontWeight: FontWeight.bold, letterSpacing: 2),
         ),
         actions: <Widget>[
           IconButton(

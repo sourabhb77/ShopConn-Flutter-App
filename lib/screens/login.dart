@@ -31,6 +31,7 @@ class _LoginState extends State<Login> {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   AuthNotifier authNotifier;
   AuthMode _authMode = AuthMode.Login;
+  bool load = false;
 
   User _user = User();
 
@@ -62,8 +63,13 @@ class _LoginState extends State<Login> {
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (_authMode == AuthMode.Login) {
+      setState(() {
+        load = true;
+      });
       String result = await login(_user, authNotifier);
-
+      setState(() {
+        load = false;
+      });
       if (result.compareTo("True") == 0) {
         await prefs.setBool('logined', true);
         print("Intialize AuthNotifier");
@@ -80,7 +86,23 @@ class _LoginState extends State<Login> {
         Scaffold.of(_formKey.currentContext).showSnackBar(snackBar);
       }
     } else {
-      signup(_user, authNotifier);
+      setState(() {
+        load = true;
+      });
+      String result = await signup(_user, authNotifier);
+      setState(() {
+        load = false;
+      });
+      if (result.compareTo("True") == 0) {
+        var snackBar = new SnackBar(
+            content: new Text("Registered Succesfully, Login Now"),
+            backgroundColor: Colors.teal);
+        Scaffold.of(_formKey.currentContext).showSnackBar(snackBar);
+      } else {
+        var snackBar = new SnackBar(
+            content: new Text(result), backgroundColor: Colors.red);
+        Scaffold.of(_formKey.currentContext).showSnackBar(snackBar);
+      }
     }
   }
 
@@ -132,12 +154,15 @@ class _LoginState extends State<Login> {
             fontSize: 16.0,
           ),
           enabledBorder: UnderlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8.0)),
             borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
           ),
           focusedBorder: UnderlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8.0)),
             borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
           ),
           border: UnderlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8.0)),
             borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
           ),
         ),
@@ -178,12 +203,15 @@ class _LoginState extends State<Login> {
             fontSize: 16.0,
           ),
           enabledBorder: UnderlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8.0)),
             borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
           ),
           focusedBorder: UnderlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8.0)),
             borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
           ),
           border: UnderlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8.0)),
             borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
           ),
         ),
@@ -226,12 +254,15 @@ class _LoginState extends State<Login> {
             fontSize: 16.0,
           ),
           enabledBorder: UnderlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8.0)),
             borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
           ),
           focusedBorder: UnderlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8.0)),
             borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
           ),
           border: UnderlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8.0)),
             borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
           ),
         ),
@@ -272,12 +303,15 @@ class _LoginState extends State<Login> {
             fontSize: 16.0,
           ),
           enabledBorder: UnderlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8.0)),
             borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
           ),
           focusedBorder: UnderlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8.0)),
             borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
           ),
           border: UnderlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8.0)),
             borderSide: BorderSide(color: sc_PrimaryColor, width: 3.0),
           ),
         ),
@@ -306,13 +340,12 @@ class _LoginState extends State<Login> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text(_authMode == AuthMode.Login ? 'Login' : 'Register',
-            style: TextStyle(color: Colors.black)),
-        leading: Icon(
-          IconData(58135,
-              fontFamily: 'MaterialIcons', matchTextDirection: true),
-          color: Colors.black,
-          size: 30.0,
+        title: Text(
+          _authMode == AuthMode.Login ? 'Login' : 'Register',
+          style: TextStyle(
+            color: Colors.black,
+            letterSpacing: 1.0,
+          ),
         ),
         elevation: 0.5,
       ),
@@ -341,13 +374,28 @@ class _LoginState extends State<Login> {
                 ButtonTheme(
                   minWidth: 260,
                   child: RaisedButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0)),
                     color: sc_PrimaryColor,
                     padding: EdgeInsets.all(10.0),
                     onPressed: () => _submitForm(),
-                    child: Text(
-                      _authMode == AuthMode.Login ? 'Login' : 'Signup',
-                      style: TextStyle(fontSize: 20, color: sc_AppBarTextColor),
-                    ),
+                    child: load
+                        ? Center(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10.0),
+                              child: LinearProgressIndicator(
+                                backgroundColor: Colors.white,
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(Colors.red),
+                              ),
+                            ),
+                          )
+                        : Text(
+                            _authMode == AuthMode.Login ? 'Login' : 'Signup',
+                            style: TextStyle(
+                                fontSize: 20, color: sc_AppBarTextColor),
+                          ),
                   ),
                 ),
                 SizedBox(
@@ -366,6 +414,8 @@ class _LoginState extends State<Login> {
                 ButtonTheme(
                   minWidth: 260,
                   child: RaisedButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0)),
                     color: sc_AppBarTextColor,
                     padding: EdgeInsets.all(10.0),
                     onPressed: () {
@@ -380,33 +430,31 @@ class _LoginState extends State<Login> {
                   ),
                 ),
                 SizedBox(
-                  height: 40.0,
+                  height: 50.0,
                 ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 0, 10, 15),
-                  child: Row(
-                    children: <Widget>[
-                      Text(
-                        '${_authMode == AuthMode.Login ? 'Don\'t Have Account? ' : 'Have Account? '}',
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      '${_authMode == AuthMode.Login ? 'Don\'t Have Account? ' : 'Have Account? '}',
+                      style:
+                          TextStyle(fontSize: 16.0, color: sc_ItemTitleColor),
+                    ),
+                    GestureDetector(
+                      child: Text(
+                        '${_authMode == AuthMode.Login ? 'Register' : 'Login'} Here',
                         style:
-                            TextStyle(fontSize: 16.0, color: sc_ItemTitleColor),
+                            TextStyle(fontSize: 16.0, color: sc_PrimaryColor),
                       ),
-                      GestureDetector(
-                        child: Text(
-                          '${_authMode == AuthMode.Login ? 'Register' : 'Login'} with Google',
-                          style:
-                              TextStyle(fontSize: 16.0, color: sc_PrimaryColor),
-                        ),
-                        onTap: () {
-                          setState(() {
-                            _authMode = _authMode == AuthMode.Login
-                                ? AuthMode.Signup
-                                : AuthMode.Login;
-                          });
-                        },
-                      )
-                    ],
-                  ),
+                      onTap: () {
+                        setState(() {
+                          _authMode = _authMode == AuthMode.Login
+                              ? AuthMode.Signup
+                              : AuthMode.Login;
+                        });
+                      },
+                    )
+                  ],
                 )
               ],
             ),

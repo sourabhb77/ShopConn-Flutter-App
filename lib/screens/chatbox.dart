@@ -177,9 +177,7 @@ class Chat extends State<ChatPage> with TickerProviderStateMixin {
                 Expanded(
                   flex: 1,
                   child: IconButton(
-                      icon: Icon(IconData(57699,
-                          fontFamily: 'MaterialIcons',
-                          matchTextDirection: true)),
+                      icon: Icon(Icons.send),
                       onPressed: () {
                         sendMessage(_textController.text);
 
