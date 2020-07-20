@@ -172,8 +172,8 @@ class _LoginState extends State<Login> {
             return 'Display Name is required';
           }
 
-          if (value.length < 5 || value.length > 12) {
-            return 'Display Name must be betweem 5 and 12 characters';
+          if (value.length < 5 || value.length > 30) {
+            return 'Display Name must be betweem 5 and 30 characters';
           }
 
           return null;
@@ -401,34 +401,37 @@ class _LoginState extends State<Login> {
                 SizedBox(
                   height: 15.0,
                 ),
-                Text(
-                  'or',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 18.0,
-                  ),
-                ),
+                _authMode == AuthMode.Signup
+                    ? Container()
+                    : Text(
+                        'or',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 18.0,
+                        ),
+                      ),
                 SizedBox(
                   height: 15.0,
                 ),
-                ButtonTheme(
-                  minWidth: 260,
-                  child: RaisedButton(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0)),
-                    color: sc_AppBarTextColor,
-                    padding: EdgeInsets.all(10.0),
-                    onPressed: () {
-                      _sigInGoogle();
-                    },
-                    child: Text(
-                      _authMode == AuthMode.Login
-                          ? 'Login with Google'
-                          : 'Signup with Google',
-                      style: TextStyle(fontSize: 18, color: sc_ItemTitleColor),
-                    ),
-                  ),
-                ),
+                _authMode == AuthMode.Signup
+                    ? Container()
+                    : ButtonTheme(
+                        minWidth: 260,
+                        child: RaisedButton(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0)),
+                          color: sc_AppBarTextColor,
+                          padding: EdgeInsets.all(10.0),
+                          onPressed: () {
+                            _sigInGoogle();
+                          },
+                          child: Text(
+                            'Login with Google',
+                            style: TextStyle(
+                                fontSize: 18, color: sc_ItemTitleColor),
+                          ),
+                        ),
+                      ),
                 SizedBox(
                   height: 50.0,
                 ),

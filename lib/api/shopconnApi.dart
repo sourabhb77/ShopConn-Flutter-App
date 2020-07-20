@@ -56,14 +56,15 @@ Future<String> signup(User user, AuthNotifier authNotifier) async {
     await Firestore.instance
         .collection('users')
         .document(authResult.user.uid)
-        .updateData({
-      'name': user.displayName,
-    }).then((value) async {
+        .setData({
+      "name": user.displayName,
+    }, merge: true).then((value) async {
       print("resgisterd succesfully");
       FirebaseUser currentUser = await FirebaseAuth.instance.currentUser();
       authNotifier.setUser(currentUser);
     }).catchError((err) {
-      print("got error");
+      errorCode = err.toString();
+      print("got error $err");
     });
     return "True";
   }
