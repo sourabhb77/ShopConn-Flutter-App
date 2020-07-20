@@ -177,14 +177,18 @@ class _ProfileState extends State<Profile> {
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.fromLTRB(0, 20, 0, 15),
-                      child: Text(
-                        name != null ? name : "",
-                        style: TextStyle(
-                          fontSize: 22.0,
-                          fontWeight: FontWeight.bold,
+                    Expanded(
+                      flex: 6,
+                      child: Container(
+                        padding: EdgeInsets.fromLTRB(20, 20, 20, 15),
+                        child: Text(
+                          name != null ? name : "",
+                          style: TextStyle(
+                            fontSize: 22.0,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),

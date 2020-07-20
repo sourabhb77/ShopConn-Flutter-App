@@ -64,57 +64,52 @@ class _SettingScreenState extends State<SettingScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Column(
-                    children: [
-                      Row(
-                        children: [
-                          CircleAvatar(
-                            backgroundImage: NetworkImage(
-                              imageUrl == null
-                                  ? "https://image.freepik.com/free-vector/doctor-character-background_1270-84.jpg"
-                                  : imageUrl,
-                            ),
-                            radius: 45,
+                  CircleAvatar(
+                    backgroundImage: NetworkImage(
+                      imageUrl == null
+                          ? "https://image.freepik.com/free-vector/doctor-character-background_1270-84.jpg"
+                          : imageUrl,
+                    ),
+                    radius: 45,
+                  ),
+                  SizedBox(
+                    width: 15.0,
+                  ),
+                  Expanded(
+                    flex: 4,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Hello",
+                          style: TextStyle(
+                            color: sc_grey,
+                            fontSize: 16.0,
+                            letterSpacing: 1.0,
                           ),
-                          SizedBox(
-                            width: 15.0,
+                        ),
+                        Text(
+                          name == null ? "" : name,
+                          style: TextStyle(
+                            color: sc_AppBarTextColor,
+                            fontSize: 18.0,
+                            letterSpacing: 1.0,
+                            fontWeight: FontWeight.w500,
                           ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Hello",
-                                style: TextStyle(
-                                  color: sc_grey,
-                                  fontSize: 16.0,
-                                  letterSpacing: 1.0,
-                                ),
-                              ),
-                              Text(
-                                name == null ? "" : name,
-                                style: TextStyle(
-                                  color: sc_AppBarTextColor,
-                                  fontSize: 18.0,
-                                  letterSpacing: 1.0,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 10.0,
-                              ),
-                              Text(
-                                email == null ? "" : email,
-                                style: TextStyle(
-                                  color: sc_AppBarTextColor,
-                                  fontSize: 16.0,
-                                  letterSpacing: 1.0,
-                                ),
-                              ),
-                            ],
-                          )
-                        ],
-                      )
-                    ],
+                        ),
+                        SizedBox(
+                          height: 10.0,
+                        ),
+                        Text(
+                          email == null ? "" : email,
+                          style: TextStyle(
+                            color: sc_AppBarTextColor,
+                            fontSize: 16.0,
+                            letterSpacing: 1.0,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   IconButton(
                     icon: Icon(Icons.edit),
