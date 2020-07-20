@@ -16,7 +16,7 @@ class RequestBox extends StatelessWidget {
   RequestBox({this.request});
 
   Future<ChatUser> getUserProfile() async {
-    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    // FirebaseUser user = await FirebaseAuth.instance.currentUser();
 
     String id = request.requesterId;
 
@@ -45,7 +45,10 @@ class RequestBox extends StatelessWidget {
 class RequestCard extends StatelessWidget {
   final ChatUser user;
   final MessageRequest request;
-  RequestCard({this.user, this.request});
+  RequestCard({this.user, this.request}) {
+
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +78,7 @@ class RequestCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(30),
                   child: Image.network(
                     user != null
-                        ? user.imageUrl.length != 0
+                        ? user.imageUrl != null
                             ? user.imageUrl
                             : 'https://image.freepik.com/free-vector/doctor-character-background_1270-83.jpg'
                         : 'https://image.freepik.com/free-vector/doctor-character-background_1270-84.jpg',
@@ -94,7 +97,7 @@ class RequestCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    user.name,
+                    user.name != null? user.name : "--",
                     textAlign: TextAlign.start,
                     style: TextStyle(
                       fontSize: 16.0,
@@ -258,7 +261,7 @@ class ChatCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(30),
                   child: Image.network(
                     user != null
-                        ? user.imageUrl.length != 0
+                        ? user.imageUrl !=null
                             ? user.imageUrl
                             : 'https://image.freepik.com/free-vector/doctor-character-background_1270-83.jpg'
                         : 'https://image.freepik.com/free-vector/doctor-character-background_1270-84.jpg',
@@ -274,7 +277,8 @@ class ChatCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    Text(user != null ? user.name : "Name",
+                    Text(user != null ? 
+                    user.name != null ? user.name : "Name": "Name",
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 14.0, color: Colors.black)),
                     Text(

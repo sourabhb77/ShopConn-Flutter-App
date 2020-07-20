@@ -57,6 +57,7 @@ class _CarouselState extends State<Carousel> {
             viewportFraction: 0.9,
             aspectRatio: 1.0,
             initialPage: 0,
+            
             onPageChanged: (index, reason) {
               setState(() {
                 print("Page Changed");

@@ -207,7 +207,6 @@ class SearchProduct extends SearchDelegate<dynamic> {
     //       ),
     //     );
     //   },
-
     //   itemCount: mylist.length,
     // );
 
@@ -228,6 +227,7 @@ class SearchProduct extends SearchDelegate<dynamic> {
         break;
       default:
     }
+
     Stream<QuerySnapshot> productStream =
         suggestRef.where('tagList', arrayContainsAny: inputTagList).snapshots();
     return StreamBuilder(
@@ -274,20 +274,37 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     print("building result");
-    return Container(
-      color: sc_PrimaryColor,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Row(
-            children: <Widget>[
-              Expanded(flex: 3, child: FilterBox(category: category)),
-              Expanded(flex: 3, child: SortBox()),
-            ],
-          ),
-        ],
-      ),
-    );
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+         Expanded(flex: 10, child: Container(
+                child: FilterBox(category: category),
+                height: kToolbarHeight
+                ,
+                color: sc_PrimaryColor,),
+               ),
+              Expanded(flex: 10, child: Container(child: SortBox(),
+                height: kToolbarHeight,
+                color: sc_PrimaryColor,)),
+      ],);
+
+    // return Container(
+    //   color: sc_PrimaryColor,
+    //   child: Column(
+    //     mainAxisAlignment: MainAxisAlignment.center,
+    //     children: [
+    //       Row(
+    //         children: <Widget>[
+    //           Expanded(flex: 10, child: Container(
+    //             child: FilterBox(category: category),
+    //             color: Colors.pink,),
+    //            ),
+    //           Expanded(flex: 10, child: SortBox()),
+    //         ],
+    //       ),
+    //     ],
+    //   ),
+    // );
   }
 
   @override
@@ -439,30 +456,33 @@ class _SortBoxState extends State<SortBox> {
         print("tapped on sort");
         _showModalBottomSheet(context);
       },
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.sort, color: sc_AppBarTextColor),
-          SizedBox(
-            width: 10.0,
-          ),
-          Text(
-            "SORT",
-            style: TextStyle(
-              fontSize: 16.0,
-              fontWeight: FontWeight.w500,
-              color: sc_AppBarTextColor,
-              letterSpacing: 1.0,
+      child: Container(
+        color: sc_PrimaryColor,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.sort, color: sc_AppBarTextColor),
+            SizedBox(
+              width: 10.0,
             ),
-          ),
-        ],
+            Text(
+              "SORT",
+              style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.w500,
+                color: sc_AppBarTextColor,
+                letterSpacing: 1.0,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
 class FilterBox extends StatelessWidget {
-  String category;
+  final String category;
   FilterBox({this.category});
   _showModalBottomSheet(context) {
     FilterNotifier filterNotifier =
@@ -577,28 +597,34 @@ class FilterBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      
       onTap: () {
         print("tapped on filter");
         _showModalBottomSheet(context);
       },
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.filter_list, color: sc_AppBarTextColor),
-          SizedBox(
-            width: 20.0,
+        child: Container(
+          color: sc_PrimaryColor,
+          child: Row(
+            
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.filter_list, color: sc_AppBarTextColor),
+              SizedBox(
+                width: 20.0,
+              ),
+              Text(
+                "FILTER",
+                style: TextStyle(
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.w500,
+                  color: sc_AppBarTextColor,
+                  letterSpacing: 1.0,
+                ),
+              ),
+            ],
           ),
-          Text(
-            "FILTER",
-            style: TextStyle(
-              fontSize: 16.0,
-              fontWeight: FontWeight.w500,
-              color: sc_AppBarTextColor,
-              letterSpacing: 1.0,
-            ),
-          ),
-        ],
-      ),
+        ),
+
     );
   }
 }

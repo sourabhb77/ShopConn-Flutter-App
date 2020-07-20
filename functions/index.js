@@ -13,10 +13,8 @@ admin.initializeApp(functions.config().firebase);
 exports.newUser= functions.auth.user().onCreate((user)=>
 {
     let email=user.email?user.email:"";
-    let name=user.name? name: "";
     let data ={
         "email": email,
-        "name": name,
         "userId": user.uid,
     }
 

@@ -125,6 +125,10 @@ class MessageRequest {
     requestedId = data['requestedId'];
     timeStamp = data['timeStamp'];
   }
+
+  printData() {
+    print(" $id $requesterId $requestedId $productId");
+  }
 }
 
 class ChatRoom {

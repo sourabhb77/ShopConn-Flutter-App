@@ -11,9 +11,6 @@ import 'package:shopconn/models/Message.dart';
 import 'package:shopconn/models/user.dart';
 import 'package:shopconn/notifier/authNotifier.dart';
 import 'package:shopconn/widgets/MessageWidgets/RequestMessageBox.dart';
-// import 'package:stream_transform/stream_transform.dart';
-import './chatbox.dart';
-import '../services/auth.dart';
 
 class ChatBox extends StatefulWidget {
   Stream<List<ChatUser>> getNewRequestsStream() async* {
@@ -226,11 +223,15 @@ class _RequestStream extends State<RequestStream> {
           );
         } else if (snapshot.data.documents.length != 0) {
           return ListView.builder(
+
             itemBuilder: (context, index) {
               print("Length : ${snapshot.data.documents.length}");
               return RequestBox(
+
                   request: MessageRequest.fromMap(
-                      snapshot.data.documents[index].data));
+                      snapshot.data.documents[index].data)
+
+              );
             },
             itemCount: snapshot.data.documents.length,
           );
@@ -243,3 +244,10 @@ class _RequestStream extends State<RequestStream> {
     );
   }
 }
+
+
+//Edit profile => snackbar
+
+//Filter sort, 
+
+//SETTINGS PROFILE DATA FROM AUTH NOTIFIER

@@ -33,4 +33,8 @@ class ChatUser
 
     };
   }
+
+  printData(){
+    print("$userId, $name $email $imageUrl $mobile");
+  }
 }
