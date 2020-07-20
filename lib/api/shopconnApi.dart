@@ -168,7 +168,7 @@ Future<String> UploadProfileImage(String user, File image) async {
   return url;
 }
 
-Future<void> UpdateProfile(String name, String mobile, File image) async {
+Future<void> UpdateProfile(String name, String mobile, dynamic image) async {
   FirebaseUser user = await FirebaseAuth.instance.currentUser();
   String url = await UploadProfileImage(user.uid, image);
   DocumentReference ref = Firestore.instance.document("users/${user.uid}");
@@ -176,6 +176,18 @@ Future<void> UpdateProfile(String name, String mobile, File image) async {
   ref
       .setData(
           {"name": name, "mobile": mobile, "imageUrl": url, "newUser": false},
+          merge: true)
+      .then((value) => print("Success"))
+      .catchError((error) => {print(error)});
+}
+
+Future<void> UpdateProfileNoImage(String name, String mobile) async {
+  FirebaseUser user = await FirebaseAuth.instance.currentUser();
+  DocumentReference ref = Firestore.instance.document("users/${user.uid}");
+
+  ref
+      .setData(
+          {"name": name, "mobile": mobile, "newUser": false},
           merge: true)
       .then((value) => print("Success"))
       .catchError((error) => {print(error)});

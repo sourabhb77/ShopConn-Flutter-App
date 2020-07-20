@@ -23,6 +23,8 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   File image;
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   ProfilePicState state = ProfilePicState.Default;
   bool selected = false;
   String _name, _imageUrl, _mobile, _email;
@@ -59,7 +61,6 @@ class _ProfileState extends State<Profile> {
 
   @override
   void initState() {
-
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) => loadUserDetails());
     // loadUserDetails();
@@ -73,13 +74,38 @@ class _ProfileState extends State<Profile> {
       print("incorrect");
     } else {
       final FirebaseUser user = await FirebaseAuth.instance.currentUser();
-      print("User ID: ${user.uid}");
+      print("File : $image");
       //Firebase Storage
-      await UpdateProfile(name, mobile, image);
+      if (image != null)
+        await UpdateProfile(name, mobile, image);
+      else
+        await UpdateProfileNoImage(name, mobile);
       initializeCurrentUser(authNotifier);
+      // showSnackBar("Upload Successful");
       //Firestore Uploading
-
     }
+  }
+
+  void showSnackBar(String string) {
+    var snackBar = new SnackBar(
+      content: new Text(
+        string,
+        style: TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+          fontStyle: FontStyle.normal,
+        ),
+      ),
+      backgroundColor: Colors.teal,
+      action: SnackBarAction(
+        label: "Ok",
+        textColor: Colors.white,
+        onPressed: () {},
+      ),
+      elevation: 4.0,
+    );
+    if (_scaffoldKey.currentState != null)
+      _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 
   Future<void> _selectImage() async {
@@ -106,6 +132,7 @@ class _ProfileState extends State<Profile> {
     authNotifier = Provider.of<AuthNotifier>(context);
 
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         elevation: 0,
         title: Text("Edit Profile"),
