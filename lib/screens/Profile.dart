@@ -72,21 +72,39 @@ class _ProfileState extends State<Profile> {
     print("Name : $name, Mobile: $mobile");
     if (name.length == 0 || mobile.length < 2) {
       print("incorrect");
+      showSnackBar("Fill All deatils Correctly", "red");
     } else {
       final FirebaseUser user = await FirebaseAuth.instance.currentUser();
       print("File : $image");
       //Firebase Storage
-      if (image != null)
-        await UpdateProfile(name, mobile, image);
-      else
-        await UpdateProfileNoImage(name, mobile);
+      if (image != null) {
+        await UpdateProfile(name, mobile, image).then((value) {
+          if (value == "True") {
+            showSnackBar("Upload Successful", "teal");
+          } else {
+            showSnackBar("Something went wrong $value", "red");
+          }
+        });
+      } else {
+        await UpdateProfileNoImage(name, mobile).then((value) {
+          if (value == "True") {
+            showSnackBar("Upload Successful", "teal");
+          } else {
+            showSnackBar("Something went wrong $value", "red");
+          }
+        });
+      }
+      final FirebaseUser user1 = await FirebaseAuth.instance.currentUser();
+      authNotifier.currentUser(user1);
       initializeCurrentUser(authNotifier);
-      // showSnackBar("Upload Successful");
-      //Firestore Uploading
     }
   }
 
-  void showSnackBar(String string) {
+  void showSnackBar(String string, String color) {
+    var clr = Colors.teal;
+    if (color == "red") {
+      clr = Colors.red;
+    }
     var snackBar = new SnackBar(
       content: new Text(
         string,
@@ -96,7 +114,7 @@ class _ProfileState extends State<Profile> {
           fontStyle: FontStyle.normal,
         ),
       ),
-      backgroundColor: Colors.teal,
+      backgroundColor: clr,
       action: SnackBarAction(
         label: "Ok",
         textColor: Colors.white,

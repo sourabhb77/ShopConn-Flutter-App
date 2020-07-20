@@ -89,6 +89,9 @@ signout(AuthNotifier authNotifier) async {
         .catchError((error) => print("Error code : ${error.code}"));
     authNotifier.currentUser(null);
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    await Firestore.instance
+        .document("users/${authNotifier.userId}")
+        .updateData({"FCM_token": null}).then((value) => null);
   } catch (err) {
     print("Error : $err");
   }
@@ -168,29 +171,35 @@ Future<String> UploadProfileImage(String user, File image) async {
   return url;
 }
 
-Future<void> UpdateProfile(String name, String mobile, dynamic image) async {
+Future<String> UpdateProfile(String name, String mobile, dynamic image) async {
   FirebaseUser user = await FirebaseAuth.instance.currentUser();
   String url = await UploadProfileImage(user.uid, image);
   DocumentReference ref = Firestore.instance.document("users/${user.uid}");
-
-  ref
-      .setData(
-          {"name": name, "mobile": mobile, "imageUrl": url, "newUser": false},
-          merge: true)
-      .then((value) => print("Success"))
-      .catchError((error) => {print(error)});
+  String res = "True";
+  ref.setData(
+      {"name": name, "mobile": mobile, "imageUrl": url, "newUser": false},
+      merge: true).then((value) {
+    print("Success");
+  }).catchError((error) {
+    print(error);
+    res = error.toString();
+  });
+  return res;
 }
 
-Future<void> UpdateProfileNoImage(String name, String mobile) async {
+Future<String> UpdateProfileNoImage(String name, String mobile) async {
   FirebaseUser user = await FirebaseAuth.instance.currentUser();
   DocumentReference ref = Firestore.instance.document("users/${user.uid}");
+  String res = "True";
 
   ref
-      .setData(
-          {"name": name, "mobile": mobile, "newUser": false},
-          merge: true)
+      .setData({"name": name, "mobile": mobile, "newUser": false}, merge: true)
       .then((value) => print("Success"))
-      .catchError((error) => {print(error)});
+      .catchError((error) {
+        print(error);
+        res = error.toString();
+      });
+  return res;
 }
 
 /**

@@ -43,7 +43,8 @@ class _NavDrawer extends State<NavDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    AuthNotifier _authNotifier = Provider.of<AuthNotifier>(context);
+    AuthNotifier _authNotifier =
+        Provider.of<AuthNotifier>(context, listen: true);
     _imageUrl = _authNotifier.imageUrl;
     _name = _authNotifier.name;
     _email = _authNotifier.email;

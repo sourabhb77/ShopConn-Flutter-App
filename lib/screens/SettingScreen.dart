@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shopconn/api/shopconnApi.dart';
 import 'package:shopconn/const/Theme.dart';
@@ -22,19 +23,19 @@ class SettingScreen extends StatefulWidget {
 }
 
 class _SettingScreenState extends State<SettingScreen> {
-  String name, imageUrl, mobile, email;
-  String _user;
+  // String name, imageUrl, mobile, email;
+  // String _user;
   AuthNotifier authNotifier;
-  void loadUserDetails() async {
-    _user = await getCurrentUser(authNotifier);
-    DocumentSnapshot snapshot = await getProfile(_user);
-    setState(() {
-      imageUrl = snapshot.data["imageUrl"];
-      name = snapshot.data["name"];
-      mobile = snapshot.data["mobile"];
-      email = snapshot.data["email"];
-    });
-  }
+  // void loadUserDetails() async {
+  //   _user = await getCurrentUser(authNotifier);
+  //   DocumentSnapshot snapshot = await getProfile(_user);
+  //   setState(() {
+  //     imageUrl = snapshot.data["imageUrl"];
+  //     name = snapshot.data["name"];
+  //     mobile = snapshot.data["mobile"];
+  //     email = snapshot.data["email"];
+  //   });
+  // }
 
   _clearUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -43,12 +44,13 @@ class _SettingScreenState extends State<SettingScreen> {
 
   @override
   void initState() {
-    loadUserDetails();
+    // loadUserDetails();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    authNotifier = Provider.of<AuthNotifier>(context, listen: true);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: sc_PrimaryColor,
@@ -66,9 +68,9 @@ class _SettingScreenState extends State<SettingScreen> {
                 children: <Widget>[
                   CircleAvatar(
                     backgroundImage: NetworkImage(
-                      imageUrl == null
+                      authNotifier.imageUrl == null
                           ? "https://image.freepik.com/free-vector/doctor-character-background_1270-84.jpg"
-                          : imageUrl,
+                          : authNotifier.imageUrl,
                     ),
                     radius: 45,
                   ),
@@ -89,7 +91,7 @@ class _SettingScreenState extends State<SettingScreen> {
                           ),
                         ),
                         Text(
-                          name == null ? "" : name,
+                          authNotifier.name == null ? "" : authNotifier.name,
                           style: TextStyle(
                             color: sc_AppBarTextColor,
                             fontSize: 18.0,
@@ -101,7 +103,7 @@ class _SettingScreenState extends State<SettingScreen> {
                           height: 10.0,
                         ),
                         Text(
-                          email == null ? "" : email,
+                          authNotifier.email == null ? "" : authNotifier.email,
                           style: TextStyle(
                             color: sc_AppBarTextColor,
                             fontSize: 16.0,
