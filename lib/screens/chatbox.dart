@@ -85,9 +85,10 @@ class Chat extends State<ChatPage> with TickerProviderStateMixin {
                   borderRadius: BorderRadius.circular(28),
                   child: Image.network(
                     // 'https://image.freepik.com/free-vector/doctor-character-background_1270-84.jpg',
-                    _user != null
+                    _user.imageUrl != null
                         ? _user.imageUrl
-                        : 'https://image.freepik.com/free-vector/doctor-character-background_1270-84.jpg',
+                        : 'https://image.freepik.com/free-vector/doctor-character-background_1270-83.jpg',
+                    // : 'https://image.freepik.com/free-vector/doctor-character-background_1270-84.jpg',
                     height: 45,
                     width: 45,
                     fit: BoxFit.fill,

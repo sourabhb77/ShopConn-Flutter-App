@@ -72,147 +72,157 @@ class _MyProductsState extends State<MyProducts> {
                     topRight: Radius.circular(20),
                   ),
                 ),
-                child: Column(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 0.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                child: DraggableScrollableSheet(
+                  initialChildSize: 1.0,
+                  minChildSize: 1.0,
+                  builder: (BuildContext context,
+                      ScrollController scrollController) {
+                    return SingleChildScrollView(
+                      child: Column(
                         children: [
-                          Text(
-                            "Who is Buyer ?",
-                            style: TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.w700,
-                              color: sc_ItemTitleColor,
+                          Container(
+                            padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 0.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Who is Buyer ?",
+                                  style: TextStyle(
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.w700,
+                                    color: sc_ItemTitleColor,
+                                  ),
+                                ),
+                                OutlineButton(
+                                  // elevation: 0,
+                                  color: sc_PrimaryColor,
+                                  padding: EdgeInsets.fromLTRB(
+                                      13.0, 10.0, 13.0, 10.0),
+                                  child: Text(
+                                    'Confirm As SOLD',
+                                    style: TextStyle(
+                                      color: Colors.black54,
+                                      fontSize: 16.0,
+                                    ),
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8.0)),
+                                  onPressed: () {
+                                    if (ownerId != "") {
+                                      markAsSold(
+                                        productNotifier.currentProduct["id"],
+                                        ownerId,
+                                      );
+                                      Navigator.pop(context);
+                                    }
+                                  },
+                                ),
+                              ],
                             ),
                           ),
-                          OutlineButton(
-                            // elevation: 0,
-                            color: sc_PrimaryColor,
-                            padding:
-                                EdgeInsets.fromLTRB(13.0, 10.0, 13.0, 10.0),
-                            child: Text(
-                              'Confirm As SOLD',
-                              style: TextStyle(
-                                color: Colors.black54,
-                                fontSize: 16.0,
-                              ),
-                            ),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.0)),
-                            onPressed: () {
-                              if (ownerId != "") {
-                                markAsSold(
-                                  productNotifier.currentProduct["id"],
-                                  ownerId,
+                          StreamBuilder(
+                            stream: Firestore.instance
+                                .collectionGroup("rooms")
+                                .where("members", arrayContainsAny: userList)
+                                .orderBy("timeStamp", descending: true)
+                                .snapshots(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasError) return Text("Error");
+                              if (!snapshot.hasData) {
+                                return Center(
+                                  child: CircularProgressIndicator(
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                        Colors.red),
+                                  ),
                                 );
-                                Navigator.pop(context);
                               }
+                              if (snapshot.data.documents.length == 0) {
+                                return Center(
+                                  child: Text("No Contacts"),
+                                );
+                              }
+                              return ListView.builder(
+                                controller: scrollController,
+                                shrinkWrap: true,
+                                itemBuilder: (context, index) {
+                                  return InkWell(
+                                    splashColor: sc_PrimaryColor,
+                                    onTap: () {
+                                      print("adding buyer");
+                                      setState(() {
+                                        if (authNotifier.userId !=
+                                            snapshot.data
+                                                .documents[index]["members"][0]
+                                                .toString()) {
+                                          setState(() {
+                                            ownerId = snapshot.data
+                                                .documents[index]["members"][0]
+                                                .toString();
+                                          });
+                                        } else if (authNotifier.userId !=
+                                            snapshot.data
+                                                .documents[index]["members"][1]
+                                                .toString()) {
+                                          setState(() {
+                                            ownerId = snapshot.data
+                                                .documents[index]["members"][1]
+                                                .toString();
+                                          });
+                                        } else if (authNotifier.userId ==
+                                            snapshot.data
+                                                .documents[index]["members"][0]
+                                                .toString()) {
+                                          setState(() {
+                                            ownerId = "";
+                                          });
+                                        } else if (authNotifier.userId ==
+                                            snapshot.data
+                                                .documents[index]["members"][1]
+                                                .toString()) {
+                                          setState(() {
+                                            ownerId = "";
+                                          });
+                                        }
+                                      });
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        border: ownerId ==
+                                                    snapshot
+                                                        .data
+                                                        .documents[index]
+                                                            ["members"][0]
+                                                        .toString() ||
+                                                ownerId ==
+                                                    snapshot
+                                                        .data
+                                                        .documents[index]
+                                                            ["members"][1]
+                                                        .toString()
+                                            ? Border.all(
+                                                color: sc_PrimaryColor,
+                                                width: 2.0,
+                                              )
+                                            : null,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(7.0)),
+                                      ),
+                                      child: Messagebox(
+                                        room: ChatRoom.fromMap(snapshot
+                                            .data.documents[index].data),
+                                      ),
+                                    ),
+                                  );
+                                },
+                                itemCount: snapshot.data.documents.length,
+                              );
                             },
                           ),
                         ],
                       ),
-                    ),
-                    StreamBuilder(
-                      stream: Firestore.instance
-                          .collectionGroup("rooms")
-                          .where("members", arrayContainsAny: userList)
-                          .orderBy("timeStamp", descending: true)
-                          .snapshots(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasError) return Text("Error");
-                        if (!snapshot.hasData) {
-                          return Center(
-                            child: CircularProgressIndicator(
-                              valueColor:
-                                  AlwaysStoppedAnimation<Color>(Colors.red),
-                            ),
-                          );
-                        }
-                        if (snapshot.data.documents.length == 0) {
-                          return Center(
-                            child: Text("No Contacts"),
-                          );
-                        }
-                        return ListView.builder(
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            return InkWell(
-                              splashColor: sc_PrimaryColor,
-                              onTap: () {
-                                print("adding buyer");
-                                setState(() {
-                                  if (authNotifier.userId !=
-                                      snapshot
-                                          .data.documents[index]["members"][0]
-                                          .toString()) {
-                                    setState(() {
-                                      ownerId = snapshot
-                                          .data.documents[index]["members"][0]
-                                          .toString();
-                                    });
-                                  } else if (authNotifier.userId !=
-                                      snapshot
-                                          .data.documents[index]["members"][1]
-                                          .toString()) {
-                                    setState(() {
-                                      ownerId = snapshot
-                                          .data.documents[index]["members"][1]
-                                          .toString();
-                                    });
-                                  } else if (authNotifier.userId ==
-                                      snapshot
-                                          .data.documents[index]["members"][0]
-                                          .toString()) {
-                                    setState(() {
-                                      ownerId = "";
-                                    });
-                                  } else if (authNotifier.userId ==
-                                      snapshot
-                                          .data.documents[index]["members"][1]
-                                          .toString()) {
-                                    setState(() {
-                                      ownerId = "";
-                                    });
-                                  }
-                                });
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border: ownerId ==
-                                              snapshot
-                                                  .data
-                                                  .documents[index]["members"]
-                                                      [0]
-                                                  .toString() ||
-                                          ownerId ==
-                                              snapshot
-                                                  .data
-                                                  .documents[index]["members"]
-                                                      [1]
-                                                  .toString()
-                                      ? Border.all(
-                                          color: sc_PrimaryColor,
-                                          width: 2.0,
-                                        )
-                                      : null,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(7.0)),
-                                ),
-                                child: Messagebox(
-                                  room: ChatRoom.fromMap(
-                                      snapshot.data.documents[index].data),
-                                ),
-                              ),
-                            );
-                          },
-                          itemCount: snapshot.data.documents.length,
-                        );
-                      },
-                    ),
-                  ],
+                    );
+                  },
                 ),
               );
             },
@@ -394,7 +404,7 @@ class ChatCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(28),
                   child: Image.network(
                     user != null
-                        ? user.imageUrl.length != 0
+                        ? user.imageUrl != null
                             ? user.imageUrl
                             : 'https://image.freepik.com/free-vector/doctor-character-background_1270-83.jpg'
                         : 'https://image.freepik.com/free-vector/doctor-character-background_1270-84.jpg',
