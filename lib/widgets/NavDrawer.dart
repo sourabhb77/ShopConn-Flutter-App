@@ -46,8 +46,8 @@ class _NavDrawer extends State<NavDrawer> {
     AuthNotifier _authNotifier = Provider.of<AuthNotifier>(context);
     _imageUrl = _authNotifier.imageUrl;
     _name = _authNotifier.name;
-    _email = _authNotifier.eamil;
-    print("Auth notifier : ${_authNotifier.eamil}");
+    _email = _authNotifier.email;
+    print("Auth notifier : ${_authNotifier.email}");
     print("image: ${_imageUrl}");
     return Drawer(
       child: ListView(

@@ -106,7 +106,8 @@ Future<void> initializeCurrentUser(AuthNotifier authNotifier) async {
 
     authNotifier.name = ref.data["name"];
     authNotifier.imageUrl = ref.data["imageUrl"];
-    authNotifier.eamil = ref.data["email"];
+    authNotifier.email = ref.data["email"];
+    authNotifier.mobile = ref.data['mobile'];
   }
 }
 
@@ -167,7 +168,7 @@ Future<String> UploadProfileImage(String user, File image) async {
   return url;
 }
 
-void UpdateProfile(String name, String mobile, File image) async {
+Future<void> UpdateProfile(String name, String mobile, File image) async {
   FirebaseUser user = await FirebaseAuth.instance.currentUser();
   String url = await UploadProfileImage(user.uid, image);
   DocumentReference ref = Firestore.instance.document("users/${user.uid}");

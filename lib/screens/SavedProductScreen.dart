@@ -116,7 +116,7 @@ class _SavedProductScreenState extends State<SavedProductScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.stretch,
                                   children: <Widget>[
                                     Text(
-                                      productNotifier.productList[index].name,
+                                      productNotifier.productList[index]._name,
                                       style: TextStyle(
                                         color: sc_ItemTitleColor,
                                         fontWeight: FontWeight.w600,

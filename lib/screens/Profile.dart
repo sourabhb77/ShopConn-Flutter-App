@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:shopconn/api/shopconnApi.dart';
 import 'package:shopconn/const/Theme.dart';
 import 'package:shopconn/notifier/authNotifier.dart';
@@ -24,43 +25,44 @@ class _ProfileState extends State<Profile> {
   File image;
   ProfilePicState state = ProfilePicState.Default;
   bool selected = false;
-  String name, imageUrl, mobile, email;
+  String _name, _imageUrl, _mobile, _email;
   StorageReference storageReference;
   TextEditingController nameController = TextEditingController(),
       mobileController = TextEditingController(),
       emailController = TextEditingController();
-  String _user;
   AuthNotifier authNotifier;
 
   void loadUserDetails() async {
     print("*******************************************************");
-    _user = await getCurrentUser(authNotifier);
-    print("USER ID: ${_user}");
-    DocumentSnapshot snapshot = await getProfile(_user);
-    print("SnapShot : ${snapshot.data.toString()}");
 
     setState(() {
-      print("setting state");
-      imageUrl = snapshot.data["imageUrl"];
-      name = snapshot.data["name"];
-      mobile = snapshot.data["mobile"];
-      email = snapshot.data["email"];
-      // nameController= TextEditingController(text: name);
-      nameController.text = name;
-      mobileController.text = mobile;
-      emailController.text = snapshot.data["email"];
+      _imageUrl = authNotifier.imageUrl;
+      _name = authNotifier.name;
+      _email = authNotifier.email;
+      _mobile = authNotifier.mobile;
+      print("setting state $_imageUrl , $_email $_name $_mobile");
 
-      if (imageUrl != null && imageUrl.length > 5) {
+      // _imageUrl = snapshot.data["imageUrl"];
+      // _name = snapshot.data["name"];
+      // _mobile = snapshot.data["mobile"];
+      // _email = snapshot.data["email"];
+      // nameController= TextEditingController(text: name);
+      nameController.text = _name;
+      mobileController.text = _mobile;
+      emailController.text = authNotifier.email;
+      if (_imageUrl != null && _imageUrl.length > 5) {
         state = ProfilePicState.DB;
       }
     });
-    print("Image URL : $imageUrl Name : $name");
+    print("Image URL : $_imageUrl Name : $_name");
   }
 
   @override
   void initState() {
+
     super.initState();
-    loadUserDetails();
+    WidgetsBinding.instance.addPostFrameCallback((_) => loadUserDetails());
+    // loadUserDetails();
   }
 
   void uploadToDatabase() async {
@@ -73,7 +75,8 @@ class _ProfileState extends State<Profile> {
       final FirebaseUser user = await FirebaseAuth.instance.currentUser();
       print("User ID: ${user.uid}");
       //Firebase Storage
-      UpdateProfile(name, mobile, image);
+      await UpdateProfile(name, mobile, image);
+      initializeCurrentUser(authNotifier);
       //Firestore Uploading
 
     }
@@ -100,6 +103,8 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
+    authNotifier = Provider.of<AuthNotifier>(context);
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -145,7 +150,7 @@ class _ProfileState extends State<Profile> {
                     children: [
                       state == ProfilePicState.DB
                           ? CircleAvatar(
-                              backgroundImage: NetworkImage(imageUrl),
+                              backgroundImage: NetworkImage(_imageUrl),
                               radius: 70,
                             )
                           : state == ProfilePicState.Default
@@ -184,7 +189,7 @@ class _ProfileState extends State<Profile> {
                       child: Container(
                         padding: EdgeInsets.fromLTRB(20, 20, 20, 15),
                         child: Text(
-                          name != null ? name : "",
+                          _name != null ? _name : "",
                           style: TextStyle(
                             fontSize: 22.0,
                             fontWeight: FontWeight.bold,

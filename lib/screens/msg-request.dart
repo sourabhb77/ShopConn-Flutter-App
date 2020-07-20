@@ -245,9 +245,3 @@ class _RequestStream extends State<RequestStream> {
   }
 }
 
-
-//Edit profile => snackbar
-
-//Filter sort, 
-
-//SETTINGS PROFILE DATA FROM AUTH NOTIFIER
