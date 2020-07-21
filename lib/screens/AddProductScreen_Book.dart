@@ -51,8 +51,13 @@ class _AddProuctScreen_BookState extends State<AddProuctScreen_Book> {
       _SelectImage() async //Function to keep track of all the image files that are needed to be uploaded
   {
     try {
-      File image = await ImagePicker.pickImage(source: ImageSource.gallery);
+      File image = await ImagePicker.pickImage(
+          source: ImageSource.gallery, imageQuality: 50);
       if (image != null) {
+        print("-------------");
+        print("image size ${image.lengthSync()}");
+        print("-------------");
+
         setState(() {
           imageList.add(image);
         });

@@ -45,7 +45,8 @@ class _AddProuctScreen_OtherState extends State<AddProuctScreen_Other> {
       _SelectImage() async //Function to keep track of all the image files that are needed to be uploaded
   {
     try {
-      File image = await ImagePicker.pickImage(source: ImageSource.gallery);
+      File image = await ImagePicker.pickImage(
+          source: ImageSource.gallery, imageQuality: 50);
       if (image != null) {
         setState(() {
           imageList.add(image);

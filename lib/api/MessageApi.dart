@@ -100,8 +100,8 @@ Future<bool> makeRoom(String userId, String message) async {
     var ref2 = Firestore.instance.collection("rooms/$id/chats").document();
     msg.id = ref2.documentID;
     msg.message = message;
-    msg.receiver = userId;
-    msg.sender = user.uid;
+    msg.sender = userId;
+    msg.receiver = user.uid;
 
     await ref2.setData(msg.toMap());
     return true;

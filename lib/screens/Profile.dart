@@ -127,7 +127,8 @@ class _ProfileState extends State<Profile> {
   }
 
   Future<void> _selectImage() async {
-    File Timage = await ImagePicker.pickImage(source: ImageSource.gallery);
+    File Timage = await ImagePicker.pickImage(
+        source: ImageSource.gallery, imageQuality: 40);
     Timage = await ImageCropper.cropImage(
       sourcePath: Timage.path,
       // ratioX: 1.0,

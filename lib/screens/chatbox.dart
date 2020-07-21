@@ -62,6 +62,10 @@ class Chat extends State<ChatPage> with TickerProviderStateMixin {
     _user = chatNotifier.currentUser;
     _currentRoom = chatNotifier.currentRoom;
 
+    // ScrollController _controller = ScrollController();
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   _controller.jumpTo(_controller.position.maxScrollExtent);
+    // });
     // if (_user == null || _currentRoom == null) {
     //   setState(() {
     //     _user = chatNotifier.currentUser;

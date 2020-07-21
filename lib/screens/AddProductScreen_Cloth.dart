@@ -52,7 +52,8 @@ class _AddProuctScreen_ClothState extends State<AddProuctScreen_Cloth> {
       _SelectClothesImage() async //Function to keep track of all the image files that are needed to be uploaded
   {
     try {
-      File image = await ImagePicker.pickImage(source: ImageSource.gallery);
+      File image = await ImagePicker.pickImage(
+          source: ImageSource.gallery, imageQuality: 50);
       if (image != null) {
         setState(() {
           imageList.add(image);

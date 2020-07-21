@@ -89,9 +89,9 @@ signout(AuthNotifier authNotifier) async {
         .catchError((error) => print("Error code : ${error.code}"));
     authNotifier.currentUser(null);
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await Firestore.instance
-        .document("users/${authNotifier.userId}")
-        .updateData({"FCM_token": null}).then((value) => null);
+    // await Firestore.instance
+    //     .document("users/${authNotifier.userId}")
+    //     .updateData({"FCM_token": null}).then((value) => null);
   } catch (err) {
     print("Error : $err");
   }
