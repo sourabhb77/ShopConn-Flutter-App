@@ -133,11 +133,15 @@ class Chat extends State<ChatPage> with TickerProviderStateMixin {
                       // return Text(snapshot.data.documents[index]["message"]);
                       return ChatMessageBox(
                           message: ChatMessage.fromMap(
-                        snapshot.data.documents[index].data,
+                        snapshot
+                            .data
+                            .documents[
+                                snapshot.data.documents.length - index - 1]
+                            .data,
                       ));
                     },
                     itemCount: snapshot.data.documents.length,
-                    reverse: false,
+                    reverse: true,
                     padding: EdgeInsets.all(6.0));
               },
             ),
