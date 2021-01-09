@@ -106,7 +106,12 @@ Future<void> initializeCurrentUser(AuthNotifier authNotifier) async {
     authNotifier.setUser(firebaseUser);
     var ref =
         await Firestore.instance.document("users/${firebaseUser.uid}").get();
-
+    if(ref.data["name"]== null) {
+      authNotifier.name = "";
+    }
+    else{
+      authNotifier.name = ref.data["name"];
+    }
     authNotifier.name = ref.data["name"];
     authNotifier.imageUrl = ref.data["imageUrl"];
     authNotifier.email = ref.data["email"];
