@@ -10,19 +10,21 @@ ShopConn is flutter and firebase based mobile app
 
 ### Screenshots
 <p float="left">
-  <img src="./screenshots/bs.png" width="350" title="">
-  <img src="./screenshots/home.png" width="350" title="">
-  <img src="./screenshots/addProduct.png" width="350" title="">
-  <img src="./screenshots/search.png" width="350" title="">
-  <img src="./screenshots/filter.png" width="350" title="">
-  <img src="./screenshots/settings.png" width="350" title="">
-  <img src="./screenshots/profile.png" width="350" title="">
-  <img src="./screenshots/chat.png" width="350" title="">
-  <img src="./screenshots/chat1.png" width="350" title="">
-  <img src="./screenshots/request.png" width="350" title="">
-  <img src="./screenshots/sold.png" width="350" title="">
-
+  <img src="./screenshots/bs.png" width="300" title="">
+  <img src="./screenshots/home.png" width="300" title="">
+  <img src="./screenshots/addProduct.png" width="300" title="">
+  <img src="./screenshots/search.png" width="300" title="">
+  <img src="./screenshots/filter.png" width="300" title="">
+  <img src="./screenshots/settings.png" width="300" title="">
+  <img src="./screenshots/profile.png" width="300" title="">
+  <img src="./screenshots/chat.png" width="300" title="">
+  <img src="./screenshots/chat1.png" width="300" title="">
+  <img src="./screenshots/request.png" width="300" title="">
+  <img src="./screenshots/sold.png" width="300" title="">
+  <img src="./screenshots/myProducts.png" width="300" title="">
 </p>
+
+### Show some :heart: and star the repo to support the project
 
 ### Technology Stack
 
@@ -38,22 +40,7 @@ $ cd ShopConn-Flutter-App
 $ flutter run
 ```
 
+### License
 
-### Plugins
-
-Dillinger is currently extended with the following plugins. Instructions on how to use them in your own application are linked below.
-
-| Plugin | README |
-| ------ | ------ |
-| Dropbox | [plugins/dropbox/README.md][PlDb] |
-| GitHub | [plugins/github/README.md][PlGh] |
-| Google Drive | [plugins/googledrive/README.md][PlGd] |
-| OneDrive | [plugins/onedrive/README.md][PlOd] |
-| Medium | [plugins/medium/README.md][PlMe] |
-| Google Analytics | [plugins/googleanalytics/README.md][PlGa] |
-
-
-License
-----
-
-MIT
+Project is published under the [MIT license](/LICENSE.md).
+Feel free to clone and modify repo as you want, but don't forget to add reference to authors :)
