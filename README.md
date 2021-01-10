@@ -10,18 +10,18 @@ ShopConn is flutter and firebase based mobile app
 
 ### Screenshots
 <p float="left">
-  <img src="./screenshots/bs.png" width="300" title="">
-  <img src="./screenshots/home.png" width="300" title="">
-  <img src="./screenshots/addProduct.png" width="300" title="">
-  <img src="./screenshots/search.png" width="300" title="">
-  <img src="./screenshots/filter.png" width="300" title="">
-  <img src="./screenshots/settings.png" width="300" title="">
-  <img src="./screenshots/profile.png" width="300" title="">
-  <img src="./screenshots/chat.png" width="300" title="">
-  <img src="./screenshots/chat1.png" width="300" title="">
-  <img src="./screenshots/request.png" width="300" title="">
-  <img src="./screenshots/sold.png" width="300" title="">
-  <img src="./screenshots/myProducts.png" width="300" title="">
+  <img src="./screenshots/bs.png" width="250" title="">
+  <img src="./screenshots/home.png" width="250" title="">
+  <img src="./screenshots/addProduct.png" width="250" title="">
+  <img src="./screenshots/search.png" width="250" title="">
+  <img src="./screenshots/filter.png" width="250" title="">
+  <img src="./screenshots/settings.png" width="250" title="">
+  <img src="./screenshots/profile.png" width="250" title="">
+  <img src="./screenshots/chat.png" width="250" title="">
+  <img src="./screenshots/chat1.png" width="250" title="">
+  <img src="./screenshots/request.png" width="250" title="">
+  <img src="./screenshots/sold.png" width="250" title="">
+  <img src="./screenshots/myProducts.png" width="250" title="">
 </p>
 
 ### Show some :heart: and star the repo to support the project
