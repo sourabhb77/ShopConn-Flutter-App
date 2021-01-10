@@ -1,4 +1,7 @@
 # ShopConn
+<p>
+  <img src="./assets/images/shopconnLogo.png" width="250" title="">
+</p>
 
 ShopConn is flutter and firebase based mobile app
 
