@@ -43,7 +43,11 @@ $ cd ShopConn-Flutter-App
 $ flutter run
 ```
 
-### License
 
-Project is published under the [MIT license](/LICENSE.md).
-Feel free to clone and modify repo as you want, but don't forget to add reference to authors :)
+### Getting Started
+
+For help getting started with Flutter, view our online
+[documentation](http://flutter.io/).
+
+For help on editing plugin code, view the [documentation](https://flutter.io/platform-plugins/#edit-code).
+
