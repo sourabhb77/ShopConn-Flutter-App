@@ -35,6 +35,9 @@ ShopConn is flutter and firebase based mobile app
 - Flutter Providers
 - Firebase
 
+### Firebase Settings
+- Create a new Firebase project and download google-services.json and paste it inside android/app
+- Add sha1 key to firebase console to enable Google-SignIn
 
 ### Installation
 
